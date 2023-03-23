@@ -7,3 +7,6 @@ Meeting Thursday after database
 
 #### Order of features
 Looking over the weekend
+
+
+I can change the README 
