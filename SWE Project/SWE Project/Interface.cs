@@ -1,5 +1,5 @@
 ﻿
-namespace SWE_Project
+namespace actor_interface
 {
     interface Actor
     { 
