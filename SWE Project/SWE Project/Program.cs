@@ -99,7 +99,7 @@ public class LoadEngineer : Actor
         try
         {
             var workbook = new XLWorkbook(Globals.databasePath); // Open database
-            var worksheet = workbook.Worksheet("FlightManifest"); // Get Flight Manifest sheet
+            var worksheet = workbook.Worksheet("ActiveFlights"); // Get Flight Manifest sheet
      
             var table = worksheet.Tables.Table(0); // Get Flight Table
 
@@ -108,10 +108,15 @@ public class LoadEngineer : Actor
             listOfData.Add(DepartingFrom.airport);
             listOfData.Add(ArrivingAt.airport);
             listOfData.Add(DateTimeInformation.ToUniversalTime().ToShortDateString());
+          
+            table.InsertRowsBelow(1); // Put new flight data into list
 
-            table.AppendData(listOfData); // Put new flight data into list
+            for(int i = 0; i < table.LastRow().CellCount(); i++) // Iterrate through last row of table hitting each cell
+            {
+                table.LastRow().Cell(i + 1).Value = listOfData[i].ToString(); // Change value of cell to list data
 
-            workbook.Save();
+            }
+            workbook.Save(); // Save changes
             
         }
         catch (FileNotFoundException ex)
