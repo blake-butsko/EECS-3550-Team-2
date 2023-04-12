@@ -16,11 +16,9 @@ public class Globals
 // The Location class stores the state and airport
 public class Location
 {
-    public string state {  get; }
     public string airport {  get; }
-    public Location(string state, string airport)
+    public Location(string airport)
     {
-        this.state = state;
         this.airport = airport;
 
     }
@@ -55,9 +53,33 @@ public class Flight
     {
         int CalculatedDistance = 0;
 
-        // Grab from excel based on location
+        var workbook = new XLWorkbook(Globals.databasePath);
+        var worksheet = workbook.Worksheet("FlightDistance");
+       
+        for(int i = 0; i < worksheet.Tables.Count(); i++)
+        {
+            if(String.Equals(FlightFrom.airport, worksheet.Tables.Table(i).Name))
+            {
 
-        this.Distance = CalculatedDistance;
+                var table = worksheet.Tables.Table(i);
+                
+                for(int j = 1; j <= table.Column(1).CellCount(); j++)
+                {
+                    Console.WriteLine(table.Column(1).Cell(j).Value.ToString());
+                    if (String.Equals(FlightTo.airport,table.Column(1).Cell(j).Value.ToString()))
+                    {
+
+                        CalculatedDistance = (int)table.Column(1).Cell(j).CellRight(1).Value;
+                        this.Distance = CalculatedDistance;
+                        
+                        return;
+                    }
+                }
+
+
+            }
+
+        }
     }
 
     void CalculatePrice()
@@ -119,8 +141,10 @@ public class LoadEngineer : Actor
             var tableLastRow = table.LastRow();
             for(int i = 0; i < table.LastRow().CellCount(); i++) // Iterrate through last row of table hitting each cell
             {
+
                 tableLastRow.Cell(i + 1).Value = listOfData[i].ToString(); // Change value of cell to list data
-                
+
+
 
             }
             workbook.Save(); // Save changes
@@ -257,7 +281,7 @@ public class LoadEngineer : Actor
                                 workbook.Save();
 
                             }
-                            catch(Exception e)
+                            catch(Exception)
                             {
                                 Console.WriteLine("Invalid Entry");
                             }
@@ -325,11 +349,7 @@ public class LoadEngineer : Actor
         throw new NotImplementedException();
     }
 
-    public void Login(string UserId, string Password)
-    {
-        throw new NotImplementedException();
-    }
-
+  
 }
 
 class Program
@@ -338,13 +358,13 @@ class Program
     {
         Globals.databasePath = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + @"\AirportInfo.xlsx"); // store excel file in debug so it can be grabbed 
         Console.WriteLine("Hello World");
-
         LoadEngineer alex = new("12345", "password");
 
         System.DateTime dateTime = System.DateTime.Now;
-        Location from = new("texas", "houston airport");
-        Location to = new("Nebraska", "Nebraska airport");
-        alex.DeleteFlight(789);
+        Location from = new("Nashville");
+        Location to = new("Cleveland");
+        alex.CreateFlight(555, from, to, dateTime);
+        
     }
 
 
