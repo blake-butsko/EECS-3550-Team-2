@@ -106,7 +106,7 @@ class Program
         var totalRows = worksheet.LastRowUsed().RowNumber();
         for (int i = 1; i <= totalRows; i++)
         {
-            var usCell = table.Row(i).Cell(1).GetString();
+            var usCell = table.Row(i).Cell(1).GetString();//Get hashed pass
             if (usCell == user)
             {
                 var tmpSource = ASCIIEncoding.ASCII.GetBytes(pass);
@@ -116,7 +116,7 @@ class Program
                 tmpSource = ASCIIEncoding.ASCII.GetBytes(table.Row(i).Cell(2).GetString());
                 savedHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
                 bool bEqual = false;
-                if (tmpNewHash.Length == savedHash.Length)
+                if (tmpNewHash.Length == savedHash.Length)//Compared stored hash with inputed password
                 {
                     int buf = 0;
                     while ((buf < tmpNewHash.Length) && (tmpNewHash[buf] == savedHash[buf]))
