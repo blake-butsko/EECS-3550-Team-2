@@ -30,7 +30,7 @@ namespace SWE_Project
 
             var flightColumn = table.Column(1); //flight id column
 
-            Flight flight;
+            Flight flight = new Flight();
             bool foundFlight = false;
 
             // Find flight in database and create object to populate it

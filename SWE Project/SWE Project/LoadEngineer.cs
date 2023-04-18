@@ -51,9 +51,6 @@ namespace SWE_Project
                     {
 
                         tableLastRow.Cell(i + 1).Value = listOfData[i].ToString(); // Change value of cell to list data
-
-
-
                     }
 
                 }

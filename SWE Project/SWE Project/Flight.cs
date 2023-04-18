@@ -35,6 +35,7 @@ namespace SWE_Project
             CalculatePoints();
             PopulateFlight();
         }
+        public Flight() { }
 
         private void CalculateDistance()
         {

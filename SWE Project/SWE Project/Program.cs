@@ -12,7 +12,6 @@ using SWE_Project;
 public class Globals
 {
     public static string databasePath = "";
-
 }
 
 
