@@ -6,6 +6,7 @@ using System.Collections;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.VariantTypes;
 using static ClosedXML.Excel.XLPredefinedFormat;
+using SWE_Project;
 
 // Class for global variables following c# standards
 public class Globals
@@ -251,8 +252,10 @@ class Program
     {
         Globals.databasePath = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + @"\AirportInfo.xlsx"); // store excel file in debug so it can be grabbed 
         CLICaller caller = new CLICaller();
+        
 
-
+        SWE_Project.AccountingManager x = new SWE_Project.AccountingManager("123","password");
+        x.getFlightProfit("555");
     }
 
 
