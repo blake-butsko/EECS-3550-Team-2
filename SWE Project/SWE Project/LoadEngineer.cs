@@ -23,7 +23,8 @@ namespace SWE_Project
 
         }
 
-        public void CreateFlight(int FlightId, Location DepartingFrom, Location ArrivingAt, System.DateTime DateTimeInformation)
+        // Create a flight in the database
+        public void CreateFlight(string FlightId, string DepartingFrom, string ArrivingAt, System.DateTime DateTimeInformation)
         {
             Flight newFlight = new(FlightId, DepartingFrom, ArrivingAt, DateTimeInformation);
             try
@@ -35,8 +36,8 @@ namespace SWE_Project
 
                 var listOfData = new ArrayList(); // Making list to feed data into Append data function (IEnumerable)
                 listOfData.Add(FlightId);
-                listOfData.Add(DepartingFrom.airport);
-                listOfData.Add(ArrivingAt.airport);
+                listOfData.Add(DepartingFrom);
+                listOfData.Add(ArrivingAt);
                 listOfData.Add(DateTimeInformation.ToUniversalTime().ToString("g"));
                 if (!(table.DataRange.FirstRow().Cell(1).Value.IsBlank))
                 {
@@ -44,12 +45,22 @@ namespace SWE_Project
                 }
 
                 var tableLastRow = table.LastRow();
-                for (int i = 0; i < table.LastRow().CellCount(); i++) // Iterrate through last row of table hitting each cell
+                if (listOfData != null)
                 {
+                    for (int i = 0; i < table.LastRow().CellCount(); i++) // Iterrate through last row of table hitting each cell
+                    {
 
-                    tableLastRow.Cell(i + 1).Value = listOfData[i].ToString(); // Change value of cell to list data
+                        tableLastRow.Cell(i + 1).Value = listOfData[i].ToString(); // Change value of cell to list data
 
 
+
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("Internal Error");
+                    return;
 
                 }
                 workbook.Save(); // Save changes
@@ -64,8 +75,8 @@ namespace SWE_Project
 
 
         }
-
-        public void EditFlight(int FlightId)
+        // Find an existing flight and edit it
+        public void EditFlight(string FlightId)
         {
             string[] listOfAirports = { "Nashville", "Cleveland", "Los Angeles", "New York City", "Salt Lake City", "Miami", "Detroit", "Atlanta", "Chicago", "Las Vegas", "Washington DC" };
             // Find flight id in excel file
@@ -77,6 +88,8 @@ namespace SWE_Project
                 var table = worksheet.Tables.Table(0);
 
                 var idColumn = table.DataRange.Column(1);
+
+
                 for (int i = 1; i <= idColumn.CellCount(); i++)
                 {
                     if (String.Equals(idColumn.Cell(i).Value.GetText(), FlightId.ToString()))
@@ -94,15 +107,29 @@ namespace SWE_Project
                             Console.WriteLine("To edit the date and time the plane is leaving, type: date");
                             Console.WriteLine("To stop editing the flight, type: quit");
 
-                            ; userEntry = Console.ReadLine().ToLower();
-                            userEntry = userEntry.Trim();
+                            userEntry = Console.ReadLine();
+
+                            if (userEntry == null)
+                            {
+                                Console.WriteLine("Invalid Entry");
+                                continue;
+                            }
+
+                            userEntry = userEntry.Trim().ToLower();
 
                             if (String.Equals(userEntry, "flight id"))
                             {
                                 Console.WriteLine("Current Value: " + flightRow.Cell(1).Value);
                                 Console.WriteLine("What would you like the new value to be?");
 
-                                string userChange = Console.ReadLine();
+                                var userChange = Console.ReadLine();
+
+                                if (userChange == null)
+                                {
+                                    Console.WriteLine("Invalid Entry");
+                                    continue;
+                                }
+
                                 int tryParseTest;
                                 if (!(Int32.TryParse(userChange, out tryParseTest)))
                                 {
@@ -119,8 +146,14 @@ namespace SWE_Project
                                 Console.WriteLine("Current Value: " + flightRow.Cell(2).Value);
                                 Console.WriteLine("What would you like the new value to be? Enter the city the airport is in: ");
 
-                                string userChange = Console.ReadLine().ToLower();
+                                string userChange = Console.ReadLine();
 
+                                if (userChange == null)
+                                {
+                                    Console.WriteLine("Invalid Entry");
+                                    continue;
+                                }
+                                userChange = userChange.ToLower();
                                 int tryParseTest;
                                 bool validAirport = false;
                                 for (int j = 0; j < listOfAirports.Length; j++)
@@ -148,7 +181,11 @@ namespace SWE_Project
                                 Console.WriteLine("What would you like the new value to be? Enter the city the airport is in: ");
 
                                 string userChange = Console.ReadLine().ToLower();
-
+                                if (userChange == null)
+                                {
+                                    Console.WriteLine("Invalid Entry");
+                                    continue;
+                                }
                                 int tryParseTest;
 
                                 bool validAirport = false;
@@ -178,6 +215,11 @@ namespace SWE_Project
                                 Console.WriteLine("What would you like the new value to be? Enter in the format month/day/year hour:minute AM/PM");
 
                                 string userChange = Console.ReadLine();
+                                if(userChange == null) 
+                                { 
+                                    Console.WriteLine("Invalid Entry");
+                                    continue;
+                                }
 
                                 try
                                 {
@@ -200,21 +242,23 @@ namespace SWE_Project
                             Console.WriteLine();
                         } while (!(String.Equals(userEntry, "quit")));
 
+                        return;
 
                     }
+
                 }
+                Console.WriteLine("Flight not found \n");
+                return;
+
             }
             catch (FileNotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
                 return;
             }
-
-
-
         }
-
-        public void DeleteFlight(int FlightId)
+        // Find an existing flight and delete it
+        public void DeleteFlight(string FlightId)
         {
 
             // Find flight id in excel file
@@ -226,6 +270,7 @@ namespace SWE_Project
                 var table = worksheet.Tables.Table(0);
 
                 var idColumn = table.DataRange.Column(1);
+
                 for (int i = 1; i <= idColumn.CellCount(); i++)
                 {
                     if (String.Equals(idColumn.Cell(i).Value.GetText(), FlightId.ToString()))
@@ -235,11 +280,14 @@ namespace SWE_Project
                         flightRow.Delete();
                         workbook.Save();
                         Console.WriteLine("Flight " + FlightId + " has been deleted.");
+                        return;
 
                         // Update customer history
 
                     }
                 }
+                Console.WriteLine("Flight not found \n");
+                return;
             }
             catch (FileNotFoundException ex)
             {
@@ -247,15 +295,12 @@ namespace SWE_Project
                 return;
             }
 
-
         }
 
-        public void CreateAccount(string UserId, string Password)
+        public void Login(string UserId, string Password)
         {
             throw new NotImplementedException();
         }
-
-
     }
 }
 
