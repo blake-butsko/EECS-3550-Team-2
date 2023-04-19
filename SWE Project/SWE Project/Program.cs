@@ -106,29 +106,21 @@ class Program
         var totalRows = worksheet.LastRowUsed().RowNumber();
         for (int i = 1; i <= totalRows; i++)
         {
-            var usCell = table.Row(i).Cell(1).GetString();//Get hashed pass
+            var usCell = table.Row(i).Cell(1).GetString();//Get row user id
             if (usCell == user)
             {
-                var tmpSource = ASCIIEncoding.ASCII.GetBytes(pass);
                 byte[] tmpNewHash;
                 byte[] savedHash;
-                tmpNewHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
-                tmpSource = ASCIIEncoding.ASCII.GetBytes(table.Row(i).Cell(2).GetString());
-                savedHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
-                bool bEqual = false;
-                if (tmpNewHash.Length == savedHash.Length)//Compared stored hash with inputed password
-                {
-                    int buf = 0;
-                    while ((buf < tmpNewHash.Length) && (tmpNewHash[buf] == savedHash[buf]))
-                    {
-                        buf += 1;
-                    }
-                    if (buf == tmpNewHash.Length)
-                    {
-                        bEqual = true;
-                    }
-                }
-                if (bEqual)
+                string SavedPass;
+                string checkPass;
+                SHA512 shaM = new SHA512Managed();
+                var tmpSource = ASCIIEncoding.ASCII.GetBytes(pass);
+                tmpNewHash =shaM.ComputeHash(tmpSource);
+                checkPass = Encoding.UTF8.GetString(tmpNewHash);
+                SavedPass = table.Row(i).Cell(2).Value.ToString();
+                //tmpSource = Encoding.UTF8.GetBytes(table.Row(i).Cell(2).Value.ToString());
+                //savedHash = shaM.ComputeHash(tmpSource);
+                if (checkPass == SavedPass)
                 {
                     if (user.Length == 6)
                     {
@@ -155,35 +147,41 @@ class Program
         var table = worksheet.Tables.Table(0); // Get customer Table
         var lastRowPos = worksheet.LastRowUsed().RowNumber();
         worksheet.Row(lastRowPos).InsertRowsBelow(1);
-        int id = worksheet.Row(lastRowPos).Cell(1).GetValue<int>();
-        id++;
+        Random rnd = new Random();
+        int ranCheck = rnd.Next(0, 900000);
+        ranCheck = 999999 - ranCheck;
+        int cmp;
+        for (int x = 2; x <= lastRowPos; x++)
+        {
+            cmp= worksheet.Row(x).Cell(1).GetValue<int>();
+            if (ranCheck == cmp)
+            {
+                ranCheck = rnd.Next(0, 900000);
+                ranCheck = 999999 - ranCheck;
+                x = 1;
+            }
+        }
         lastRowPos++;
-        worksheet.Row(lastRowPos).Cell(1).Value = id;
+        worksheet.Row(lastRowPos).Cell(1).Value = ranCheck;
         worksheet.Row(lastRowPos).Cell(3).Value = fname;
         worksheet.Row(lastRowPos).Cell(4).Value = lname;
         worksheet.Row(lastRowPos).Cell(5).Value = address;
-        worksheet.Row(lastRowPos).Cell(6).Value = phone;
+        worksheet.Row(lastRowPos).Cell(6).Value = phone;    
         worksheet.Row(lastRowPos).Cell(7).Value = age;
         worksheet.Row(lastRowPos).Cell(8).Value = 0;
         worksheet.Row(lastRowPos).Cell(9).Value = 0;
 
         byte[] tmpSource;
         byte[] tmpHash;
+        String byteholder;
+        SHA512 shaM = new SHA512Managed();
         tmpSource = ASCIIEncoding.ASCII.GetBytes(pass);
-        tmpHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
-        int i;
-        StringBuilder sOutput = new StringBuilder(tmpHash.Length);
-        for (i = 0; i < tmpHash.Length; i++)
-        {
-            sOutput.Append(tmpHash[i].ToString("X2"));
-        }
-        worksheet.Row(lastRowPos).Cell(2).Value = sOutput.ToString();
+        tmpHash = shaM.ComputeHash(tmpSource);
+        byteholder = Encoding.UTF8.GetString(tmpHash);
+        worksheet.Row(lastRowPos).Cell(2).Value = byteholder;
         workbook.SaveAs(Globals.databasePath);
+        Console.WriteLine($"Your User ID is: '{ranCheck}'");
         return true;
     }
 
 }
-
-
-
-
