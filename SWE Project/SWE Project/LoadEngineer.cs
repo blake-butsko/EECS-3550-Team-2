@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SWE_Project
 {
-    // The load engineer is responsible for creating, editing, and deleting flights3
+    // The load engineer is responsible for creating, editing, and deleting flights
     internal class LoadEngineer : Actor
     {
 
