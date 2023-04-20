@@ -1,5 +1,6 @@
 ﻿using actor_interface;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Drawing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -80,18 +81,20 @@ namespace SWE_Project
             try
             {
                 var workbook = new XLWorkbook(Globals.databasePath); // Open database
-                var worksheet = workbook.Worksheet("ActiveFlights"); // Get Flight Manifest sheet
+                var flightWorksheet = workbook.Worksheet("ActiveFlights"); // Get Flight Manifest sheet
 
-                var table = worksheet.Tables.Table(0);
+                var flightTable = flightWorksheet.Tables.Table(0);
 
-                var idColumn = table.DataRange.Column(1);
+                var flightIdColumn = flightTable.DataRange.Column(1);
+
+                bool updateFlag = false;
 
 
-                for (int i = 1; i <= idColumn.CellCount(); i++)
+                for (int i = 1; i <= flightIdColumn.CellCount(); i++)
                 {
-                    if (String.Equals(idColumn.Cell(i).Value.GetText(), FlightId.ToString()))
+                    if (String.Equals(flightIdColumn.Cell(i).Value.GetText(), FlightId.ToString()))
                     {
-                        var flightRow = table.DataRange.Row(i);
+                        var flightRow = flightTable.DataRange.Row(i);
 
                         String userEntry;
 
@@ -136,6 +139,7 @@ namespace SWE_Project
                                 {
                                     flightRow.Cell(1).Value = userChange;
                                     workbook.Save();
+                                    updateFlag = true;
                                 }
                             }
                             else if (String.Equals(userEntry, "from"))
@@ -169,6 +173,7 @@ namespace SWE_Project
                                     flightRow.Cell(2).Value = userChange;
 
                                     workbook.Save();
+                                    updateFlag = true;
                                 }
 
                             }
@@ -202,6 +207,7 @@ namespace SWE_Project
                                 {
                                     flightRow.Cell(3).Value = userChange;
                                     workbook.Save();
+                                    updateFlag = true;
                                 }
 
                             }
@@ -212,8 +218,8 @@ namespace SWE_Project
                                 Console.WriteLine("What would you like the new value to be? Enter in the format month/day/year hour:minute AM/PM");
 
                                 string userChange = Console.ReadLine();
-                                if(userChange == null) 
-                                { 
+                                if (userChange == null)
+                                {
                                     Console.WriteLine("Invalid Entry");
                                     continue;
                                 }
@@ -224,6 +230,7 @@ namespace SWE_Project
 
                                     flightRow.Cell(4).Value = userChange;
                                     workbook.Save();
+                                    updateFlag = true;
 
                                 }
                                 catch (Exception)
@@ -239,9 +246,46 @@ namespace SWE_Project
                             Console.WriteLine();
                         } while (!(String.Equals(userEntry, "quit")));
 
-                        return;
+                        if (updateFlag)
+                        {
+                            Flight updatedFlight = new Flight(flightRow.Cell(1).Value.ToString(),
+                                flightRow.Cell(2).Value.ToString(),
+                                flightRow.Cell(3).Value.ToString(),
+                                System.DateTime.Parse(flightRow.Cell(4).Value.ToString()));
+
+                            var custHistWorksheet = workbook.Worksheet("CustHistory");
+                            var custHistTable = custHistWorksheet.Tables.Table(0);
+
+                            var custHistIdColumn = custHistTable.Column(1);
+
+                            int passengerIndex = 0;
+
+                            for (int j = 1; j <= custHistIdColumn.CellCount(); j++)
+                            { 
+
+
+                                if (string.Equals(custHistIdColumn.Cell(j).Value.ToString(), updatedFlight.passengers[passengerIndex].UserId)) 
+                                {
+                                    custHistIdColumn.Cell(j).CellRight(1).Value = updatedFlight.FlightId;
+                                    custHistIdColumn.Cell(j).CellRight(2).Value = updatedFlight.FlightTime.ToString();
+                                    custHistIdColumn.Cell(j).CellRight(4).Value = updatedFlight.FlightFrom;
+                                    custHistIdColumn.Cell(j).CellRight(5).Value = updatedFlight.FlightTo;
+                                   
+                                    passengerIndex++;
+                                }
+                               
+                            }
+                            workbook.Save();
+                            return;
+
+                        }
+
+                        else
+                            continue;
 
                     }
+
+
 
                 }
                 Console.WriteLine("Flight not found \n");
@@ -262,24 +306,32 @@ namespace SWE_Project
             try
             {
                 var workbook = new XLWorkbook(Globals.databasePath); // Open database
-                var worksheet = workbook.Worksheet("ActiveFlights"); // Get Flight Manifest sheet
+                var flightWorksheet = workbook.Worksheet("ActiveFlights"); // Get Flight Manifest sheet
 
-                var table = worksheet.Tables.Table(0);
+                var flightTable = flightWorksheet.Tables.Table(0);
 
-                var idColumn = table.DataRange.Column(1);
+                var idColumn = flightTable.DataRange.Column(1);
 
                 for (int i = 1; i <= idColumn.CellCount(); i++)
                 {
                     if (String.Equals(idColumn.Cell(i).Value.GetText(), FlightId.ToString()))
                     {
-                        var flightRow = table.DataRange.Row(i);
+                        var flightRow = flightTable.DataRange.Row(i);
+
+                        Flight deletedFlight = new Flight(flightRow.Cell(1).Value.ToString(),
+                            flightRow.Cell(2).Value.ToString(),
+                            flightRow.Cell(3).Value.ToString(),
+                            System.DateTime.Parse(flightRow.Cell(4).Value.ToString()));
 
                         flightRow.Delete();
                         workbook.Save();
                         Console.WriteLine("Flight " + FlightId + " has been deleted.");
-                        return;
+
 
                         // Update customer history
+
+
+                        return;
 
                     }
                 }

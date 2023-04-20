@@ -36,6 +36,7 @@ C:\Users\dxvia\Documents\GitHub\EECS-3550-Team-2\SWE Project\SWE Project\bin\Deb
 C:\Users\dxvia\Documents\GitHub\EECS-3550-Team-2\SWE Project\SWE Project\obj\Debug\net6.0\SWE Project.csproj.CopyComplete
 C:\Users\dxvia\Documents\GitHub\EECS-3550-Team-2\SWE Project\SWE Project\obj\Debug\net6.0\SWE Project.genruntimeconfig.cache
 C:\Users\dxvia\Documents\GitHub\EECS-3550-Team-2\SWE Project\SWE Project\obj\Debug\net6.0\ref\SWE Project.dll
+<<<<<<< Updated upstream
 C:\Users\iwame\OneDrive\Documents\GitHub\EECS-3550-Team-2\SWE Project\SWE Project\bin\Debug\net6.0\SWE Project.exe
 C:\Users\iwame\OneDrive\Documents\GitHub\EECS-3550-Team-2\SWE Project\SWE Project\bin\Debug\net6.0\SWE Project.deps.json
 C:\Users\iwame\OneDrive\Documents\GitHub\EECS-3550-Team-2\SWE Project\SWE Project\bin\Debug\net6.0\SWE Project.runtimeconfig.json
@@ -59,3 +60,6 @@ C:\Users\iwame\OneDrive\Documents\GitHub\EECS-3550-Team-2\SWE Project\SWE Projec
 C:\Users\iwame\OneDrive\Documents\GitHub\EECS-3550-Team-2\SWE Project\SWE Project\obj\Debug\net6.0\SWE Project.pdb
 C:\Users\iwame\OneDrive\Documents\GitHub\EECS-3550-Team-2\SWE Project\SWE Project\obj\Debug\net6.0\SWE Project.genruntimeconfig.cache
 C:\Users\iwame\OneDrive\Documents\GitHub\EECS-3550-Team-2\SWE Project\SWE Project\obj\Debug\net6.0\ref\SWE Project.dll
+=======
+C:\Users\dxvia\Documents\GitHub\EECS-3550-Team-2\SWE Project\SWE Project\bin\Debug\net6.0\CsvHelper.dll
+>>>>>>> Stashed changes

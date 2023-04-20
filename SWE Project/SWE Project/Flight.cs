@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace SWE_Project
 {
-   
+
 
     // The Flight class holds all the information about a flight as well as methods to calculate distance, cost, and points
     internal class Flight
     {
-        string FlightFrom;
-        string FlightTo;
-        System.DateTime FlightTime;
-        string FlightId;
+        public string FlightFrom;
+        public string FlightTo;
+        public System.DateTime FlightTime;
+        public string FlightId { get; }
         public int PlaneType { get; set; }
         float Distance;
         int PointsGenerated;
-        public List<string> passengers = new List<string>();
+        public List<Customer> passengers = new List<Customer>();
         public Decimal Price { get; set; } // Using Decimal class made to deal with money cause floats and doubles loose precision over calculations
-                                    //+passengers: List<Customer>
+                                           //+passengers: List<Customer>
 
         public Flight(string FlightId, string FlightFrom, string FlightTo, System.DateTime FlightTime)
         {
@@ -93,17 +93,36 @@ namespace SWE_Project
         private void PopulateFlight() // Could add a flag to prevent needless checks
         {
             var workbook = new XLWorkbook(Globals.databasePath);
-            var worksheet = workbook.Worksheet("CustHistory");
+            var custHistWorksheet = workbook.Worksheet("CustHistory");
 
-            var table = worksheet.Tables.Table(0);
+            var custHistTable = custHistWorksheet.Tables.Table(0);
 
-            var IdColumn = table.Column(2);
+            var custHistIdColumn = custHistTable.Column(2);
+            List<string> userIds = new List<string>();
 
             // Find passengers on this flight and add them to flight list
-            for(int i = 1; i <= IdColumn.CellCount(); i++)
+            for (int i = 1; i <= custHistIdColumn.CellCount(); i++)
             {
-                if ((string.Equals(IdColumn.Cell(i).Value.ToString(),FlightId)))
-                    passengers.Add(IdColumn.Cell(i).CellLeft(1).Value.ToString());
+                if ((string.Equals(custHistIdColumn.Cell(i).Value.ToString(), FlightId)))
+                    userIds.Add(custHistIdColumn.Cell(i).CellLeft(1).Value.ToString());     
+            }
+
+            var custWorksheet = workbook.Worksheet("CustList");
+            var custTable = custWorksheet.Tables.Table(0);
+
+            var custIdColumn = custTable.Column(1);
+
+            for(int i = 1; i <= custIdColumn.CellCount(); i++)
+            {
+                if(userIds.Contains(custIdColumn.Cell(i).Value.ToString()))
+                {
+                    Customer cust = new Customer(custIdColumn.Cell(i).Value.ToString(),
+                        custIdColumn.Cell(i).CellRight(2).Value.ToString(),
+                            custIdColumn.Cell(i).CellRight(3).Value.ToString(),
+                                (int)custIdColumn.Cell(i).CellRight(6).Value);
+                    passengers.Add(cust);
+                }
+
             }
 
         }

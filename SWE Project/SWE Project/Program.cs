@@ -308,8 +308,9 @@ class Program
         SWE_Project.Location to = new("Cleveland");
         alex.CreateFlight(555, from, to, dateTime);
 
-        SWE_Project.AccountingManager x = new SWE_Project.AccountingManager("123","password");
-        x.getFlightProfit("555");
+        SWE_Project.LoadEngineer x = new SWE_Project.LoadEngineer("123","asd");
+        x.EditFlight("555");
+
     }
     static char Login(string user, string pass)
     {
