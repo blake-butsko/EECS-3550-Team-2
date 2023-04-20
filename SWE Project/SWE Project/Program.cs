@@ -22,7 +22,7 @@ internal class CLICaller
     char state;
     public CLICaller() { } // Constructor
 
-    public void CustomerCli() // add customer object here
+    public void CustomerCli(SWE_Project.Customer customer) // add customer object here
     {
         Console.WriteLine("*********************************************************************************************");
         string user = "sample name"; // Temp

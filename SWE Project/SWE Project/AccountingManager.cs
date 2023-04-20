@@ -97,6 +97,7 @@ namespace SWE_Project
             string fileName = "Total_profit " + DateTime.Now.ToString() + ".csv";
             fileName = fileName.Replace("/","_");
             fileName = fileName.Replace(":", "_");
+
             FileStream fileCreate = File.Create(fileName);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("Flight, Profit,");
@@ -121,11 +122,7 @@ namespace SWE_Project
 
         }
 
-
-
-
-
-    
+   
     public void Login(string UserId, string Password)
     {
         throw new NotImplementedException();
