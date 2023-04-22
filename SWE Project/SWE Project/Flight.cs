@@ -14,29 +14,30 @@ namespace SWE_Project
     {
         public string FlightFrom;
         public string FlightTo;
-        public System.DateTime FlightTime;
+        public System.DateTime departTime;
+        public System.DateTime arrivalTime;
         public string FlightId { get; }
         public int PlaneType { get; set; }
         float Distance;
-        int PointsGenerated;
+        public int PointsGenerated;
         public List<Customer> passengers = new List<Customer>();
         public Decimal Price { get; set; } // Using Decimal class made to deal with money cause floats and doubles loose precision over calculations
                                            //+passengers: List<Customer>
 
-        public Flight(string FlightId, string FlightFrom, string FlightTo, System.DateTime FlightTime)
+        public Flight(string FlightId, string FlightFrom, string FlightTo, System.DateTime departTime, System.DateTime arrivalTime)
         {
             this.FlightId = FlightId;
             this.FlightFrom = FlightFrom;
             this.FlightTo = FlightTo;
-            this.FlightTime = FlightTime;
-
+            this.departTime = departTime;
+            // Fill flights with info when created
             CalculateDistance();
             CalculatePrice();
             CalculatePoints();
             PopulateFlight();
         }
         public Flight() { }
-
+        // Finds distance of a flight from database
         private void CalculateDistance()
         {
             int CalculatedDistance = 0;
@@ -69,7 +70,7 @@ namespace SWE_Project
 
             }
         }
-
+        // Calculates price of a flight based on passengers, distance, and size of plane
         private void CalculatePrice()
         {
             Decimal FixedCost = 50;
@@ -79,8 +80,18 @@ namespace SWE_Project
 
             Decimal TotalCost = FixedCost + DistanceCost + TsaSegmentCost; // will need to check if rounding is needed
 
+            // Apply red eye discount
+            if (this.departTime.Hour >= 0 || this.departTime.Hour <= 5 || this.arrivalTime.Hour >= 0 || this.arrivalTime.Hour <= 5)
+            {
+                TotalCost *= (decimal).8;
+            }else if((this.departTime.Hour >= 0 && this.departTime.Hour >= 8) || (this.arrivalTime.Hour >= 19 && this.arrivalTime.Hour < 0)) // Apply Off-Peak discount
+            {
+                TotalCost *= (decimal).9;
+            }
+
             this.Price = TotalCost;
         }
+        // Calculate points generated from a flight
         private void CalculatePoints()
         {
             Decimal PointsDec = this.Price * 100;
@@ -100,7 +111,7 @@ namespace SWE_Project
             var custHistIdColumn = custHistTable.Column(2);
             List<string> userIds = new List<string>();
 
-            // Find passengers on this flight and add them to flight list
+            // Find passengers on this flight and add their id to list
             for (int i = 1; i <= custHistIdColumn.CellCount(); i++)
             {
                 if ((string.Equals(custHistIdColumn.Cell(i).Value.ToString(), FlightId)))
@@ -111,7 +122,7 @@ namespace SWE_Project
             var custTable = custWorksheet.Tables.Table(0);
 
             var custIdColumn = custTable.Column(1);
-
+            // Find passengers using customer ids and add customer object to list
             for(int i = 1; i <= custIdColumn.CellCount(); i++)
             {
                 if(userIds.Contains(custIdColumn.Cell(i).Value.ToString()))

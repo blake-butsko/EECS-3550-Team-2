@@ -41,12 +41,13 @@ namespace SWE_Project
                 if (string.Equals((string)flightColumn.Cell(i).Value, flightId))
                 {
 
-                    System.DateTime dateTime = System.DateTime.Parse(flightColumn.Cell(i).CellRight(3).Value.ToString());
+                    System.DateTime departTime = System.DateTime.Parse(flightColumn.Cell(i).CellRight(3).Value.ToString());
+                    System.DateTime arrivalTime = System.DateTime.Parse(flightColumn.Cell(i).CellRight(4).Value.ToString());
 
                     flight = new Flight(flightColumn.Cell(i).Value.ToString(),
                         flightColumn.Cell(i).CellRight(1).Value.ToString(),
                          flightColumn.Cell(i).CellRight(2).Value.ToString(),
-                         dateTime);
+                         departTime, arrivalTime);
 
                     foundFlight = true;
                     break;
@@ -85,12 +86,13 @@ namespace SWE_Project
             {
                 Flight flight = new Flight();
 
-                System.DateTime dateTime = System.DateTime.Parse(flightColumn.Cell(i).CellRight(3).Value.ToString());
+                System.DateTime departTime = System.DateTime.Parse(flightColumn.Cell(i).CellRight(3).Value.ToString());
+                System.DateTime arrivalTime = System.DateTime.Parse(flightColumn.Cell(i).CellRight(4).Value.ToString());
 
                 flight = new Flight(flightColumn.Cell(i).Value.ToString(),
                     flightColumn.Cell(i).CellRight(1).Value.ToString(),
                      flightColumn.Cell(i).CellRight(2).Value.ToString(),
-                     dateTime);
+                     departTime, arrivalTime);
 
                 flightList.Add(flight);
             }

@@ -78,7 +78,7 @@ internal class CLICaller
             Console.WriteLine("What would you like to do today?");
             Console.WriteLine("To create a flight, enter create.");
             Console.WriteLine("To edit a flight, enter edit.");
-            Console.WriteLine("To delete a flight, enter flight.");
+            Console.WriteLine("To delete a flight, enter delete.");
             Console.WriteLine("To create an account for a fellow worker, enter account.");
             Console.WriteLine("To exit the load engineer portal, enter quit.\n");
 
@@ -99,7 +99,7 @@ internal class CLICaller
             {
 
             }
-            else if (string.Equals(userInput, "flight"))
+            else if (string.Equals(userInput, "delete"))
             {
 
             }
@@ -255,10 +255,12 @@ class Program
         CLICaller caller = new CLICaller();
         Console.WriteLine("Hello World");
         SWE_Project.LoadEngineer alex = new("12345", "password");
+        alex.DeleteFlight("123");
         char Vr = 'Q';
         string input;
         string user = "";
         string pass = "";
+
         do
         {
             Console.WriteLine("Welcome, Enter L to Login, C to Create an Account, or Q to Quit");
@@ -272,6 +274,8 @@ class Program
                 Console.Write("Enter password: ");
                 pass = Console.ReadLine();
                 Vr = Login(user, pass);
+
+
                 if (Vr == 'Q')
                 {
                     Console.WriteLine("Username or Password was incorrrect");
@@ -303,14 +307,6 @@ class Program
             }
 
         } while (Vr == 'Q');
-        System.DateTime dateTime = System.DateTime.Now;
-        SWE_Project.Location from = new("Nashville");
-        SWE_Project.Location to = new("Cleveland");
-        alex.CreateFlight(555, from, to, dateTime);
-
-        SWE_Project.LoadEngineer x = new SWE_Project.LoadEngineer("123","asd");
-        x.EditFlight("555");
-
     }
     static char Login(string user, string pass)
     {

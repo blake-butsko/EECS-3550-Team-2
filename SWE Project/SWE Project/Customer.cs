@@ -15,7 +15,8 @@ namespace SWE_Project
         private string Password { get; set; }
         public string FName { get; set; }
         public string LName { get; set; }
-        int Points { get; }
+        public int Points { get; }
+
 
         string CreditCardInfo = ""; // Could make into list to hold several cards
         string Email = "";
