@@ -9,6 +9,8 @@ using static ClosedXML.Excel.XLPredefinedFormat;
 using SWE_Project;
 using System.Text;
 using System.Security.Cryptography;
+using DocumentFormat.OpenXml.Spreadsheet;
+using System.Runtime.Intrinsics.Arm;
 
 // Class for global variables following c# standards
 public class Globals
@@ -22,7 +24,7 @@ internal class CLICaller
     char state;
     public CLICaller() { } // Constructor
 
-    public void CustomerCli() // add customer object here
+    public void CustomerCli(SWE_Project.Customer person) // add customer object here
     {
         Console.WriteLine("*********************************************************************************************");
         string user = "sample name"; // Temp
@@ -118,7 +120,7 @@ internal class CLICaller
 
     }
 
-    public void marketingManagerCli()
+    public void marketingManagerCli(SWE_Project.MarketingManager marketing)
     {
         Console.WriteLine("*********************************************************************************************");
         string user = "sample name"; // Temp
@@ -160,7 +162,7 @@ internal class CLICaller
 
     }
 
-    public void FlightManagerCli()
+    public void FlightManagerCli(SWE_Project.FlightManager flighter)
     {
         Console.WriteLine("*********************************************************************************************");
         string user = "sample name"; // Temp
@@ -201,7 +203,7 @@ internal class CLICaller
 
     }
 
-    public void AccountingManagerCli()
+    public void AccountingManagerCli(SWE_Project.AccountingManager accountant)
     {
 
         Console.WriteLine("*********************************************************************************************");
@@ -255,19 +257,27 @@ class Program
         CLICaller caller = new CLICaller();
         Console.WriteLine("Hello World");
         SWE_Project.LoadEngineer alex = new("12345", "password");
-        char Vr = 'Q';
-        string input;
+        int Vr = 0;
+        string mainInput;
         string user = "";
         string pass = "";
+        Console.WriteLine("*********************************************************************************************");
+        Console.WriteLine("Welcome to Burger King Airlines");
+        Console.WriteLine("");
         do
         {
-            Console.WriteLine("Welcome, Enter L to Login, C to Create an Account, or Q to Quit");
-            input = Console.ReadLine();
-            if (input == "L")
+            Console.WriteLine("If you already have an account and want to access the app, enter Login");
+            Console.WriteLine("To make a new account, enter Create ");
+            Console.WriteLine("To exit the application, enter Quit");
+            mainInput = Console.ReadLine();
+            if (mainInput != null)
+                mainInput = mainInput.ToLower();
+        
+            if (string.Equals(mainInput, "login"))//When login is inputted wait for input of the ID and password send to login function
             {
                 user = "";
                 pass = "";
-                Console.Write("Enter username: ");
+                Console.Write("Enter user ID: ");
                 user = Console.ReadLine();
                 Console.Write("Enter password: ");
                 pass = Console.ReadLine();
@@ -277,7 +287,7 @@ class Program
                     Console.WriteLine("Username or Password was incorrrect");
                 }
             }
-            else if (input == "C")
+            else if (mainInput == "create")//When login in inputted ask for Name, Address, Phone, Age, Card Information, Password and send to CreateAccount function
             {
                 Console.Write("Enter First Name: ");
                 string fname = Console.ReadLine();
@@ -297,42 +307,84 @@ class Program
                     CreateAccount(fname, lname, address, phone, age, passs);
                 }
             }
-            else if (input == "Q")
+            else if (mainInput == "quit")
             {
                 System.Environment.Exit(1);
             }
+            else
+            {
+                Console.WriteLine("Invalid Entry\n");
+            }
 
-        } while (Vr == 'Q');
+        } while (Vr == 0);
         System.DateTime dateTime = System.DateTime.Now;
+        var workbook = new XLWorkbook(Globals.databasePath); // Open database
+        CLICaller cLi = new CLICaller();
+        if (user.Length == 6)
+        {
+            var worksheet = workbook.Worksheet("custList");
+            var table = worksheet.Tables.Table(0);
+            var idCol = table.Column(1);
+            Customer currentUser = new Customer(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString(), idCol.Cell(Vr).CellRight(2).GetValue<int>(), idCol.Cell(Vr).CellRight(3).Value.ToString(), idCol.Cell(Vr).CellRight(4).Value.ToString(), idCol.Cell(Vr).CellRight(5).Value.ToString(), idCol.Cell(Vr).CellRight(6).GetValue<int>(), idCol.Cell(Vr).CellRight(7).Value.ToString());
+            cLi.CustomerCli(currentUser);
+        }
+        else if(user.Length == 5)
+        {
+            var worksheet = workbook.Worksheet("EmpList");
+            var table = worksheet.Tables.Table(0);
+            var idCol = table.Column(1);
+            string dep = idCol.Cell(Vr).CellRight(2).Value.ToString();
+            dep.ToLower();
+            if (dep == "marketing")
+            {
+                //MarketingManager currentUser = new MarketingManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                //cLi.marketingManagerCli(currentUser);
+            }
+            else if (dep == "engineer")
+            {
+                LoadEngineer currentUser = new LoadEngineer(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                cLi.LoadEngineerCli(currentUser);
+            }
+            else if (dep == "flight")
+            {
+                FlightManager currentUser = new FlightManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                cLi.FlightManagerCli(currentUser);
+            }
+            else if (dep == "accounting")
+            {
+                AccountingManager currentUser = new AccountingManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                cLi.AccountingManagerCli(currentUser);
+            }
+        }
         //SWE_Project.Location from = new("Nashville");
         //SWE_Project.Location to = new("Cleveland");
         //alex.CreateFlight(555, from, to, dateTime);
 
         //SWE_Project.AccountingManager x = new SWE_Project.AccountingManager("123","password");
         SWE_Project.FlightManager Mark = new SWE_Project.FlightManager("123", "password");
-        Mark.getFlightManifest("555");
+        //Mark.getFlightManifest("555");
         //x.getFlightProfit("555");
     }
-    static char Login(string user, string pass)
+    static int Login(string user, string pass)
     {
         if (user == null || pass == null)
         {
-            return 'Q';
+            return 0;
         }
-        char Vr = 'Q';
+        int usersRow = 0;
         var workbook = new XLWorkbook(Globals.databasePath); // Open database
         var worksheet = workbook.Worksheet("custList");
         if (user.Length == 6)
         {
-            worksheet = workbook.Worksheet("custList"); // Get Flight Manifest sheet
+            worksheet = workbook.Worksheet("custList"); // Get list of employees
         }
         else if (user.Length == 5)
         {
-            worksheet = workbook.Worksheet("EmpList"); // Get Flight Manifest sheet
+            worksheet = workbook.Worksheet("EmpList"); // Get list of Employees
         }
         else
         {
-            return 'Q'; //If length is not 8 for customers or 7 for employees than username is invalid so return Q
+            return 0; //If length is not 8 for customers or 7 for employees than username is invalid so return Q
         }
 
         var table = worksheet.Tables.Table(0); // Get customer Table
@@ -347,31 +399,22 @@ class Program
                 string SavedPass;
                 string checkPass;
                 SHA512 shaM = new SHA512Managed();
-                var tmpSource = ASCIIEncoding.ASCII.GetBytes(pass);
-                tmpNewHash =shaM.ComputeHash(tmpSource);
-                checkPass = Encoding.UTF8.GetString(tmpNewHash);
+                var tmpSource = ASCIIEncoding.ASCII.GetBytes(pass);//Turns inputted password into bytes
+                tmpNewHash =shaM.ComputeHash(tmpSource);//Hashes the bytes
+                checkPass = Encoding.UTF8.GetString(tmpNewHash);//turns it back into a string
                 SavedPass = table.Row(i).Cell(2).Value.ToString();
-                //tmpSource = Encoding.UTF8.GetBytes(table.Row(i).Cell(2).Value.ToString());
-                //savedHash = shaM.ComputeHash(tmpSource);
-                if (checkPass == SavedPass)
+                if (checkPass == SavedPass)//Compares inputed hashed string to hashed string stored in database
                 {
-                    if (user.Length == 6)
-                    {
-                        Vr = 'C';
-                    }
-                    else if (user.Length == 5)
-                    {
-                        Vr = 'E';
-                    }
+                    usersRow = i;//Stores row of users information
                 }
                 else
                 {
-                    Vr = 'Q';
+                    usersRow = 0;
                 }
                 break;
             }
         }
-        return Vr;
+        return usersRow;
     }
     static bool CreateAccount(string fname, string lname, string address, string phone, string age, string pass)
     {
