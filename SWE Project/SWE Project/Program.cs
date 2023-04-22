@@ -304,12 +304,14 @@ class Program
 
         } while (Vr == 'Q');
         System.DateTime dateTime = System.DateTime.Now;
-        SWE_Project.Location from = new("Nashville");
-        SWE_Project.Location to = new("Cleveland");
-        alex.CreateFlight(555, from, to, dateTime);
+        //SWE_Project.Location from = new("Nashville");
+        //SWE_Project.Location to = new("Cleveland");
+        //alex.CreateFlight(555, from, to, dateTime);
 
-        SWE_Project.AccountingManager x = new SWE_Project.AccountingManager("123","password");
-        x.getFlightProfit("555");
+        //SWE_Project.AccountingManager x = new SWE_Project.AccountingManager("123","password");
+        SWE_Project.FlightManager Mark = new SWE_Project.FlightManager("123", "password");
+        Mark.getFlightManifest("555");
+        //x.getFlightProfit("555");
     }
     static char Login(string user, string pass)
     {
