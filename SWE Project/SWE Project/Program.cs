@@ -255,7 +255,7 @@ class Program
         CLICaller caller = new CLICaller();
         Console.WriteLine("Hello World");
         SWE_Project.LoadEngineer alex = new("12345", "password");
-        alex.DeleteFlight("123");
+        alex.DeleteFlight("1");
         char Vr = 'Q';
         string input;
         string user = "";

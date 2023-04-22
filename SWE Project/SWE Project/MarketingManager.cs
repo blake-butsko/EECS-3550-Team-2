@@ -8,5 +8,6 @@ namespace SWE_Project
 {
     internal class MarketingManager
     {
+        public MarketingManager() { }
     }
 }

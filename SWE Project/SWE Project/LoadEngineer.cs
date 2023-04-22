@@ -398,16 +398,23 @@ namespace SWE_Project
                         int passengerIndex = 0;
 
                         //Get Customer sheet to refund points
-
+                        
                         var custWorksheet = workbook.Worksheet("CustList");
                         var custTable = custWorksheet.Tables.Table(0);
                         var custIdColumn = custTable.Column(1);
+                        List <bool> pointFlags = new List<bool>();
                         // Update the customer history
                         for (int j = 1; j <= custHistIdColumn.CellCount(); j++)
                         {
                             if (string.Equals(custHistIdColumn.Cell(j).Value.ToString(), deletedFlight.passengers[passengerIndex].UserId))
                             {
-                                custHistIdColumn.Cell(j).CellRight(5).Value = "Canceled";
+                                if (string.Equals(custHistIdColumn.Cell(j).CellRight(8).Value.ToString(),"Points"))
+                                    pointFlags.Add(true);
+                                else
+                                    pointFlags.Add(false);
+
+                                
+                                custHistIdColumn.Cell(j).CellRight(4).Value = "Canceled";
                                 passengerIndex++;
                                 if (passengerIndex >= deletedFlight.passengers.Count)
                                     break;
@@ -420,9 +427,12 @@ namespace SWE_Project
                         {
                             if (string.Equals(custIdColumn.Cell(j).Value.ToString(), deletedFlight.passengers[passengerIndex].UserId))
                             {
-                                custIdColumn.Cell(j).CellRight(8).Value = (int)custIdColumn.Cell(j).CellRight(8).Value + deletedFlight.PointsGenerated;
+                                if (pointFlags[passengerIndex])
+                                    custIdColumn.Cell(j).CellRight(8).Value = (int)custIdColumn.Cell(j).CellRight(8).Value + deletedFlight.PointsGenerated;
 
                                 passengerIndex++;
+                                if (passengerIndex >= deletedFlight.passengers.Count)
+                                    break;
                             }
 
                         }
