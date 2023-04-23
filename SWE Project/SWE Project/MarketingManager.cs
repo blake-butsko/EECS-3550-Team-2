@@ -49,7 +49,7 @@ namespace SWE_Project
 
                             return (int)table.Column(1).Cell(j).CellRight(1).Value; // returns distance
 
-                            
+
                         }
                     }
 
@@ -66,52 +66,56 @@ namespace SWE_Project
         {
             // Code to go into the database and retrieve the flight distance
             // For specified flightId find the distance between Departing and ArrivingAt (add try catch in case of invalid name)
-            try {
+            try
+            {
                 var workbook = new XLWorkbook(Globals.databasePath); // Open database
                 var worksheet = workbook.Worksheet("ActiveFlights"); // Get Flight Manifest sheet
 
                 var table = worksheet.Tables.Table(0);
 
                 var idColumn = table.DataRange.Column(1);
-
-                // For an ID not in the table
-                bool Notfound = false;
-
+                bool IdCheck = false;
+                bool IdFound;
                 for (int i = 1; i <= idColumn.CellCount(); i++)
                 {
-                    if (String.Equals(idColumn.Cell(i).Value.GetText(), FlightId.ToString()))
+                    //Still have to write a try catch only inside this if
+                    try { IdFound = String.Equals(idColumn.Cell(i).Value.GetText(), FlightId.ToString()); }
+                    catch { IdFound = false; }
+                    
+                    if (IdFound)
                     {
+                        IdCheck = true;
                         var flightRow = table.DataRange.Row(i);
 
                         String arrival = (string)flightRow.Cell(2).Value;
                         String departure = (string)flightRow.Cell(3).Value;
                         int distance = CalculateDistances(arrival, departure);
-                        String plane_choice;
+                        String suggested;
                         // code to fetch distance from datasheet thing
                         // Need to find list of planes and distances based on that
-                        if (distance < 200) {
-                            plane_choice = PossiblePlanes[0];
+                        if (distance < 200)
+                        {
+                            suggested = PossiblePlanes[0];
                         }
                         else if (distance > 199 && distance < 300)
-                            plane_choice = PossiblePlanes[1];
+                            suggested = PossiblePlanes[1];
                         else if (distance > 199 && distance < 300)
-                            plane_choice = PossiblePlanes[2];
+                            suggested = PossiblePlanes[2];
                         else
                         {
-                            plane_choice= PossiblePlanes[3];
+                            suggested = PossiblePlanes[3];
                         }
                         String userEntry;
 
                         do
                         {
                             // Row starts at 1 rather than 0
-                            Console.WriteLine("This is our suggested plane for this flight {0}", plane_choice);
+                            Console.WriteLine("This is our suggested plane for this flight {0}", suggested);
                             Console.WriteLine("If this is satisfactory, type: y");
                             Console.WriteLine("If you want to manually enter a plane, type: n");
                             Console.WriteLine("Or if you don't want a plane assigned to this flight, type: quit");
                             // y will set the plane and then quit the function
                             // n will output a series of planes where you put in a number to choose
-                            // wanna remove that ; but Ill test first
 
                             userEntry = Console.ReadLine().ToLower();
                             userEntry = userEntry.Trim();
@@ -119,57 +123,54 @@ namespace SWE_Project
                             if (String.Equals(userEntry, "y"))
                             {
                                 Console.WriteLine("You've selected y, the flight will be updated with the plane");
-                                flightRow.Cell(1).Value = plane_choice;
+                                flightRow.Cell(5).Value = suggested;
                                 workbook.Save();
                                 return;
-                                /*Console.WriteLine("Current Value: " + flightRow.Cell(1).Value);
-                                Console.WriteLine("What would you like the new value to be?");
-
-                                string userChange = Console.ReadLine();
-                                int tryParseTest;
-                                if (!(Int32.TryParse(userChange, out tryParseTest)))
-                                {
-                                    Console.WriteLine("Invalid input");
-                                }
-                                else
-                                {
-                                    flightRow.Cell(1).Value = userChange;
-                                    workbook.Save();
-                                }*/
                             }
                             if (String.Equals(userEntry, "n"))
                             {
+                                string userChange;
                                 do
                                 {
-                                    Console.WriteLine("You've selected n, here's the suggested plane {0} what would you like to replace it with");
+                                    Console.WriteLine("You've selected n, the suggested plane is {0} what would you like to replace it with", suggested);
                                     for (int g = 0; g < PossiblePlanes.Length; g++)
                                     {
                                         Console.WriteLine("{0}. {1}", g, PossiblePlanes[g]);
                                     }
-                                    userEntry = Console.ReadLine().ToLower();
-                                    userEntry = userEntry.Trim();
-                                    try {
-                                        PossiblePlanes[(int)userEntry];
-                                        flightRow.Cell(1).Value = plane_choice;
-                                        workbook.Save();
-                                        Console.WriteLine("You've selected {0} is this right type: y/n", PossiblePlanes[(int)userEntry]);
+                                    userChange = Console.ReadLine();
+                                    userChange = userChange.Trim(); //Might need to remove this
+                                    try
+                                    {
+                                        String planeChoice = PossiblePlanes[Int32.Parse(userChange)];
+
+                                        Console.WriteLine("You've selected {0} is this right type: y/n", planeChoice);
                                         userEntry = Console.ReadLine().ToLower();
                                         userEntry = userEntry.Trim();
-                                        if(String.Equals(userEntry, "y"))
+                                        if (String.Equals(userEntry, "y"))
+                                        {
+                                            flightRow.Cell(5).Value = planeChoice;
+                                            workbook.Save();
+                                            Console.WriteLine("You've selected y, the flight will be updated with the plane");
                                             return;
+                                        }
+
                                         else
-                                            Console.WriteLine("Please try again or to leave the program type: quit ");
+                                            Console.WriteLine("Please try again or to leave the program type: quit \n");
                                     }
-                                    catch { }
-                                } while (!(String.Equals(userEntry, "quit")));
+                                    catch { Console.WriteLine("Invalid input, please try again or to leave type: quit\n"); }
+                                } while (!(String.Equals(userChange, "quit")));
                             }
                             Console.WriteLine();
                         } while (!(String.Equals(userEntry, "quit")));
-                    }                    
+                    }
+                    else
+                    {
+                        IdCheck = false;
+                    }
                 }
-                if(Notfound)
+                if (!IdCheck)
                 {
-                    Console.WriteLine("Flight ID not found");
+                    Console.WriteLine("FlightID not found in our database");
                     return;
                 }
             }
