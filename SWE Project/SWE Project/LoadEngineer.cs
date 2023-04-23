@@ -13,7 +13,7 @@ namespace SWE_Project
     internal class LoadEngineer : Actor
     {
 
-        string UserId { get; }
+        public string UserId { get; }
         string Password { get; set; }
 
         public LoadEngineer(string UserId, string Password)
@@ -26,7 +26,7 @@ namespace SWE_Project
         // Create a flight in the database
         public void CreateFlight(string FlightId, string DepartingFrom, string ArrivingAt, System.DateTime DateTimeInformation)
         {
-            Flight newFlight = new(FlightId, DepartingFrom, ArrivingAt, DateTimeInformation);
+            Flight newFlight = new(FlightId, DepartingFrom, ArrivingAt, DateTimeInformation, DateTimeInformation);
             try
             {
                 var workbook = new XLWorkbook(Globals.databasePath); // Open database

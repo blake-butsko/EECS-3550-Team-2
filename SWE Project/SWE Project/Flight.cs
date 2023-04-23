@@ -21,9 +21,9 @@ namespace SWE_Project
         int PointsGenerated;
         public List<string> passengers = new List<string>();
         public Decimal Price { get; set; } // Using Decimal class made to deal with money cause floats and doubles loose precision over calculations
-                                    //+passengers: List<Customer>
+                                           //+passengers: List<Customer>
 
-        public Flight(string FlightId, string FlightFrom, string FlightTo, System.DateTime FlightTime)
+        public Flight(string FlightId, string FlightFrom, string FlightTo, System.DateTime departTime, System.DateTime arrivalTime)
         {
             this.FlightId = FlightId;
             this.FlightFrom = FlightFrom;

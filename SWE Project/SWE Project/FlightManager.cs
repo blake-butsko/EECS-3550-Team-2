@@ -11,7 +11,7 @@ namespace SWE_Project
 {
     internal class FlightManager
     {
-        string UserId;
+        public string UserId { get; }
         string Password;
 
         public FlightManager(string UserId, string Password)
@@ -35,14 +35,15 @@ namespace SWE_Project
                 if (string.Equals((string)flightColumn.Cell(i).Value, FlightId))
                 {
 
-                    System.DateTime dateTime = System.DateTime.Parse(flightColumn.Cell(i).CellRight(3).Value.ToString());
-
+                    System.DateTime from = System.DateTime.Parse(flightColumn.Cell(i).CellRight(3).Value.ToString());
+                    System.DateTime dest = System.DateTime.Parse(flightColumn.Cell(i).CellRight(4).Value.ToString());
                     flight = new Flight(flightColumn.Cell(i).Value.ToString(),
                         flightColumn.Cell(i).CellRight(1).Value.ToString(),
                          flightColumn.Cell(i).CellRight(2).Value.ToString(),
-                         dateTime);
+                         from, dest);
 
                     foundFlight = true;
+                    table.Row(i).Delete();
                     break;
                 }
             }

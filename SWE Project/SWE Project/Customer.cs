@@ -9,7 +9,7 @@ namespace SWE_Project
 {
     internal class Customer : Actor
     {
-        string UserId { get; }
+        public string UserId { get; }
         private string Password { get; set; }
         int Points { get; }
 

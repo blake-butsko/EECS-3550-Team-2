@@ -11,6 +11,7 @@ using System.Text;
 using System.Security.Cryptography;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System.Runtime.Intrinsics.Arm;
+using DocumentFormat.OpenXml.Office2010.Word;
 
 // Class for global variables following c# standards
 public class Globals
@@ -27,8 +28,20 @@ internal class CLICaller
     public void CustomerCli(SWE_Project.Customer person) // add customer object here
     {
         Console.WriteLine("*********************************************************************************************");
-        string user = "sample name"; // Temp
-        Console.WriteLine("\n Welcome Back " + user + "!\n");
+        string user = person.UserId; // Temp
+        var workbook = new XLWorkbook(Globals.databasePath); // Open database
+        var worksheet = workbook.Worksheet("CustList");
+        var table = worksheet.Tables.Table(0); // Get customer Table
+        var totalRows = worksheet.LastRowUsed().RowNumber();
+        for (int i = 1; i <= totalRows; i++)
+        {
+            var usCell = table.Row(i).Cell(1).GetString();//Get row user id
+            if (string.Equals(usCell, user))
+            {
+                Console.WriteLine("\n Welcome Back " + table.Row(i).Cell(4).GetString() + "!\n");
+                break;
+            }
+        }
         var userInput = "";
         do
         {
@@ -72,8 +85,20 @@ internal class CLICaller
     public void LoadEngineerCli(SWE_Project.LoadEngineer engineer) 
     {
         Console.WriteLine("*********************************************************************************************");
-        string user = "sample name"; // Temp
-        Console.WriteLine("\n Welcome Back " + user + "!\n");
+        string user = engineer.UserId; // Temp
+        var workbook = new XLWorkbook(Globals.databasePath); // Open database
+        var worksheet = workbook.Worksheet("EmpList");
+        var table = worksheet.Tables.Table(0); // Get customer Table
+        var totalRows = worksheet.LastRowUsed().RowNumber();
+        for (int i = 1; i <= totalRows; i++)
+        {
+            var usCell = table.Row(i).Cell(1).GetString();//Get row user id
+            if (string.Equals(usCell, user))
+            {
+                Console.WriteLine("\n Welcome Back " + table.Row(i).Cell(4).GetString() + "!\n");
+                break;
+            }
+        }
         var userInput = "";
         do
         {
@@ -96,14 +121,52 @@ internal class CLICaller
             if (string.Equals(userInput, "create"))
             {
                 // Booking method here
+                Console.Write("Enter an ID for the flight: ");
+                string FlightId = Console.ReadLine();
+                Console.Write("Enter the airport the flight is taking off from: ");//Need to check if this is an actual airport
+                string DepartingFrom = Console.ReadLine();
+                Console.Write("Enter the airport the flight will be arriving at: ");
+                string ArrivingAt = Console.ReadLine();
+                Console.Write("Enter the time of departure: ");//Needs to be more complex
+                string DepartTime = Console.ReadLine();
+                Console.Write("Enter the time of arrival: ");//Needs to be more complex
+                string arrivalTime = Console.ReadLine();
+                string confIn;
+                do
+                {
+                    Console.Write("Enter Yes or No (Y/N) to confirm submition: ");
+                    confIn = Console.ReadLine();
+                    if (confIn == "Y")
+                    {
+                        //engineer.CreateFlight(FlightId, string DepartingFrom, string ArrivingAt, System.DateTime DateTimeInformation)
+                    }
+                } while (confIn == "y" || confIn == "n");
             }
             else if (string.Equals(userInput, "edit"))
             {
-
+                Console.Write("Enter the ID for the flight you want to edit: ");
+                string FlightId = Console.ReadLine();
+                if(FlightId != null)
+                {
+                    engineer.EditFlight(FlightId);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Entry\n");
+                }
             }
             else if (string.Equals(userInput, "flight"))
             {
-
+                Console.Write("Enter the ID for the flight you want to delete: ");
+                string FlightId = Console.ReadLine();
+                if (FlightId != null)
+                {
+                    engineer.DeleteFlight(FlightId);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Entry\n");
+                }
             }
             else if (string.Equals(userInput, "account"))
             {
@@ -123,8 +186,20 @@ internal class CLICaller
     public void marketingManagerCli(SWE_Project.MarketingManager marketing)
     {
         Console.WriteLine("*********************************************************************************************");
-        string user = "sample name"; // Temp
-        Console.WriteLine("\n Welcome Back " + user + "!\n");
+        /*string user = marketing.UserId; // Temp
+        var workbook = new XLWorkbook(Globals.databasePath); // Open database
+        var worksheet = workbook.Worksheet("EmpList");
+        var table = worksheet.Tables.Table(0); // Get customer Table
+        var totalRows = worksheet.LastRowUsed().RowNumber();
+        for (int i = 1; i <= totalRows; i++)
+        {
+            var usCell = table.Row(i).Cell(1).GetString();//Get row user id
+            if (string.Equals(usCell, user))
+            {
+                Console.WriteLine("\n Welcome Back " + table.Row(i).Cell(4).GetString() + "!\n");
+                break;
+            }
+        }*/
         var userInput = "";
         do
         {
@@ -165,8 +240,20 @@ internal class CLICaller
     public void FlightManagerCli(SWE_Project.FlightManager flighter)
     {
         Console.WriteLine("*********************************************************************************************");
-        string user = "sample name"; // Temp
-        Console.WriteLine("\n Welcome Back " + user + "!\n");
+        string user = flighter.UserId; // Temp
+        var workbook = new XLWorkbook(Globals.databasePath); // Open database
+        var worksheet = workbook.Worksheet("EmpList");
+        var table = worksheet.Tables.Table(0); // Get customer Table
+        var totalRows = worksheet.LastRowUsed().RowNumber();
+        for (int i = 1; i <= totalRows; i++)
+        {
+            var usCell = table.Row(i).Cell(1).GetString();//Get row user id
+            if (string.Equals(usCell, user))
+            {
+                Console.WriteLine("\n Welcome Back " + table.Row(i).Cell(4).GetString() + "!\n");
+                break;
+            }
+        }
         var userInput = "";
         do
         {
@@ -186,7 +273,16 @@ internal class CLICaller
 
             if (string.Equals(userInput, "print"))
             {
-
+                Console.Write("Enter the ID for the flight you want to print: ");
+                string FlightId = Console.ReadLine();
+                if (FlightId != null)
+                {
+                    flighter.getFlightManifest(FlightId);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Entry\n");
+                }
             }
             else if (string.Equals(userInput, "account"))
             {
@@ -207,8 +303,20 @@ internal class CLICaller
     {
 
         Console.WriteLine("*********************************************************************************************");
-        string user = "sample name"; // Temp
-        Console.WriteLine("\n Welcome Back " + user + "!\n");
+        string user = accountant.UserId; // Temp
+        var workbook = new XLWorkbook(Globals.databasePath); // Open database
+        var worksheet = workbook.Worksheet("EmpList");
+        var table = worksheet.Tables.Table(0); // Get customer Table
+        var totalRows = worksheet.LastRowUsed().RowNumber();
+        for (int i = 1; i <= totalRows; i++)
+        {
+            var usCell = table.Row(i).Cell(1).GetString();//Get row user id
+            if (string.Equals(usCell, user))
+            {
+                Console.WriteLine("\n Welcome Back " + table.Row(i).Cell(4).GetString() + "!\n");
+                break;
+            }
+        }
         var userInput = "";
         do
         {
@@ -229,7 +337,16 @@ internal class CLICaller
 
             if (string.Equals(userInput, "profit"))
             {
-
+                Console.Write("Enter the ID for the flight you want to get the profit of: ");
+                string FlightId = Console.ReadLine();
+                if (FlightId != null)
+                {
+                    accountant.getFlightProfit(FlightId);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Entry\n");
+                }
             }
             else if (string.Equals(userInput, "total"))
             {
@@ -334,7 +451,7 @@ class Program
             var table = worksheet.Tables.Table(0);
             var idCol = table.Column(1);
             string dep = idCol.Cell(Vr).CellRight(2).Value.ToString();
-            dep.ToLower();
+            dep = dep.ToLower();
             if (dep == "marketing")
             {
                 //MarketingManager currentUser = new MarketingManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
@@ -392,7 +509,7 @@ class Program
         for (int i = 1; i <= totalRows; i++)
         {
             var usCell = table.Row(i).Cell(1).GetString();//Get row user id
-            if (usCell == user)
+            if (string.Equals(usCell , user))
             {
                 byte[] tmpNewHash;
                 byte[] savedHash;
