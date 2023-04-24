@@ -4834,19 +4834,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dxvia\\.nuget\\packages\\": {}
+    "C:\\Users\\iwame\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\dxvia\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj",
+      "projectUniqueName": "C:\\Users\\iwame\\OneDrive\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj",
       "projectName": "SWE Project",
-      "projectPath": "C:\\Users\\dxvia\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj",
-      "packagesPath": "C:\\Users\\dxvia\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\dxvia\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\obj\\",
+      "projectPath": "C:\\Users\\iwame\\OneDrive\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj",
+      "packagesPath": "C:\\Users\\iwame\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\iwame\\OneDrive\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\dxvia\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\iwame\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4897,7 +4897,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
