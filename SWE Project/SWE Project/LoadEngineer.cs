@@ -37,10 +37,17 @@ namespace SWE_Project
 
                 var listOfData = new ArrayList(); // Making list to feed data into Append data function (IEnumerable)
                 listOfData.Add(FlightId);
+<<<<<<< Updated upstream
                 listOfData.Add(DepartingFrom);
                 listOfData.Add(ArrivingAt);
                 listOfData.Add(DepartTime.ToUniversalTime().ToString("g"));
                 listOfData.Add(ArrivalTime.ToUniversalTime().ToString("g"));
+=======
+                listOfData.Add(DepartingFrom.airport);
+                listOfData.Add(ArrivingAt.airport);
+                listOfData.Add(DateTimeInformation.ToUniversalTime().ToString("g"));
+                listOfData.Add("No Plane"); // placeholder until a plane is included
+>>>>>>> Stashed changes
                 if (!(table.DataRange.FirstRow().Cell(1).Value.IsBlank))
                 {
                     table.InsertRowsBelow(1); // Put new flight data into list
