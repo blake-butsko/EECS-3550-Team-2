@@ -14,7 +14,7 @@ namespace SWE_Project
     internal class LoadEngineer : Actor
     {
 
-        string UserId { get; }
+        public string UserId { get; }
         string Password { get; set; }
 
         public LoadEngineer(string UserId, string Password)

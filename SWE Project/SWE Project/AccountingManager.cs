@@ -14,7 +14,7 @@ namespace SWE_Project
     {
 
 
-        string UserId;
+        public string UserId;
         string Password;
 
         public AccountingManager(string UserId, string Password)
@@ -48,6 +48,7 @@ namespace SWE_Project
                         flightColumn.Cell(i).CellRight(1).Value.ToString(),
                          flightColumn.Cell(i).CellRight(2).Value.ToString(),
                          departTime, arrivalTime);
+
 
                     foundFlight = true;
                     break;
