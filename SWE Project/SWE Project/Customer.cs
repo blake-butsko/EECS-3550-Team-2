@@ -1,9 +1,11 @@
 ﻿using actor_interface;
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ClosedXML.Excel.XLPredefinedFormat;
 
 namespace SWE_Project
 {
@@ -36,6 +38,38 @@ namespace SWE_Project
         public Customer(int UserId)
         {
 
+        }
+
+        public void custHistory()
+        {
+            var workbook = new XLWorkbook(Globals.databasePath);
+            var worksheet = workbook.Worksheet("CustHistory");
+            var table = worksheet.Tables.Table(0);
+            var flightColumn = table.Column(1); //flight id column
+            Console.WriteLine("*********************************************************************************************\n");
+            Console.WriteLine("Your Flight History\n");
+            Console.WriteLine(flightColumn.Cell(1).CellRight(2).Value.ToString()+ " "+ flightColumn.Cell(1).CellRight(3).Value.ToString()+" "+ flightColumn.Cell(1).CellRight(4).Value.ToString()+" "+ flightColumn.Cell(1).CellRight(5).Value.ToString()+" "+ flightColumn.Cell(1).CellRight(6).Value.ToString()+" "+ flightColumn.Cell(1).CellRight(7).Value.ToString()+" "+ flightColumn.Cell(1).CellRight(8).Value.ToString());
+            System.DateTime dateTime;
+            System.DateTime dateTimeArrive;
+            for (int i = 1; i <= flightColumn.CellCount(); i++)
+            {
+                if (string.Equals((string)flightColumn.Cell(i).Value, UserId))
+                {
+                    dateTime = System.DateTime.Parse(flightColumn.Cell(i).CellRight(3).Value.ToString());
+                    dateTimeArrive = System.DateTime.Parse(flightColumn.Cell(i).CellRight(4).Value.ToString());
+
+                    if (string.Equals((string)flightColumn.Cell(i).CellRight(8).Value, "Card"))
+                    {
+                        Console.WriteLine(flightColumn.Cell(i).CellRight(1).Value.ToString(), flightColumn.Cell(i).CellRight(2).Value.ToString(), dateTime, dateTimeArrive, flightColumn.Cell(i).CellRight(5).Value.ToString(), flightColumn.Cell(i).CellRight(6).Value.ToString(), " $" , flightColumn.Cell(i).CellRight(7).Value.ToString(), flightColumn.Cell(i).CellRight(8).Value.ToString());
+
+                    }
+                    else
+                    {
+                        Console.WriteLine(flightColumn.Cell(i).CellRight(1).Value.ToString(), flightColumn.Cell(i).CellRight(2).Value.ToString(), dateTime, dateTimeArrive, flightColumn.Cell(i).CellRight(5).Value.ToString(), flightColumn.Cell(i).CellRight(6).Value.ToString(), " $", flightColumn.Cell(i).CellRight(7).Value.ToString(), flightColumn.Cell(i).CellRight(8).Value.ToString());
+
+                    }
+                }
+            }
         }
 
 
