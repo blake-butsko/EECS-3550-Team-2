@@ -129,8 +129,7 @@ internal class CLICaller
                 string ArrivingAt = Console.ReadLine();
                 Console.Write("Enter the time of departure: ");//Needs to be more complex
                 string DepartTime = Console.ReadLine();
-                Console.Write("Enter the time of arrival: ");//Needs to be more complex
-                string arrivalTime = Console.ReadLine();
+              
                 string confIn;
                 do
                 {
@@ -138,7 +137,7 @@ internal class CLICaller
                     confIn = Console.ReadLine();
                     if (confIn == "Y")
                     {
-                        //engineer.CreateFlight(FlightId, string DepartingFrom, string ArrivingAt, System.DateTime DateTimeInformation)
+                        engineer.CreateFlight(FlightId, DepartingFrom, ArrivingAt, System.DateTime.Parse(DepartTime));
                     }
                 } while (confIn == "y" || confIn == "n");
             }
@@ -373,7 +372,8 @@ class Program
         Globals.databasePath = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + @"\AirportInfo.xlsx"); // store excel file in debug so it can be grabbed 
         CLICaller caller = new CLICaller();
         Console.WriteLine("Hello World");
-        SWE_Project.LoadEngineer alex = new("12345", "password");
+        SWE_Project.LoadEngineer alex = new("1", "123");
+        alex.CreateFlight("9999", "Nashville", "Cleveland", System.DateTime.Parse("4/24/2023  3:00:00 PM"));
         int Vr = 0;
         string mainInput;
         string user = "";
@@ -444,7 +444,14 @@ class Program
             var worksheet = workbook.Worksheet("custList");
             var table = worksheet.Tables.Table(0);
             var idCol = table.Column(1);
-            Customer currentUser = new Customer(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString(), idCol.Cell(Vr).CellRight(8).GetValue<int>(), idCol.Cell(Vr).CellRight(9).Value.ToString(), idCol.Cell(Vr).CellRight(10).Value.ToString(), idCol.Cell(Vr).CellRight(4).Value.ToString(), idCol.Cell(Vr).CellRight(6).GetValue<int>(), idCol.Cell(Vr).CellRight(5).Value.ToString());
+            Customer currentUser = new Customer(idCol.Cell(Vr).Value.ToString(), 
+                idCol.Cell(Vr).CellRight(1).Value.ToString(), 
+                idCol.Cell(Vr).CellRight(8).GetValue<int>(), 
+                idCol.Cell(Vr).CellRight(9).Value.ToString(), 
+                idCol.Cell(Vr).CellRight(10).Value.ToString(), 
+                idCol.Cell(Vr).CellRight(4).Value.ToString(), 
+                idCol.Cell(Vr).CellRight(6).GetValue<int>(), 
+                idCol.Cell(Vr).CellRight(5).Value.ToString());
             cLi.CustomerCli(currentUser);
         }
         else if(user.Length == 5)

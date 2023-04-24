@@ -16,11 +16,35 @@ namespace SWE_Project
 
         public string UserId;
         string Password;
+        public string FName;
+        public string LName;
 
         public AccountingManager(string UserId, string Password)
         {
             this.UserId = UserId;
             this.Password = Password;
+
+            populateName();
+        }
+
+        private void populateName()
+        {
+            var workbook = new XLWorkbook(Globals.databasePath);
+            var worksheet = workbook.Worksheet("EmpList");
+            var empTable = worksheet.Tables.Table(0);
+            var empIdColumn = empTable.Column(1);
+
+            for (int i = 1; i <= empIdColumn.CellCount(); i++)
+            {
+                if (string.Equals(UserId, empIdColumn.Cell(i).Value))
+                {
+                    FName = empIdColumn.Cell(i).CellRight(3).Value.ToString();
+                    LName = empIdColumn.Cell(i).CellRight(4).Value.ToString();
+
+                    return;
+                }
+            }
+
         }
 
         public void getFlightProfit(string flightId)

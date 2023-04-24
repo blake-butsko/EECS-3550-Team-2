@@ -1,6 +1,7 @@
 ﻿using actor_interface;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,23 +18,92 @@ namespace SWE_Project
         public string UserId { get; }
         string Password { get; set; }
 
+        public string FName { get; set; }
+        public string LName { get; set; }
+
         public LoadEngineer(string UserId, string Password)
         {
             this.UserId = UserId;
             this.Password = Password;
 
+            populateName();
+
+
         }
 
-        // Create a flight in the database
-        public void CreateFlight(string FlightId, string DepartingFrom, string ArrivingAt, System.DateTime DepartTime, System.DateTime ArrivalTime)
+        private void populateName()
         {
-            Flight newFlight = new(FlightId, DepartingFrom, ArrivingAt, DepartTime, ArrivalTime);
+            var workbook = new XLWorkbook(Globals.databasePath);
+            var worksheet = workbook.Worksheet("EmpList");
+            var empTable = worksheet.Tables.Table(0);
+            var empIdColumn = empTable.Column(1);
+
+            for (int i =1; i <= empIdColumn.CellCount(); i++)
+            {
+                if (string.Equals(UserId, empIdColumn.Cell(i).Value.ToString()))
+                {
+                    FName = empIdColumn.Cell(i).CellRight(3).Value.ToString();
+                    LName = empIdColumn.Cell(i).CellRight(4).Value.ToString();
+
+                    return;
+                }
+            }
+
+        }
+        // Create a flight in the database
+        public void CreateFlight(string FlightId, string DepartingFrom, string ArrivingAt, System.DateTime DepartTime)
+        {
+            string[] listOfAirports = { "Nashville", "Cleveland", "Los Angeles", "New York City", "Salt Lake City", "Miami", "Detroit", "Atlanta", "Chicago", "Las Vegas", "Washington DC" };
+            if(!(listOfAirports.Contains(DepartingFrom) && listOfAirports.Contains(ArrivingAt)))
+            {
+                Console.WriteLine("Invalid Location");
+                return;
+            }
+
+
             try
             {
                 var workbook = new XLWorkbook(Globals.databasePath); // Open database
-                var worksheet = workbook.Worksheet("ActiveFlights"); // Get Flight Manifest sheet
+                var activeFlightWorksheet = workbook.Worksheet("ActiveFlights"); // Get Flight Manifest sheet
 
-                var table = worksheet.Tables.Table(0); // Get Flight Table
+                var flightTable = activeFlightWorksheet.Tables.Table(0); // Get Flight Table
+
+                var flightIdColumn = flightTable.Column(1);
+
+                for (int i = 1; i <= flightIdColumn.CellCount(); i++)
+                {
+                    if (string.Equals(flightIdColumn.Cell(i).Value.ToString(), FlightId))
+                    {
+                        Console.WriteLine("Flight Already Exists\n");
+                        return;
+                    }
+                }
+
+                System.DateTime ArrivalTime = System.DateTime.Now;
+                var distanceSheet = workbook.Worksheet("FlightDistance");
+                bool foundTime = false;
+                for (int i = 0; i < distanceSheet.Tables.Count(); i++)
+                {
+                    if(string.Equals(DepartingFrom.Replace(" ",""), distanceSheet.Tables.Table(i).Name))
+                    {
+                        var airportTable = distanceSheet.Tables.Table(i);
+                        var cityColumn = airportTable.Column(1);
+                        for(int j = 1; j <= cityColumn.CellCount(); j++)
+                        {
+                            if(string.Equals(ArrivingAt, cityColumn.Cell(j).Value.ToString()))
+                            {
+                                
+                                ArrivalTime = DepartTime.AddHours(((double)cityColumn.Cell(j).CellRight(2).Value));
+                               
+                                foundTime = true;
+                                break;
+                            }
+                        }
+                        if (foundTime)
+                            break;
+                    }
+
+                }
 
                 var listOfData = new ArrayList(); // Making list to feed data into Append data function (IEnumerable)
                 listOfData.Add(FlightId);
@@ -43,9 +113,9 @@ namespace SWE_Project
                 listOfData.Add(DepartTime.ToUniversalTime().ToString("g"));
                 listOfData.Add(ArrivalTime.ToUniversalTime().ToString("g"));
 
-                if (!(table.DataRange.FirstRow().Cell(1).Value.IsBlank))
+                if (!(flightTable.DataRange.FirstRow().Cell(1).Value.IsBlank))
                 {
-                    table.InsertRowsBelow(1); // Put new flight data into list
+                    flightTable.InsertRowsBelow(1); // Put new flight data into list
                 }
                 else
                 {
@@ -53,10 +123,10 @@ namespace SWE_Project
                     return;
                 }
 
-                var tableLastRow = table.LastRow();
+                var tableLastRow = flightTable.LastRow();
                 if (listOfData != null)
                 {
-                    for (int i = 0; i < table.LastRow().CellCount(); i++) // Iterrate through last row of table hitting each cell
+                    for (int i = 0; i < flightTable.LastRow().CellCount(); i++) // Iterrate through last row of table hitting each cell
                     {
 
                         tableLastRow.Cell(i + 1).Value = listOfData[i].ToString(); // Change value of cell to list data
