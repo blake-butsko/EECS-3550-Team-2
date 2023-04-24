@@ -70,7 +70,7 @@ internal class CLICaller
             }
             else if (string.Equals(userInput, "account"))
             {
-
+                person.custHistory();
             }
             else if(!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
@@ -374,8 +374,6 @@ class Program
         CLICaller caller = new CLICaller();
         Console.WriteLine("Hello World");
         SWE_Project.LoadEngineer alex = new("12345", "password");
-        alex.DeleteFlight("1");
-
         int Vr = 0;
         string mainInput;
         string user = "";
@@ -446,7 +444,7 @@ class Program
             var worksheet = workbook.Worksheet("custList");
             var table = worksheet.Tables.Table(0);
             var idCol = table.Column(1);
-            Customer currentUser = new Customer(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString(), idCol.Cell(Vr).CellRight(2).GetValue<int>(), idCol.Cell(Vr).CellRight(3).Value.ToString(), idCol.Cell(Vr).CellRight(4).Value.ToString(), idCol.Cell(Vr).CellRight(5).Value.ToString(), idCol.Cell(Vr).CellRight(6).GetValue<int>(), idCol.Cell(Vr).CellRight(7).Value.ToString());
+            Customer currentUser = new Customer(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString(), idCol.Cell(Vr).CellRight(8).GetValue<int>(), idCol.Cell(Vr).CellRight(9).Value.ToString(), idCol.Cell(Vr).CellRight(10).Value.ToString(), idCol.Cell(Vr).CellRight(4).Value.ToString(), idCol.Cell(Vr).CellRight(6).GetValue<int>(), idCol.Cell(Vr).CellRight(5).Value.ToString());
             cLi.CustomerCli(currentUser);
         }
         else if(user.Length == 5)

@@ -49,7 +49,6 @@ namespace SWE_Project
                          flightColumn.Cell(i).CellRight(2).Value.ToString(),
                          departTime, arrivalTime);
 
-
                     foundFlight = true;
                     break;
                 }
