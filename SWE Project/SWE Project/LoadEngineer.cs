@@ -460,6 +460,13 @@ namespace SWE_Project
                             flightRow.Cell(3).Value.ToString(),
                             System.DateTime.Parse(flightRow.Cell(4).Value.ToString()),
                              System.DateTime.Parse(flightRow.Cell(5).Value.ToString()));
+                        if(deletedFlight.departTime.Date == System.DateTime.Now.Date)
+                            if(deletedFlight.departTime.Subtract(System.DateTime.Now).Hours <= 1) 
+                            {
+                                Console.WriteLine("Too late to delete flight");
+                                return;
+                            }
+
 
                         flightRow.Delete();
                
