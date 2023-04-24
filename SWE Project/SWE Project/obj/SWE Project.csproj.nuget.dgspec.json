@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\blake\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj": {}
+    "C:\\Users\\dxvia\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj": {}
   },
   "projects": {
-    "C:\\Users\\blake\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj": {
+    "C:\\Users\\dxvia\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\blake\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj",
+        "projectUniqueName": "C:\\Users\\dxvia\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj",
         "projectName": "SWE Project",
-        "projectPath": "C:\\Users\\blake\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj",
-        "packagesPath": "C:\\Users\\blake\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\blake\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\obj\\",
+        "projectPath": "C:\\Users\\dxvia\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj",
+        "packagesPath": "C:\\Users\\dxvia\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dxvia\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\blake\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dxvia\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -43,10 +43,6 @@
             "ClosedXML": {
               "target": "Package",
               "version": "[0.101.0, )"
-            },
-            "CsvHelper": {
-              "target": "Package",
-              "version": "[30.0.1, )"
             }
           },
           "imports": [
@@ -65,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

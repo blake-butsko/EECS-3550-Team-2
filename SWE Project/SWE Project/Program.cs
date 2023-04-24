@@ -255,13 +255,12 @@ class Program
         CLICaller caller = new CLICaller();
         Console.WriteLine("Hello World");
         SWE_Project.LoadEngineer alex = new("12345", "password");
-        alex.DeleteFlight("1");
+       
         char Vr = 'Q';
         string input;
         string user = "";
         string pass = "";
 
-<<<<<<< Updated upstream
         do
         {
             Console.WriteLine("Welcome, Enter L to Login, C to Create an Account, or Q to Quit");
@@ -276,15 +275,6 @@ class Program
                 pass = Console.ReadLine();
                 Vr = Login(user, pass);
 
-=======
-        System.DateTime dateTime = System.DateTime.Now;
-        SWE_Project.Location from = new("Nashville");
-        SWE_Project.Location to = new("Cleveland");
-        alex.CreateFlight(457, from, to, dateTime);*/
-
-        SWE_Project.MarketingManager benjamin = new("12345", "password");
-        benjamin.ChoosePlane(555);
->>>>>>> Stashed changes
 
                 if (Vr == 'Q')
                 {

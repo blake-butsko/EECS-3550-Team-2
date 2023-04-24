@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "MxiGXRWOkrZwGhCf17XOjgMjPywdjCkMUSh7VoCMf1JqMzp/A+TsVFEZwgG5IogYadScphIm8S/1MiwoqJfsqQ==",
+  "dgSpecHash": "fc3jImf9sNAVmuUKr3tbHaBBwIPnPrlYYHTbtrsHOmpeQfZguEACrHatPOdOHj1Fu6e1BJKT3uR/T2Pi5xMyxQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\dxvia\\Documents\\GitHub\\EECS-3550-Team-2\\SWE Project\\SWE Project\\SWE Project.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dxvia\\.nuget\\packages\\closedxml\\0.101.0\\closedxml.0.101.0.nupkg.sha512",
-    "C:\\Users\\dxvia\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
     "C:\\Users\\dxvia\\.nuget\\packages\\documentformat.openxml\\2.16.0\\documentformat.openxml.2.16.0.nupkg.sha512",
     "C:\\Users\\dxvia\\.nuget\\packages\\excelnumberformat\\1.1.0\\excelnumberformat.1.1.0.nupkg.sha512",
     "C:\\Users\\dxvia\\.nuget\\packages\\irony.netcore\\1.0.11\\irony.netcore.1.0.11.nupkg.sha512",

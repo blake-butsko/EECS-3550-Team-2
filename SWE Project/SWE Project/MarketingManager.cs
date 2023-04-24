@@ -182,5 +182,10 @@ namespace SWE_Project
 
             return;
         }
+
+        public void Login(string UserId, string Password)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
