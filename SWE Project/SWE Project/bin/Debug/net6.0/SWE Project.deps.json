@@ -8,27 +8,33 @@
     ".NETCoreApp,Version=v6.0": {
       "SWE Project/1.0.0": {
         "dependencies": {
-          "ClosedXML": "0.100.3"
+          "ClosedXML": "0.101.0",
+          "CsvHelper": "30.0.1"
         },
         "runtime": {
           "SWE Project.dll": {}
         }
       },
-      "ClosedXML/0.100.3": {
+      "ClosedXML/0.101.0": {
         "dependencies": {
           "DocumentFormat.OpenXml": "2.16.0",
           "ExcelNumberFormat": "1.1.0",
-          "Microsoft.CSharp": "4.7.0",
-          "SixLabors.Fonts": "1.0.0-beta18",
-          "System.Buffers": "4.5.1",
+          "SixLabors.Fonts": "1.0.0-beta19",
           "System.IO.Packaging": "6.0.0",
-          "System.Memory": "4.5.4",
           "XLParser": "1.5.2"
         },
         "runtime": {
-          "lib/netstandard2.0/ClosedXML.dll": {
-            "assemblyVersion": "0.100.3.0",
-            "fileVersion": "0.100.3.0"
+          "lib/netstandard2.1/ClosedXML.dll": {
+            "assemblyVersion": "0.101.0.0",
+            "fileVersion": "0.101.0.0"
+          }
+        }
+      },
+      "CsvHelper/30.0.1": {
+        "runtime": {
+          "lib/net6.0/CsvHelper.dll": {
+            "assemblyVersion": "30.0.0.0",
+            "fileVersion": "30.0.1.0"
           }
         }
       },
@@ -67,7 +73,6 @@
           }
         }
       },
-      "Microsoft.CSharp/4.7.0": {},
       "Microsoft.NETCore.Platforms/1.1.0": {},
       "Microsoft.NETCore.Targets/1.1.0": {},
       "Microsoft.Win32.Primitives/4.3.0": {
@@ -173,7 +178,7 @@
       "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
       "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
       "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
-      "SixLabors.Fonts/1.0.0-beta18": {
+      "SixLabors.Fonts/1.0.0-beta19": {
         "runtime": {
           "lib/netcoreapp3.1/SixLabors.Fonts.dll": {
             "assemblyVersion": "1.0.0.0",
@@ -186,7 +191,15 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "System.Buffers/4.5.1": {},
+      "System.Buffers/4.3.0": {
+        "dependencies": {
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tracing": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0"
+        }
+      },
       "System.Collections/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -284,7 +297,7 @@
       "System.IO.Compression/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
-          "System.Buffers": "4.5.1",
+          "System.Buffers": "4.3.0",
           "System.Collections": "4.3.0",
           "System.Diagnostics.Debug": "4.3.0",
           "System.IO": "4.3.0",
@@ -302,7 +315,7 @@
       },
       "System.IO.Compression.ZipFile/4.3.0": {
         "dependencies": {
-          "System.Buffers": "4.5.1",
+          "System.Buffers": "4.3.0",
           "System.IO": "4.3.0",
           "System.IO.Compression": "4.3.0",
           "System.IO.FileSystem": "4.3.0",
@@ -368,7 +381,6 @@
           "System.Threading": "4.3.0"
         }
       },
-      "System.Memory/4.5.4": {},
       "System.Net.Http/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -763,12 +775,19 @@
       "serviceable": false,
       "sha512": ""
     },
-    "ClosedXML/0.100.3": {
+    "ClosedXML/0.101.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-yvEK5ga48mSalPknChOh5hppZixBY5tDkHN7V6WybLjLBBoHvRqm0Vi23XdIaDu9St2rLGJ9/vmgvdCyMPPAsA==",
-      "path": "closedxml/0.100.3",
-      "hashPath": "closedxml.0.100.3.nupkg.sha512"
+      "sha512": "sha512-PHirYTGFZ0a9MGXzZi6zrICrlKV7zdhtKMnto0gv+nqPpfX8mt/u/hw8st+0vPdgAxrpfXz9JCpRLueJc7blUw==",
+      "path": "closedxml/0.101.0",
+      "hashPath": "closedxml.0.101.0.nupkg.sha512"
+    },
+    "CsvHelper/30.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rcZtgbWR+As4G3Vpgx0AMNmShGuQLFjkHAPIIflzrfkJCx8/AOd4m96ZRmiU1Wi39qS5UVjV0P8qdgqOo5Cwyg==",
+      "path": "csvhelper/30.0.1",
+      "hashPath": "csvhelper.30.0.1.nupkg.sha512"
     },
     "DocumentFormat.OpenXml/2.16.0": {
       "type": "package",
@@ -790,13 +809,6 @@
       "sha512": "sha512-/2MCkqdhEjPiSTZKYXg6u9AO9o3m68biqcFHAnM28WdnrcZii2vYbmKPzT5ejByyV72FUlygOtHBMt8SLnUyNw==",
       "path": "irony.netcore/1.0.11",
       "hashPath": "irony.netcore.1.0.11.nupkg.sha512"
-    },
-    "Microsoft.CSharp/4.7.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-pTj+D3uJWyN3My70i2Hqo+OXixq3Os2D1nJ2x92FFo6sk8fYS1m1WLNTs0Dc1uPaViH0YvEEwvzddQ7y4rhXmA==",
-      "path": "microsoft.csharp/4.7.0",
-      "hashPath": "microsoft.csharp.4.7.0.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/1.1.0": {
       "type": "package",
@@ -938,12 +950,12 @@
       "path": "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
       "hashPath": "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
     },
-    "SixLabors.Fonts/1.0.0-beta18": {
+    "SixLabors.Fonts/1.0.0-beta19": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-evykNmy/kEE9EAEKgZm3MNUYXuMHFfmcLUNPw7Ho5q7OI96GFkkIxBm+QaKOTPBKw+L0AjKOs+ArVg8P40Ac9g==",
-      "path": "sixlabors.fonts/1.0.0-beta18",
-      "hashPath": "sixlabors.fonts.1.0.0-beta18.nupkg.sha512"
+      "sha512": "sha512-ECJoayRT54VkJNoKBwZZllGvBIvxmnUFXsUCqHU8uAjAFrcdtxNpQ5Auyzw3d4+B+Q3KivKIrd7uO0qiNx/glg==",
+      "path": "sixlabors.fonts/1.0.0-beta19",
+      "hashPath": "sixlabors.fonts.1.0.0-beta19.nupkg.sha512"
     },
     "System.AppContext/4.3.0": {
       "type": "package",
@@ -952,12 +964,12 @@
       "path": "system.appcontext/4.3.0",
       "hashPath": "system.appcontext.4.3.0.nupkg.sha512"
     },
-    "System.Buffers/4.5.1": {
+    "System.Buffers/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Rw7ijyl1qqRS0YQD/WycNst8hUUMgrMH4FCn1nNm27M4VxchZ1js3fVjQaANHO5f3sN4isvP4a+Met9Y4YomAg==",
-      "path": "system.buffers/4.5.1",
-      "hashPath": "system.buffers.4.5.1.nupkg.sha512"
+      "sha512": "sha512-ratu44uTIHgeBeI0dE8DWvmXVBSo4u7ozRZZHOMmK/JPpYyo0dAfgSiHlpiObMQ5lEtEyIXA40sKRYg5J6A8uQ==",
+      "path": "system.buffers/4.3.0",
+      "hashPath": "system.buffers.4.3.0.nupkg.sha512"
     },
     "System.Collections/4.3.0": {
       "type": "package",
@@ -1084,13 +1096,6 @@
       "sha512": "sha512-PGKkrd2khG4CnlyJwxwwaWWiSiWFNBGlgXvJpeO0xCXrZ89ODrQ6tjEWS/kOqZ8GwEOUATtKtzp1eRgmYNfclg==",
       "path": "system.linq.expressions/4.3.0",
       "hashPath": "system.linq.expressions.4.3.0.nupkg.sha512"
-    },
-    "System.Memory/4.5.4": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-1MbJTHS1lZ4bS4FmsJjnuGJOu88ZzTT2rLvrhW7Ygic+pC0NWA+3hgAen0HRdsocuQXCkUTdFn9yHJJhsijDXw==",
-      "path": "system.memory/4.5.4",
-      "hashPath": "system.memory.4.5.4.nupkg.sha512"
     },
     "System.Net.Http/4.3.0": {
       "type": "package",
