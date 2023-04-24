@@ -8,8 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "SWE Project/1.0.0": {
         "dependencies": {
-          "ClosedXML": "0.101.0",
-          "CsvHelper": "30.0.1"
+          "ClosedXML": "0.101.0"
         },
         "runtime": {
           "SWE Project.dll": {}
@@ -27,14 +26,6 @@
           "lib/netstandard2.1/ClosedXML.dll": {
             "assemblyVersion": "0.101.0.0",
             "fileVersion": "0.101.0.0"
-          }
-        }
-      },
-      "CsvHelper/30.0.1": {
-        "runtime": {
-          "lib/net6.0/CsvHelper.dll": {
-            "assemblyVersion": "30.0.0.0",
-            "fileVersion": "30.0.1.0"
           }
         }
       },
@@ -781,13 +772,6 @@
       "sha512": "sha512-PHirYTGFZ0a9MGXzZi6zrICrlKV7zdhtKMnto0gv+nqPpfX8mt/u/hw8st+0vPdgAxrpfXz9JCpRLueJc7blUw==",
       "path": "closedxml/0.101.0",
       "hashPath": "closedxml.0.101.0.nupkg.sha512"
-    },
-    "CsvHelper/30.0.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-rcZtgbWR+As4G3Vpgx0AMNmShGuQLFjkHAPIIflzrfkJCx8/AOd4m96ZRmiU1Wi39qS5UVjV0P8qdgqOo5Cwyg==",
-      "path": "csvhelper/30.0.1",
-      "hashPath": "csvhelper.30.0.1.nupkg.sha512"
     },
     "DocumentFormat.OpenXml/2.16.0": {
       "type": "package",

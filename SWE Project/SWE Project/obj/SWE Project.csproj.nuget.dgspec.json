@@ -43,10 +43,6 @@
             "ClosedXML": {
               "target": "Package",
               "version": "[0.101.0, )"
-            },
-            "CsvHelper": {
-              "target": "Package",
-              "version": "[30.0.1, )"
             }
           },
           "imports": [
