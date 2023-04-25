@@ -112,6 +112,7 @@ namespace SWE_Project
                 listOfData.Add(ArrivingAt);
                 listOfData.Add(DepartTime.ToUniversalTime().ToString("g"));
                 listOfData.Add(ArrivalTime.ToUniversalTime().ToString("g"));
+                listOfData.Add(0); // Passengers
 
                 if (!(flightTable.DataRange.FirstRow().Cell(1).Value.IsBlank))
                 {
@@ -463,7 +464,7 @@ namespace SWE_Project
                         if(deletedFlight.departTime.Date == System.DateTime.Now.Date)
                             if(deletedFlight.departTime.Subtract(System.DateTime.Now).Hours <= 1) 
                             {
-                                Console.WriteLine("Too late to delete flight");
+                                Console.WriteLine("Too late to delete flight\n");
                                 return;
                             }
 

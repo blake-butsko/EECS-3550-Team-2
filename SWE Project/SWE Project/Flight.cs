@@ -19,6 +19,7 @@ namespace SWE_Project
         public string FlightId { get; }
         public int PlaneType { get; set; }
         float Distance;
+        public int capacity { get; set; }
         public int PointsGenerated;
         public List<Customer> passengers = new List<Customer>();
         public Decimal Price { get; set; } // Using Decimal class made to deal with money cause floats and doubles loose precision over calculations
@@ -35,6 +36,7 @@ namespace SWE_Project
             CalculatePrice();
             CalculatePoints();
             PopulateFlight();
+           
         }
         public Flight() { }
         // Finds distance of a flight from database

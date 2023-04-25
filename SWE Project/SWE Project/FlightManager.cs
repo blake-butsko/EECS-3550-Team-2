@@ -49,7 +49,7 @@ namespace SWE_Project
             var table = worksheet.Tables.Table(0);
             var flightColumn = table.Column(1); //flight id column
 
-            string path = "FlieghtManifest"+ FlightId +".csv";
+            string path = "FlightManifest"+ FlightId +".csv";
             Flight flight = new Flight();
             bool foundFlight = false;
             for (int i = 1; i <= flightColumn.CellCount(); i++)

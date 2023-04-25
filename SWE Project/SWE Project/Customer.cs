@@ -27,7 +27,7 @@ namespace SWE_Project
         string PhoneNumber = "";
 
 
-      
+
         public Customer(string userId, string password, int points, string creditCardInfo, string email, string address, int age, string phoneNumber)
         {
             UserId = userId;
@@ -56,7 +56,7 @@ namespace SWE_Project
             var flightColumn = table.Column(1); //flight id column
             Console.WriteLine("*********************************************************************************************\n");
             Console.WriteLine("Your Flight History\n");
-            Console.WriteLine(flightColumn.Cell(1).CellRight(2).Value.ToString()+ " "+ flightColumn.Cell(1).CellRight(3).Value.ToString()+" "+ flightColumn.Cell(1).CellRight(4).Value.ToString()+" "+ flightColumn.Cell(1).CellRight(5).Value.ToString()+" "+ flightColumn.Cell(1).CellRight(6).Value.ToString()+" "+ flightColumn.Cell(1).CellRight(7).Value.ToString()+" "+ flightColumn.Cell(1).CellRight(8).Value.ToString());
+            Console.WriteLine(flightColumn.Cell(1).CellRight(2).Value.ToString() + " " + flightColumn.Cell(1).CellRight(3).Value.ToString() + " " + flightColumn.Cell(1).CellRight(4).Value.ToString() + " " + flightColumn.Cell(1).CellRight(5).Value.ToString() + " " + flightColumn.Cell(1).CellRight(6).Value.ToString() + " " + flightColumn.Cell(1).CellRight(7).Value.ToString() + " " + flightColumn.Cell(1).CellRight(8).Value.ToString());
             System.DateTime dateTime;
             System.DateTime dateTimeArrive;
             for (int i = 1; i <= flightColumn.CellCount(); i++)
@@ -68,13 +68,71 @@ namespace SWE_Project
 
                     if (string.Equals((string)flightColumn.Cell(i).CellRight(8).Value, "Card"))
                     {
-                        Console.WriteLine(flightColumn.Cell(i).CellRight(1).Value.ToString(), flightColumn.Cell(i).CellRight(2).Value.ToString(), dateTime, dateTimeArrive, flightColumn.Cell(i).CellRight(5).Value.ToString(), flightColumn.Cell(i).CellRight(6).Value.ToString(), " $" , flightColumn.Cell(i).CellRight(7).Value.ToString(), flightColumn.Cell(i).CellRight(8).Value.ToString());
+                        Console.WriteLine(flightColumn.Cell(i).CellRight(1).Value.ToString(), flightColumn.Cell(i).CellRight(2).Value.ToString(), dateTime, dateTimeArrive, flightColumn.Cell(i).CellRight(5).Value.ToString(), flightColumn.Cell(i).CellRight(6).Value.ToString(), " $", flightColumn.Cell(i).CellRight(7).Value.ToString(), flightColumn.Cell(i).CellRight(8).Value.ToString());
 
                     }
                     else
                     {
                         Console.WriteLine(flightColumn.Cell(i).CellRight(1).Value.ToString(), flightColumn.Cell(i).CellRight(2).Value.ToString(), dateTime, dateTimeArrive, flightColumn.Cell(i).CellRight(5).Value.ToString(), flightColumn.Cell(i).CellRight(6).Value.ToString(), " $", flightColumn.Cell(i).CellRight(7).Value.ToString(), flightColumn.Cell(i).CellRight(8).Value.ToString());
 
+                    }
+                }
+            }
+        }
+
+        public void printBoardingPass(string flightId)
+        {
+            var workbook = new XLWorkbook(Globals.databasePath);
+            var worksheet = workbook.Worksheet("ActiveFlights");
+            var table = worksheet.Tables.Table(0);
+            var flightColumn = table.Column(1); //flight id column
+            Flight flight = new Flight();
+            bool onFlight = false;
+            // Find flight in database
+            for (int i = 1; i <= flightColumn.CellCount(); i++)
+            {
+                if (string.Equals(flightId, flightColumn.Cell(i).Value.ToString()))
+                {
+                    //Get flight from database
+                    System.DateTime departTime = System.DateTime.Parse(flightColumn.Cell(i).CellRight(3).Value.ToString());
+                    System.DateTime arrivalTime = System.DateTime.Parse(flightColumn.Cell(i).CellRight(4).Value.ToString());
+
+                    flight = new Flight(flightId, flightColumn.Cell(i).CellRight(1).Value.ToString(), // Debating on keeping in favor of just using rows but keeping for plane type? 
+                        flightColumn.Cell(i).CellRight(2).Value.ToString(),
+                        departTime, arrivalTime);
+
+                    // Ensure customer is on flight
+                    foreach (var customer in flight.passengers)
+                    {
+                        if (string.Equals(customer.UserId, this.UserId))
+                            onFlight = true;
+                          
+                        
+                        if (onFlight)
+                        {
+                            // Build and print boarding pass
+                            Console.WriteLine();
+                            StringBuilder builder = new StringBuilder();
+                            builder.AppendLine("----------------------------------------------------------------------------------------------");
+                            builder.Append("Flight: ");
+                            builder.AppendLine(flightId);
+                            builder.Append("Passenger: ");
+                            builder.Append(this.FName);
+                            builder.Append(" ");
+                            builder.AppendLine(this.LName);
+                            builder.Append("Departing from: ");
+                            builder.AppendLine(flight.FlightFrom);
+                            builder.Append("Arriving at: ");
+                            builder.AppendLine(flight.FlightTo);
+                            builder.Append("Departing at: ");
+                            builder.AppendLine(flight.departTime.ToString());
+                            builder.Append("Arriving at: ");
+                            builder.AppendLine(flight.arrivalTime.ToString());
+                            builder.AppendLine("----------------------------------------------------------------------------------------------");
+
+                            Console.WriteLine(builder.ToString());
+                            return;
+                        }
                     }
                 }
             }
