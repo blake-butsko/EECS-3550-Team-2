@@ -62,7 +62,7 @@ namespace SWE_Project
 
         // Function to go into the database and retrieves the flight distance
         // Then assigns a plane dependent on length of flight - To ActiveFlights
-        public void ChoosePlane(int FlightId)
+        public void ChoosePlane(String FlightId)
         {
             // Code to go into the database and retrieve the flight distance
             // For specified flightId find the distance between Departing and ArrivingAt (add try catch in case of invalid name)
@@ -77,12 +77,8 @@ namespace SWE_Project
                 bool IdCheck = false;
                 bool IdFound;
                 for (int i = 1; i <= idColumn.CellCount(); i++)
-                {
-                    //Still have to write a try catch only inside this if
-                    try { IdFound = String.Equals(idColumn.Cell(i).Value.GetText(), FlightId.ToString()); }
-                    catch { IdFound = false; }
-                    
-                    if (IdFound)
+                {                   
+                    if (string.Equals((idColumn.Cell(i).Value).ToString(), FlightId))
                     {
                         IdCheck = true;
                         var flightRow = table.DataRange.Row(i);
@@ -123,7 +119,7 @@ namespace SWE_Project
                             if (String.Equals(userEntry, "y"))
                             {
                                 Console.WriteLine("You've selected y, the flight will be updated with the plane");
-                                flightRow.Cell(5).Value = suggested;
+                                flightRow.Cell(6).Value = suggested;
                                 workbook.Save();
                                 return;
                             }
@@ -148,7 +144,7 @@ namespace SWE_Project
                                         userEntry = userEntry.Trim();
                                         if (String.Equals(userEntry, "y"))
                                         {
-                                            flightRow.Cell(5).Value = planeChoice;
+                                            flightRow.Cell(6).Value = planeChoice;
                                             workbook.Save();
                                             Console.WriteLine("You've selected y, the flight will be updated with the plane");
                                             return;
@@ -161,6 +157,8 @@ namespace SWE_Project
                                 } while (!(String.Equals(userChange, "quit")));
                             }
                             Console.WriteLine();
+                            if (String.Equals(userEntry, "quit"))
+                                return;
                         } while (!(String.Equals(userEntry, "quit")));
                     }
                     else

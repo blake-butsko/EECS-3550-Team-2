@@ -253,15 +253,18 @@ class Program
     {
         Globals.databasePath = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + @"\AirportInfo.xlsx"); // store excel file in debug so it can be grabbed 
         CLICaller caller = new CLICaller();
-        Console.WriteLine("Hello World");
+        /*Console.WriteLine("Hello World");
         SWE_Project.LoadEngineer alex = new("12345", "password");
        
         char Vr = 'Q';
         string input;
         string user = "";
-        string pass = "";
+        string pass = "";*/
 
-        do
+        SWE_Project.MarketingManager Benjamin = new("12345", "password");
+        Benjamin.ChoosePlane("5");
+
+        /*do
         {
             Console.WriteLine("Welcome, Enter L to Login, C to Create an Account, or Q to Quit");
             input = Console.ReadLine();
@@ -306,7 +309,7 @@ class Program
                 System.Environment.Exit(1);
             }
 
-        } while (Vr == 'Q');
+        } while (Vr == 'Q');*/
     }
     static char Login(string user, string pass)
     {
