@@ -1,4 +1,4 @@
-﻿using actor_interface;
+﻿
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace SWE_Project
 {
     // The load engineer is responsible for creating, editing, and deleting flights
-    internal class LoadEngineer : Actor
+    internal class LoadEngineer
     {
 
         public string UserId { get; }
@@ -42,8 +42,8 @@ namespace SWE_Project
             {
                 if (string.Equals(UserId, empIdColumn.Cell(i).Value.ToString()))
                 {
-                    FName = empIdColumn.Cell(i).CellRight(3).Value.ToString();
-                    LName = empIdColumn.Cell(i).CellRight(4).Value.ToString();
+                    this.FName = empIdColumn.Cell(i).CellRight(3).Value.ToString();
+                    this.LName = empIdColumn.Cell(i).CellRight(4).Value.ToString();
 
                     return;
                 }
@@ -105,6 +105,8 @@ namespace SWE_Project
 
                 }
 
+
+
                 var listOfData = new ArrayList(); // Making list to feed data into Append data function (IEnumerable)
                 listOfData.Add(FlightId);
 
@@ -114,6 +116,7 @@ namespace SWE_Project
                 listOfData.Add(ArrivalTime.ToUniversalTime().ToString("g"));
                 listOfData.Add(0); // Passengers
 
+                
                 if (!(flightTable.DataRange.FirstRow().Cell(1).Value.IsBlank))
                 {
                     flightTable.InsertRowsBelow(1); // Put new flight data into list
@@ -123,7 +126,7 @@ namespace SWE_Project
                     Console.WriteLine("Failed to add flight.\n Check Database");
                     return;
                 }
-
+               
                 var tableLastRow = flightTable.LastRow();
                 if (listOfData != null)
                 {
@@ -141,6 +144,51 @@ namespace SWE_Project
 
                 }
                 workbook.Save(); // Save changes
+                // Get approval from marketing manager
+                Console.WriteLine("\nPlease get the approval of a marketing manager to confirm this flight");
+                Console.WriteLine("UserId: ");
+                string userId = Console.ReadLine();
+                Console.WriteLine("Password: ");
+                string password = Console.ReadLine();
+
+                var empWorksheet = workbook.Worksheet("empList");
+                var empTable = empWorksheet.Tables.Table(0);
+                var empIdColumn = empTable.Column(1);
+                MarketingManager marketingManager = new MarketingManager();
+                bool foundManager = false;
+                // Check for valid marketing manager credentials to select a plane type
+                for (int i = 1; i <= empIdColumn.CellCount(); i++)
+                {
+                    if (string.Equals(empIdColumn.Cell(i).Value.ToString(), userId)) // Don't want to check both user id and password to save comparisions
+                    {
+                        if (string.Equals(empIdColumn.Cell(i).CellRight(2).Value.ToString(), password))
+                        {
+                            marketingManager = new MarketingManager(empIdColumn.Cell(i).Value.ToString(), empIdColumn.Cell(i).CellRight(2).Value.ToString());
+                            foundManager = true;
+                            break;
+                        }
+                    }
+                }
+                // Delete flight from database 
+                if (!foundManager)
+                {
+                    flightTable.LastRow().Delete();
+                    Console.WriteLine("Invalid Credentials - Canceling flight creation\n");
+                }
+                else
+                {
+                    string planeType = marketingManager.ChoosePlane(FlightId);
+                    if (string.Equals(planeType, ""))
+                    {
+                        flightTable.LastRow().Delete();
+                        Console.WriteLine("Invalid Flight Type - Canceling flight creation\n");
+                    }
+                    else
+                    {
+                        flightTable.LastRow().Cell(6).Value = planeType;
+                    }
+                }
+                workbook.Save();
 
             }
             catch (FileNotFoundException ex)
@@ -148,9 +196,6 @@ namespace SWE_Project
                 Console.WriteLine(ex.Message);
                 return;
             }
-
-
-
         }
         // Find an existing flight and edit it
         public void EditFlight(string FlightId)
@@ -509,6 +554,8 @@ namespace SWE_Project
                             {
                                 if (pointFlags[passengerIndex])
                                     custIdColumn.Cell(j).CellRight(8).Value = (int)custIdColumn.Cell(j).CellRight(8).Value + deletedFlight.PointsGenerated;
+                                else
+                                    custIdColumn.Cell(j).CellRight(8).Value = (int)custIdColumn.Cell(j).CellRight(7).Value + deletedFlight.Price;
 
                                 passengerIndex++;
                                 if (passengerIndex >= deletedFlight.passengers.Count)
@@ -535,10 +582,6 @@ namespace SWE_Project
 
         }
 
-        public void Login(string UserId, string Password)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
 

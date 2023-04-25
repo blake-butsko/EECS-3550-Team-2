@@ -1,4 +1,4 @@
-﻿using actor_interface;
+﻿
 using ClosedXML.Excel;
 using System;
 using System.Collections;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SWE_Project
 {
     // The marketing manager selects the plane that should be used for each flight
-    internal class MarketingManager : Actor
+    internal class MarketingManager
     {
         string UserId { get; }
         string Password { get; set; }
@@ -25,6 +25,8 @@ namespace SWE_Project
             populateName();
         }
 
+        public MarketingManager() { }
+
         private void populateName()
         {
             var workbook = new XLWorkbook(Globals.databasePath);
@@ -34,20 +36,15 @@ namespace SWE_Project
 
             for (int i = 1; i <= empIdColumn.CellCount(); i++)
             {
-                if (string.Equals(UserId, empIdColumn.Cell(i).Value))
+                if (string.Equals(UserId, empIdColumn.Cell(i).Value.ToString()))
                 {
-                    FName = empIdColumn.Cell(i).CellRight(3).Value.ToString();
-                    LName = empIdColumn.Cell(i).CellRight(4).Value.ToString();
+                    this.FName = empIdColumn.Cell(i).CellRight(3).Value.ToString();
+                    this.LName = empIdColumn.Cell(i).CellRight(4).Value.ToString();
 
                     return;
                 }
             }
 
-        }
-
-        public void CreateAccount(string UserId, string Password)
-        {
-            throw new NotImplementedException();
         }
 
         // modified flight mmethod (used if we distance isn't a column in active flights) just added parameters
@@ -85,7 +82,7 @@ namespace SWE_Project
 
         // Function to go into the database and retrieves the flight distance
         // Then assigns a plane dependent on length of flight - To ActiveFlights
-        public void ChoosePlane(int FlightId)
+        public string ChoosePlane(string FlightId)
         {
             // Code to go into the database and retrieve the flight distance
             // For specified flightId find the distance between Departing and ArrivingAt (add try catch in case of invalid name)
@@ -102,7 +99,7 @@ namespace SWE_Project
                 for (int i = 1; i <= idColumn.CellCount(); i++)
                 {
                     //Still have to write a try catch only inside this if
-                    try { IdFound = string.Equals((string)flightColumn.Cell(i).Value, flightId); }
+                    try { IdFound = string.Equals(idColumn.Cell(i).Value.ToString(), FlightId); }
                     catch { IdFound = false; }
                     
                     if (IdFound)
@@ -110,8 +107,8 @@ namespace SWE_Project
                         IdCheck = true;
                         var flightRow = table.DataRange.Row(i);
 
-                        String arrival = (string)flightRow.Cell(2).Value;
-                        String departure = (string)flightRow.Cell(3).Value;
+                        String arrival = flightRow.Cell(2).Value.ToString();
+                        String departure = flightRow.Cell(3).Value.ToString();
                         int distance = CalculateDistances(arrival, departure);
                         String suggested;
                         // code to fetch distance from datasheet thing
@@ -146,9 +143,8 @@ namespace SWE_Project
                             if (String.Equals(userEntry, "y"))
                             {
                                 Console.WriteLine("You've selected y, the flight will be updated with the plane");
-                                flightRow.Cell(5).Value = suggested;
-                                workbook.Save();
-                                return;
+                               
+                                return suggested;
                             }
                             if (String.Equals(userEntry, "n"))
                             {
@@ -171,10 +167,9 @@ namespace SWE_Project
                                         userEntry = userEntry.Trim();
                                         if (String.Equals(userEntry, "y"))
                                         {
-                                            flightRow.Cell(5).Value = planeChoice;
-                                            workbook.Save();
+                                           
                                             Console.WriteLine("You've selected y, the flight will be updated with the plane");
-                                            return;
+                                            return planeChoice;
                                         }
 
                                         else
@@ -184,8 +179,8 @@ namespace SWE_Project
                                 } while (!(String.Equals(userChange, "quit")));
                             }
                             Console.WriteLine();
-                            if (String.Equals(userEntry, "quit")
-                                return;
+                            if (String.Equals(userEntry, "quit"))
+                                return "";
                         } while (!(String.Equals(userEntry, "quit")));
                     }
                     else
@@ -196,21 +191,16 @@ namespace SWE_Project
                 if (!IdCheck)
                 {
                     Console.WriteLine("FlightID not found in our database");
-                    return;
+                    return "";
                 }
             }
             catch (FileNotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
-                return;
+                return "";
             }
 
-            return;
-        }
-
-        public void Login(string UserId, string Password)
-        {
-            throw new NotImplementedException();
+            return "";
         }
     }
 }

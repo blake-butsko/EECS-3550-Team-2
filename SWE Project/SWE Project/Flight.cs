@@ -17,7 +17,7 @@ namespace SWE_Project
         public System.DateTime departTime;
         public System.DateTime arrivalTime;
         public string FlightId { get; }
-        public int PlaneType { get; set; }
+        public string PlaneType { get; set; }
         float Distance;
         public int capacity { get; set; }
         public int PointsGenerated;
@@ -35,10 +35,30 @@ namespace SWE_Project
             CalculateDistance();
             CalculatePrice();
             CalculatePoints();
+            GetCapacity();
             PopulateFlight();
            
         }
         public Flight() { }
+
+        private void GetCapacity()
+        {
+            var workbook = new XLWorkbook(Globals.databasePath); // Open database
+            var flightWorksheet = workbook.Worksheet("ActiveFlights"); // Get Flight Manifest sheet
+
+            var flightTable = flightWorksheet.Tables.Table(0);
+
+            var idColumn = flightTable.DataRange.Column(1);
+            // Find flight in active flights
+            for (int i = 1; i <= idColumn.CellCount(); i++)
+            {
+                if (String.Equals(idColumn.Cell(i).Value.ToString(), FlightId))
+                {
+                    this.PlaneType = idColumn.Cell(i).CellRight(5).Value.ToString();
+                }
+            }
+        }
+
         // Finds distance of a flight from database
         private void CalculateDistance()
         {
@@ -139,7 +159,6 @@ namespace SWE_Project
             }
 
         }
-        void GetPath() { } // Need to chat with group about how to handle connecting flights
     }
 
 }

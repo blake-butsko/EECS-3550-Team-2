@@ -1,4 +1,4 @@
-﻿using actor_interface;
+﻿
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Drawing.Charts;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SWE_Project
 {
-    internal class AccountingManager : Actor
+    internal class AccountingManager
     {
 
 
@@ -36,10 +36,10 @@ namespace SWE_Project
 
             for (int i = 1; i <= empIdColumn.CellCount(); i++)
             {
-                if (string.Equals(UserId, empIdColumn.Cell(i).Value))
+                if (string.Equals(UserId, empIdColumn.Cell(i).Value.ToString()))
                 {
-                    FName = empIdColumn.Cell(i).CellRight(3).Value.ToString();
-                    LName = empIdColumn.Cell(i).CellRight(4).Value.ToString();
+                    this.FName = empIdColumn.Cell(i).CellRight(3).Value.ToString();
+                    this.LName = empIdColumn.Cell(i).CellRight(4).Value.ToString();
 
                     return;
                 }

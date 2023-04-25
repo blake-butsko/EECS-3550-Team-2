@@ -1,4 +1,4 @@
-﻿using actor_interface;
+﻿
 using DocumentFormat.OpenXml.Spreadsheet;
 using ClosedXML.Excel;
 using System;
@@ -11,7 +11,7 @@ using static ClosedXML.Excel.XLPredefinedFormat;
 
 namespace SWE_Project
 {
-    internal class Customer : Actor
+    internal class Customer
     {
         public string UserId { get; }
         private string Password { get; set; }
@@ -136,12 +136,6 @@ namespace SWE_Project
                     }
                 }
             }
-        }
-
-
-        public void Login(string UserId, string Password)
-        {
-            throw new NotImplementedException();
         }
     }
 }

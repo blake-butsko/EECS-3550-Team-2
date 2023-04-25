@@ -31,10 +31,10 @@ namespace SWE_Project
 
             for (int i = 1; i <= empIdColumn.CellCount(); i++)
             {
-                if (string.Equals(UserId, empIdColumn.Cell(i).Value))
+                if (string.Equals(UserId, empIdColumn.Cell(i).Value.ToString()))
                 {
-                    FName = empIdColumn.Cell(i).CellRight(3).Value.ToString();
-                    LName = empIdColumn.Cell(i).CellRight(4).Value.ToString();
+                    this.FName = empIdColumn.Cell(i).CellRight(3).Value.ToString();
+                    this.LName = empIdColumn.Cell(i).CellRight(4).Value.ToString();
 
                     return;
                 }

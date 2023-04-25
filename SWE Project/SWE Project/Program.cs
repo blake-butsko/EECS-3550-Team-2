@@ -1,5 +1,4 @@
-﻿using actor_interface;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using ClosedXML;
 using ClosedXML.Excel;
 using System.Collections;
@@ -72,17 +71,17 @@ internal class CLICaller
             {
                 person.custHistory();
             }
-            else if(!string.Equals(userInput, "quit"))
+            else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
 
         } while (!string.Equals(userInput, "quit"));
-        
+
 
         Console.WriteLine("*********************************************************************************************");
         return;
     }
 
-    public void LoadEngineerCli(SWE_Project.LoadEngineer engineer) 
+    public void LoadEngineerCli(SWE_Project.LoadEngineer engineer)
     {
         Console.WriteLine("*********************************************************************************************");
         string user = engineer.UserId; // Temp
@@ -129,7 +128,7 @@ internal class CLICaller
                 string ArrivingAt = Console.ReadLine();
                 Console.Write("Enter the time of departure: ");//Needs to be more complex
                 string DepartTime = Console.ReadLine();
-              
+
                 string confIn;
                 do
                 {
@@ -145,7 +144,7 @@ internal class CLICaller
             {
                 Console.Write("Enter the ID for the flight you want to edit: ");
                 string FlightId = Console.ReadLine();
-                if(FlightId != null)
+                if (FlightId != null)
                 {
                     engineer.EditFlight(FlightId);
                 }
@@ -204,7 +203,6 @@ internal class CLICaller
         {
             Console.WriteLine("What would you like to do today?");
             Console.WriteLine("To select a plane type for a flight, enter plane.");
-            Console.WriteLine("To create an account for a fellow worker, enter account.");
             Console.WriteLine("To exit the marketing manager portal, enter quit.\n");
 
 
@@ -217,10 +215,6 @@ internal class CLICaller
             Console.WriteLine("");
 
             if (string.Equals(userInput, "plane"))
-            {
-               
-            }
-            else if (string.Equals(userInput, "account"))
             {
 
             }
@@ -258,7 +252,6 @@ internal class CLICaller
         {
             Console.WriteLine("What would you like to do today?");
             Console.WriteLine("To print a flight manifest for a flight, enter print.");
-            Console.WriteLine("To create an account for a fellow worker, enter account.");
             Console.WriteLine("To exit the marketing manager portal, enter quit.\n");
 
 
@@ -283,10 +276,7 @@ internal class CLICaller
                     Console.WriteLine("Invalid Entry\n");
                 }
             }
-            else if (string.Equals(userInput, "account"))
-            {
 
-            }
             else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
 
@@ -372,7 +362,8 @@ class Program
         Globals.databasePath = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + @"\AirportInfo.xlsx"); // store excel file in debug so it can be grabbed 
         CLICaller caller = new CLICaller();
         Console.WriteLine("Hello World");
-       
+        SWE_Project.LoadEngineer alex = new LoadEngineer("1","2");
+        alex.CreateFlight("9999","Nashville", "Chicago", System.DateTime.Parse("4/25/2023 5:00 PM"));
         int Vr = 0;
         string mainInput;
         string user = "";
@@ -388,7 +379,7 @@ class Program
             mainInput = Console.ReadLine();
             if (mainInput != null)
                 mainInput = mainInput.ToLower();
-        
+
             if (string.Equals(mainInput, "login"))//When login is inputted wait for input of the ID and password send to login function
             {
                 user = "";
@@ -443,17 +434,17 @@ class Program
             var worksheet = workbook.Worksheet("custList");
             var table = worksheet.Tables.Table(0);
             var idCol = table.Column(1);
-            Customer currentUser = new Customer(idCol.Cell(Vr).Value.ToString(), 
-                idCol.Cell(Vr).CellRight(1).Value.ToString(), 
-                idCol.Cell(Vr).CellRight(8).GetValue<int>(), 
-                idCol.Cell(Vr).CellRight(9).Value.ToString(), 
-                idCol.Cell(Vr).CellRight(10).Value.ToString(), 
-                idCol.Cell(Vr).CellRight(4).Value.ToString(), 
-                idCol.Cell(Vr).CellRight(6).GetValue<int>(), 
+            Customer currentUser = new Customer(idCol.Cell(Vr).Value.ToString(),
+                idCol.Cell(Vr).CellRight(1).Value.ToString(),
+                idCol.Cell(Vr).CellRight(8).GetValue<int>(),
+                idCol.Cell(Vr).CellRight(9).Value.ToString(),
+                idCol.Cell(Vr).CellRight(10).Value.ToString(),
+                idCol.Cell(Vr).CellRight(4).Value.ToString(),
+                idCol.Cell(Vr).CellRight(6).GetValue<int>(),
                 idCol.Cell(Vr).CellRight(5).Value.ToString());
             cLi.CustomerCli(currentUser);
         }
-        else if(user.Length == 5)
+        else if (user.Length == 5)
         {
             var worksheet = workbook.Worksheet("EmpList");
             var table = worksheet.Tables.Table(0);
@@ -517,7 +508,7 @@ class Program
         for (int i = 1; i <= totalRows; i++)
         {
             var usCell = table.Row(i).Cell(1).GetString();//Get row user id
-            if (string.Equals(usCell , user))
+            if (string.Equals(usCell, user))
             {
                 byte[] tmpNewHash;
                 byte[] savedHash;
@@ -525,7 +516,7 @@ class Program
                 string checkPass;
                 SHA512 shaM = new SHA512Managed();
                 var tmpSource = ASCIIEncoding.ASCII.GetBytes(pass);//Turns inputted password into bytes
-                tmpNewHash =shaM.ComputeHash(tmpSource);//Hashes the bytes
+                tmpNewHash = shaM.ComputeHash(tmpSource);//Hashes the bytes
                 checkPass = Encoding.UTF8.GetString(tmpNewHash);//turns it back into a string
                 SavedPass = table.Row(i).Cell(2).Value.ToString();
                 if (checkPass == SavedPass)//Compares inputed hashed string to hashed string stored in database
@@ -554,7 +545,7 @@ class Program
         int cmp;
         for (int x = 2; x <= lastRowPos; x++)
         {
-            cmp= worksheet.Row(x).Cell(1).GetValue<int>();
+            cmp = worksheet.Row(x).Cell(1).GetValue<int>();
             if (ranCheck == cmp)
             {
                 ranCheck = rnd.Next(0, 900000);
@@ -567,7 +558,7 @@ class Program
         worksheet.Row(lastRowPos).Cell(3).Value = fname;
         worksheet.Row(lastRowPos).Cell(4).Value = lname;
         worksheet.Row(lastRowPos).Cell(5).Value = address;
-        worksheet.Row(lastRowPos).Cell(6).Value = phone;    
+        worksheet.Row(lastRowPos).Cell(6).Value = phone;
         worksheet.Row(lastRowPos).Cell(7).Value = age;
         worksheet.Row(lastRowPos).Cell(8).Value = 0;
         worksheet.Row(lastRowPos).Cell(9).Value = 0;
