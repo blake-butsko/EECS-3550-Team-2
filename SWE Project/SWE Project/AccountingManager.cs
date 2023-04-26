@@ -34,7 +34,7 @@ namespace SWE_Project
             var empTable = worksheet.Tables.Table(0);
             var empIdColumn = empTable.Column(1);
 
-            for (int i = 1; i <= empIdColumn.CellCount(); i++)
+            for (int i = 1; i <= empIdColumn.CellsUsed().Count(); i++)
             {
                 if (string.Equals(UserId, empIdColumn.Cell(i).Value))
                 {

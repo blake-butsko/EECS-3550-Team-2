@@ -102,7 +102,7 @@ namespace SWE_Project
                 for (int i = 1; i <= idColumn.CellCount(); i++)
                 {
                     //Still have to write a try catch only inside this if
-                    try { IdFound = string.Equals((string)flightColumn.Cell(i).Value, flightId); }
+                    try { IdFound = string.Equals((string)idColumn.Cell(i).Value, idColumn); }
                     catch { IdFound = false; }
                     
                     if (IdFound)
@@ -184,7 +184,7 @@ namespace SWE_Project
                                 } while (!(String.Equals(userChange, "quit")));
                             }
                             Console.WriteLine();
-                            if (String.Equals(userEntry, "quit")
+                            if (String.Equals(userEntry, "quit"))
                                 return;
                         } while (!(String.Equals(userEntry, "quit")));
                     }
