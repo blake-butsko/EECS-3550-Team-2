@@ -361,15 +361,13 @@ class Program
     {
         Globals.databasePath = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + @"\AirportInfo.xlsx"); // store excel file in debug so it can be grabbed 
         CLICaller caller = new CLICaller();
-        Console.WriteLine("Hello World");
-        SWE_Project.LoadEngineer alex = new LoadEngineer("1","2");
-        alex.CreateFlight("9999","Nashville", "Chicago", System.DateTime.Parse("4/25/2023 5:00 PM"));
+        
         int Vr = 0;
         string mainInput;
         string user = "";
         string pass = "";
         Console.WriteLine("*********************************************************************************************");
-        Console.WriteLine("Welcome to Burger King Airlines");
+        Console.WriteLine("Welcome to MidWest Airlines");
         Console.WriteLine("");
         do
         {

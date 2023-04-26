@@ -43,20 +43,43 @@ namespace SWE_Project
 
         private void GetCapacity()
         {
+            string[] PossiblePlanes = { "737", "757", "767", "787" };
+            int[] Capcacities = { 149, 200, 216, 248 };
             var workbook = new XLWorkbook(Globals.databasePath); // Open database
             var flightWorksheet = workbook.Worksheet("ActiveFlights"); // Get Flight Manifest sheet
 
             var flightTable = flightWorksheet.Tables.Table(0);
 
             var idColumn = flightTable.DataRange.Column(1);
+            bool foundPlaneType = false;
             // Find flight in active flights
             for (int i = 1; i <= idColumn.CellCount(); i++)
             {
                 if (String.Equals(idColumn.Cell(i).Value.ToString(), FlightId))
                 {
                     this.PlaneType = idColumn.Cell(i).CellRight(5).Value.ToString();
+                    if(string.Equals(this.PlaneType, PossiblePlanes[0]))
+                    {
+                        this.capacity = Capcacities[0];
+                    }else if (string.Equals(this.PlaneType, PossiblePlanes[1]))
+                    {
+                        this.capacity = Capcacities[1];
+
+                    }
+                    else if (string.Equals(this.PlaneType, PossiblePlanes[2]))
+                    {
+                        this.capacity = Capcacities[2];
+                    }
+                    else if (string.Equals(this.PlaneType, PossiblePlanes[3]))
+                    {
+                        this.capacity = Capcacities[3];
+                    }
+                    break;
                 }
             }
+
+           
+
         }
 
         // Finds distance of a flight from database
