@@ -88,6 +88,7 @@ namespace SWE_Project
             var flightColumn = table.Column(1); //flight id column
             Flight flight = new Flight();
             bool onFlight = false;
+
             // Find flight in database
             for (int i = 1; i <= flightColumn.CellCount(); i++)
             {
@@ -101,15 +102,25 @@ namespace SWE_Project
                         flightColumn.Cell(i).CellRight(2).Value.ToString(),
                         departTime, arrivalTime);
 
+                   
+
                     // Ensure customer is on flight
                     foreach (var customer in flight.passengers)
                     {
                         if (string.Equals(customer.UserId, this.UserId))
                             onFlight = true;
+                        
                           
                         
                         if (onFlight)
                         {
+                            if (!(System.DateTime.Now > departTime.AddHours(-24) && System.DateTime.Now < departTime))
+                            {
+                                Console.WriteLine("It is too early for you to print this\n");
+
+                                return;
+                            }
+
                             // Build and print boarding pass
                             Console.WriteLine();
                             StringBuilder builder = new StringBuilder();
@@ -133,7 +144,10 @@ namespace SWE_Project
                             Console.WriteLine(builder.ToString());
                             return;
                         }
+                       
                     }
+                    Console.WriteLine("You are not on this flight\n");
+                    return;
                 }
             }
         }

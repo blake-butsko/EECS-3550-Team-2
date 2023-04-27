@@ -31,6 +31,7 @@ namespace SWE_Project
             this.FlightFrom = FlightFrom;
             this.FlightTo = FlightTo;
             this.departTime = departTime;
+            this.arrivalTime = arrivalTime;
             // Fill flights with info when created
             CalculateDistance();
             CalculatePrice();
@@ -175,7 +176,7 @@ namespace SWE_Project
                     Customer cust = new Customer(custIdColumn.Cell(i).Value.ToString(),
                         custIdColumn.Cell(i).CellRight(2).Value.ToString(),
                             custIdColumn.Cell(i).CellRight(3).Value.ToString(),
-                                (int)custIdColumn.Cell(i).CellRight(6).Value);
+                                Int32.Parse(custIdColumn.Cell(i).CellRight(6).Value.ToString()));
                     passengers.Add(cust);
                 }
 

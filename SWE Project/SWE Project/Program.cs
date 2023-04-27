@@ -65,7 +65,11 @@ internal class CLICaller
             }
             else if (string.Equals(userInput, "print"))
             {
-
+                Console.WriteLine("Please enter the flight id of the plane you are trying to board: ");
+                string userResponse = Console.ReadLine();
+                if (userResponse != null)
+                    person.printBoardingPass(userResponse);
+                
             }
             else if (string.Equals(userInput, "account"))
             {

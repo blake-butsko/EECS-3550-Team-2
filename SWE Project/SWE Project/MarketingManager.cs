@@ -162,7 +162,7 @@ namespace SWE_Project
                                     {
                                         String planeChoice = PossiblePlanes[Int32.Parse(userChange)];
 
-                                        Console.WriteLine("You've selected {0} is this right type: y/n", planeChoice);
+                                        Console.WriteLine("You've selected {0} is this right plane: y/n", planeChoice);
                                         userEntry = Console.ReadLine().ToLower();
                                         userEntry = userEntry.Trim();
                                         if (String.Equals(userEntry, "y"))
