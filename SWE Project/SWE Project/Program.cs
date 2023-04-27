@@ -261,8 +261,13 @@ class Program
         string user = "";
         string pass = "";*/
 
-        SWE_Project.MarketingManager Benjamin = new("12345", "password");
-        Benjamin.ChoosePlane("5");
+        // WIll have to write console function for interior of schedule flight either in the function (which is most likely or out here)
+
+        SWE_Project.Customer Phillip = new("000001");
+        Phillip.accountInformation();
+        //Benjamin.ScheduleFlight(new System.DateTime(2023, 4, 24,5,23,20), "Nashville", "Las Vegas");
+        /*SWE_Project.MarketingManager Benjamin = new("12345", "password");
+        Benjamin.ChoosePlane("7");*/
 
         /*do
         {

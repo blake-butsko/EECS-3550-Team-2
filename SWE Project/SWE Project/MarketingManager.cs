@@ -14,7 +14,8 @@ namespace SWE_Project
     {
         string UserId { get; }
         string Password { get; set; }
-        string[] PossiblePlanes = { "737", "747", "757", "Norton FalconX 5000" };
+        string[] PossiblePlanes = { "737", "757", "767", "787" };
+        int[] Capcacities = { 149, 200, 216, 248 };
         public MarketingManager(string UserId, string Password)
         {
             this.UserId = UserId;
@@ -89,18 +90,16 @@ namespace SWE_Project
                         String suggested;
                         // code to fetch distance from datasheet thing
                         // Need to find list of planes and distances based on that
-                        if (distance < 200)
+                        if (distance < 890)
                         {
                             suggested = PossiblePlanes[0];
                         }
-                        else if (distance > 199 && distance < 300)
+                        else if (distance > 890 && distance < 1700)
                             suggested = PossiblePlanes[1];
-                        else if (distance > 199 && distance < 300)
+                        else if (distance > 1700 && distance < 2000)
                             suggested = PossiblePlanes[2];
                         else
-                        {
                             suggested = PossiblePlanes[3];
-                        }
                         String userEntry;
 
                         do
