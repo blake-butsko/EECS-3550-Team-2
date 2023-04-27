@@ -38,6 +38,7 @@ namespace SWE_Project
             Address = address;
             Age = age;
             PhoneNumber = phoneNumber;
+            populateName();
         }
 
         public Customer(string UserId, string FName, string LName, int Age)
@@ -46,6 +47,27 @@ namespace SWE_Project
             this.FName = FName;
             this.LName = LName;
             this.Age = Age;
+        }
+
+
+        private void populateName()
+        {
+            var workbook = new XLWorkbook(Globals.databasePath);
+            var worksheet = workbook.Worksheet("CustList");
+            var custTable = worksheet.Tables.Table(0);
+            var custIdColumn = custTable.Column(1);
+
+            for (int i = 1; i <= custIdColumn.CellCount(); i++)
+            {
+                if (string.Equals(UserId, custIdColumn.Cell(i).Value.ToString()))
+                {
+                    this.FName = custIdColumn.Cell(i).CellRight(2).Value.ToString();
+                    this.LName = custIdColumn.Cell(i).CellRight(3).Value.ToString();
+
+                    return;
+                }
+            }
+
         }
 
         public void custHistory()

@@ -27,20 +27,7 @@ internal class CLICaller
     public void CustomerCli(SWE_Project.Customer person) // add customer object here
     {
         Console.WriteLine("*********************************************************************************************");
-        string user = person.UserId; // Temp
-        var workbook = new XLWorkbook(Globals.databasePath); // Open database
-        var worksheet = workbook.Worksheet("CustList");
-        var table = worksheet.Tables.Table(0); // Get customer Table
-        var totalRows = worksheet.LastRowUsed().RowNumber();
-        for (int i = 1; i <= totalRows; i++)
-        {
-            var usCell = table.Row(i).Cell(1).GetString();//Get row user id
-            if (string.Equals(usCell, user))
-            {
-                Console.WriteLine("\n Welcome Back " + table.Row(i).Cell(4).GetString() + "!\n");
-                break;
-            }
-        }
+        Console.WriteLine("Welcome Back " + person.FName + " " + person.LName + "!\n");
         var userInput = "";
         do
         {
@@ -88,20 +75,7 @@ internal class CLICaller
     public void LoadEngineerCli(SWE_Project.LoadEngineer engineer)
     {
         Console.WriteLine("*********************************************************************************************");
-        string user = engineer.UserId; // Temp
-        var workbook = new XLWorkbook(Globals.databasePath); // Open database
-        var worksheet = workbook.Worksheet("EmpList");
-        var table = worksheet.Tables.Table(0); // Get customer Table
-        var totalRows = worksheet.LastRowUsed().RowNumber();
-        for (int i = 1; i <= totalRows; i++)
-        {
-            var usCell = table.Row(i).Cell(1).GetString();//Get row user id
-            if (string.Equals(usCell, user))
-            {
-                Console.WriteLine("\n Welcome Back " + table.Row(i).Cell(4).GetString() + "!\n");
-                break;
-            }
-        }
+        Console.WriteLine("Welcome Back " + engineer.FName + " " + engineer.LName + "!\n");
         var userInput = "";
         do
         {
@@ -109,7 +83,6 @@ internal class CLICaller
             Console.WriteLine("To create a flight, enter create.");
             Console.WriteLine("To edit a flight, enter edit.");
             Console.WriteLine("To delete a flight, enter delete.");
-            Console.WriteLine("To create an account for a fellow worker, enter account.");
             Console.WriteLine("To exit the load engineer portal, enter quit.\n");
 
 
@@ -170,10 +143,7 @@ internal class CLICaller
                     Console.WriteLine("Invalid Entry\n");
                 }
             }
-            else if (string.Equals(userInput, "account"))
-            {
-
-            }
+           
             else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
 
@@ -188,20 +158,7 @@ internal class CLICaller
     public void marketingManagerCli(SWE_Project.MarketingManager marketing)
     {
         Console.WriteLine("*********************************************************************************************");
-        /*string user = marketing.UserId; // Temp
-        var workbook = new XLWorkbook(Globals.databasePath); // Open database
-        var worksheet = workbook.Worksheet("EmpList");
-        var table = worksheet.Tables.Table(0); // Get customer Table
-        var totalRows = worksheet.LastRowUsed().RowNumber();
-        for (int i = 1; i <= totalRows; i++)
-        {
-            var usCell = table.Row(i).Cell(1).GetString();//Get row user id
-            if (string.Equals(usCell, user))
-            {
-                Console.WriteLine("\n Welcome Back " + table.Row(i).Cell(4).GetString() + "!\n");
-                break;
-            }
-        }*/
+        Console.WriteLine("Welcome Back " + marketing.FName + " " + marketing.LName + "!\n");
         var userInput = "";
         do
         {
@@ -221,6 +178,7 @@ internal class CLICaller
             if (string.Equals(userInput, "plane"))
             {
 
+
             }
             else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
@@ -237,20 +195,7 @@ internal class CLICaller
     public void FlightManagerCli(SWE_Project.FlightManager flighter)
     {
         Console.WriteLine("*********************************************************************************************");
-        string user = flighter.UserId; // Temp
-        var workbook = new XLWorkbook(Globals.databasePath); // Open database
-        var worksheet = workbook.Worksheet("EmpList");
-        var table = worksheet.Tables.Table(0); // Get customer Table
-        var totalRows = worksheet.LastRowUsed().RowNumber();
-        for (int i = 1; i <= totalRows; i++)
-        {
-            var usCell = table.Row(i).Cell(1).GetString();//Get row user id
-            if (string.Equals(usCell, user))
-            {
-                Console.WriteLine("\n Welcome Back " + table.Row(i).Cell(4).GetString() + "!\n");
-                break;
-            }
-        }
+        Console.WriteLine("Welcome Back " + flighter.FName + " " + flighter.LName + "!\n");
         var userInput = "";
         do
         {
@@ -296,20 +241,7 @@ internal class CLICaller
     {
 
         Console.WriteLine("*********************************************************************************************");
-        string user = accountant.UserId; // Temp
-        var workbook = new XLWorkbook(Globals.databasePath); // Open database
-        var worksheet = workbook.Worksheet("EmpList");
-        var table = worksheet.Tables.Table(0); // Get customer Table
-        var totalRows = worksheet.LastRowUsed().RowNumber();
-        for (int i = 1; i <= totalRows; i++)
-        {
-            var usCell = table.Row(i).Cell(1).GetString();//Get row user id
-            if (string.Equals(usCell, user))
-            {
-                Console.WriteLine("\n Welcome Back " + table.Row(i).Cell(4).GetString() + "!\n");
-                break;
-            }
-        }
+        Console.WriteLine("Welcome Back " + accountant.FName + " " + accountant.LName + "!\n");
         var userInput = "";
         do
         {
@@ -343,7 +275,7 @@ internal class CLICaller
             }
             else if (string.Equals(userInput, "total"))
             {
-
+                accountant.getTotalProfit();
             }
             else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
@@ -355,8 +287,6 @@ internal class CLICaller
         return;
     }
 }
-
-
 
 
 class Program
@@ -502,6 +432,7 @@ class Program
         }
         else
         {
+            Console.WriteLine("Failed to login - Invalid credentials\n");
             return 0; //If length is not 8 for customers or 7 for employees than username is invalid so return Q
         }
 
@@ -532,6 +463,12 @@ class Program
                 break;
             }
         }
+
+        if (usersRow == 0)
+            Console.WriteLine("Failed to login - Invalid credentials\n");
+
+
+
         return usersRow;
     }
     static bool CreateAccount(string fname, string lname, string address, string phone, string age, string pass)
