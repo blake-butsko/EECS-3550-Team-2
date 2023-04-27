@@ -60,12 +60,19 @@ internal class CLICaller
                 person.custHistory();
             }
             else if(!string.Equals(userInput, "quit"))
+            {
+                Console.WriteLine("*********************************************************************************************");
+                System.Environment.Exit(1);
+            }
+            else
                 Console.WriteLine("Invalid Entry\n");
+            Console.WriteLine("*********************************************************************************************");
 
-        } while (!string.Equals(userInput, "quit"));
+        } while (string.Equals(userInput, "quit"));
         
 
         Console.WriteLine("*********************************************************************************************");
+        System.Environment.Exit(1);
         return;
     }
 
@@ -146,13 +153,17 @@ internal class CLICaller
             {
 
             }
-            else if (!string.Equals(userInput, "quit"))
+            else if (string.Equals(userInput, "quit"))
+            {
+                Console.WriteLine("*********************************************************************************************");
+                System.Environment.Exit(1);
+            }
+            else
                 Console.WriteLine("Invalid Entry\n");
+            Console.WriteLine("*********************************************************************************************");
 
         } while (!string.Equals(userInput, "quit"));
 
-
-        Console.WriteLine("*********************************************************************************************");
         return;
 
     }
@@ -187,13 +198,20 @@ internal class CLICaller
             {
 
             }
-            else if (!string.Equals(userInput, "quit"))
+            else if (string.Equals(userInput, "quit"))
+            {
+                Console.WriteLine("*********************************************************************************************");
+                System.Environment.Exit(1);
+            }
+            else
                 Console.WriteLine("Invalid Entry\n");
+            Console.WriteLine("*********************************************************************************************");
 
         } while (!string.Equals(userInput, "quit"));
 
 
         Console.WriteLine("*********************************************************************************************");
+        System.Environment.Exit(1);
         return;
 
 
@@ -240,12 +258,19 @@ internal class CLICaller
 
             }
             else if (!string.Equals(userInput, "quit"))
+            {
+                Console.WriteLine("*********************************************************************************************");
+                System.Environment.Exit(1);
+            }
+            else
                 Console.WriteLine("Invalid Entry\n");
+            Console.WriteLine("*********************************************************************************************");
 
         } while (!string.Equals(userInput, "quit"));
 
 
         Console.WriteLine("*********************************************************************************************");
+        System.Environment.Exit(1);
         return;
 
     }
@@ -292,18 +317,21 @@ internal class CLICaller
             {
 
             }
-            else if (!string.Equals(userInput, "quit")) {
+            else if (string.Equals(userInput, "quit"))
+            {
+                Console.WriteLine("*********************************************************************************************");
                 System.Environment.Exit(1);
             }
             else
-            {
                 Console.WriteLine("Invalid Entry\n");
-            }    
+            Console.WriteLine("*********************************************************************************************");
 
         } while (!string.Equals(userInput, "quit"));
 
 
         Console.WriteLine("*********************************************************************************************");
+        System.Environment.Exit(1);
+
         return;
     }
 }
@@ -317,23 +345,23 @@ class Program
     {
         Globals.databasePath = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + @"\AirportInfo.xlsx"); // store excel file in debug so it can be grabbed 
         CLICaller caller = new CLICaller();
-        Console.WriteLine("Hello World");
        
         int Vr = 0;
         string mainInput;
         string user = "";
         string pass = "";
+        var workbook = new XLWorkbook(Globals.databasePath); // Open database
         Console.WriteLine("*********************************************************************************************");
-        Console.WriteLine("Welcome to Burger King Airlines\n");
+        Console.WriteLine("Welcome to Soft Air Airlines\n");
         do
         {
             Console.WriteLine("If you already have an account and want to access the app, enter Login");
             Console.WriteLine("To make a new account, enter Create ");
-            Console.WriteLine("To exit the application, enter Quit");
+            Console.WriteLine("To exit the application, enter Quit\n");
             mainInput = Console.ReadLine();
             if (mainInput != null)
                 mainInput = mainInput.ToLower();
-        
+            
             if (string.Equals(mainInput, "login"))//When login is inputted wait for input of the ID and password send to login function
             {
                 user = "";
@@ -342,7 +370,7 @@ class Program
                 user = Console.ReadLine();
                 Console.Write("Enter password: ");
                 pass = Console.ReadLine();
-                Vr = Login(user, pass);
+                Vr = Login(user, pass, workbook);
 
 
                 if (Vr == 0)
@@ -379,11 +407,12 @@ class Program
             else
             {
                 Console.WriteLine("Invalid Entry\n");
+                Console.WriteLine("*********************************************************************************************\n");
+
             }
 
         } while (Vr == 0);
         System.DateTime dateTime = System.DateTime.Now;
-        var workbook = new XLWorkbook(Globals.databasePath); // Open database
         CLICaller cLi = new CLICaller();
         if (user.Length == 6)
         {
@@ -410,21 +439,25 @@ class Program
             if (dep == "marketing")
             {
                 MarketingManager currentUser = new MarketingManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                workbook.Dispose();
                 cLi.marketingManagerCli(currentUser);
             }
             else if (dep == "engineer")
             {
                 LoadEngineer currentUser = new LoadEngineer(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                workbook.Dispose();
                 cLi.LoadEngineerCli(currentUser);
             }
             else if (dep == "flight")
             {
                 FlightManager currentUser = new FlightManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                workbook.Dispose();
                 cLi.FlightManagerCli(currentUser);
             }
             else if (dep == "accounting")
             {
                 AccountingManager currentUser = new AccountingManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                workbook.Dispose();
                 cLi.AccountingManagerCli(currentUser);
             }
         }
@@ -437,7 +470,7 @@ class Program
         //Mark.getFlightManifest("555");
         //x.getFlightProfit("555");
     }
-    static int Login(string user, string pass)
+    static int Login(string user, string pass, XLWorkbook workbook)
     {
         if (user == null || pass == null)
         {
@@ -445,7 +478,7 @@ class Program
             return 0;
         }
         int usersRow = 0;
-        var workbook = new XLWorkbook(Globals.databasePath); // Open database
+        //var workbook = new XLWorkbook(Globals.databasePath); // Open database
         var worksheet = workbook.Worksheet("custList");
         if (user.Length == 6)
         {
@@ -528,6 +561,7 @@ class Program
         byteholder = Encoding.UTF8.GetString(tmpHash);
         worksheet.Row(lastRowPos).Cell(2).Value = byteholder;
         workbook.SaveAs(Globals.databasePath);
+        workbook.Dispose();
         Console.WriteLine($"Your User ID is: '{ranCheck}'");
         return true;
     }
