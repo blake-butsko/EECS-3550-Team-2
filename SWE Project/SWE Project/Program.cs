@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System.Runtime.Intrinsics.Arm;
 using DocumentFormat.OpenXml.Office2010.Word;
+using System.Net;
 
 // Class for global variables following c# standards
 public class Globals
@@ -361,7 +362,7 @@ class Program
             mainInput = Console.ReadLine();
             if (mainInput != null)
                 mainInput = mainInput.ToLower();
-            
+
             if (string.Equals(mainInput, "login"))//When login is inputted wait for input of the ID and password send to login function
             {
                 user = "";
@@ -382,23 +383,127 @@ class Program
             }
             else if (mainInput == "create")//When login in inputted ask for Name, Address, Phone, Age, Card Information, Password and send to CreateAccount function
             {
-                Console.Write("Enter First Name: ");
-                string fname = Console.ReadLine();
-                Console.Write("Enter Last Name: ");
-                string lname = Console.ReadLine();
-                Console.Write("Enter Address: ");
-                string address = Console.ReadLine();
-                Console.Write("Enter Phone: ");
-                string phone = Console.ReadLine();
-                Console.Write("Enter Age: ");
-                string age = Console.ReadLine();
-                Console.Write("Enter Password: ");
-                string passs = Console.ReadLine();
-                Console.Write("Confirm Submission (Y/N)");
-                if (Console.ReadLine() == "Y" || Console.ReadLine() == "y")
+                int part = 0;
+                string fname = "";string lname = ""; string address = ""; string phone = ""; string age = "";string card = ""; string passs = ""; string confir = "";
+                do
                 {
-                    CreateAccount(fname, lname, address, phone, age, passs);
-                }
+                    if (part == 0)
+                    {
+                        Console.Write("Enter First Name: ");
+                        fname = Console.ReadLine();
+                        part++;
+                    }
+                    else if (part == 1) {
+                        Console.Write("Enter Last Name: ");
+                        lname = Console.ReadLine();
+                        part++;
+                    }
+                    else if (part == 2)
+                    {
+                        Console.Write("Enter Address: ");
+                        address = Console.ReadLine();
+                        part++;
+                    }
+                    else if (part == 3)
+                    {
+                        Console.Write("Enter Phone: ");
+                        phone = Console.ReadLine();
+                        try
+                        {
+                            Int32.Parse(phone);
+                            part++;
+                        }
+                        catch (ArgumentNullException)
+                        {
+                            Console.Write("Please Enter a Value");
+                        }
+                        catch
+                        {
+                            Console.Write("Invalid Phone Number");
+                        }
+                    }
+                    else if (part == 4)
+                    {
+                        Console.Write("Enter Age: ");
+                        age = Console.ReadLine();
+                        try
+                        {
+                            Int32.Parse(age);
+                            part++;
+                        }
+                        catch (ArgumentNullException)
+                        {
+                            Console.Write("Please Enter a Value");
+                        }
+                        catch 
+                        {
+                            Console.Write("Invalid age");
+                        }
+                    }
+                    else if (part == 5)
+                    {
+                        Console.Write("Enter Card Information: ");
+                        card = Console.ReadLine();
+                        if (card != null)
+                        {
+                            if (card.Length >= 16)
+                            {
+                                part++;
+                            }
+                            else
+                            {
+                                Console.Write("Invalid Card Number\n");
+                            }
+                        }
+                        else
+                        {
+                            Console.Write("Invalid Entry\n");
+                        }
+                    }
+                    else if (part == 6)
+                    {
+                        Console.Write("Enter Password: ");
+                        passs = Console.ReadLine();
+                        if (passs != null)
+                        {
+                            part++;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid Password");
+                        }
+                    }
+                    else if (part == 7)
+                    {
+                        Console.Write("Confirm Submission (Y/N)");
+                        confir = Console.ReadLine();
+                        if(confir != null)
+                        {
+                            if (confir.ToLower() == "y")
+                            {
+                                CreateAccount(fname, lname, address, phone, age, card, passs);
+                                part++;
+                            }
+                            else if (confir.ToLower() == "n")
+                            {
+                                part = 8;
+                            }
+                            else
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine("Enter Valid Confirmation (Y/N)\n");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("");
+                            Console.WriteLine("Enter Valid Confirmation (Y/N)\n");
+                        }
+                       
+                    }
+
+                } while (part != 8);
+               
             }
             else if (mainInput == "quit")
             {
@@ -521,7 +626,7 @@ class Program
         }
         return usersRow;
     }
-    static bool CreateAccount(string fname, string lname, string address, string phone, string age, string pass)
+    static bool CreateAccount(string fname, string lname, string address, string phone, string age, string cardin, string pass)
     {
         var workbook = new XLWorkbook(Globals.databasePath); // Open database
         var worksheet = workbook.Worksheet("custList");
@@ -551,7 +656,7 @@ class Program
         worksheet.Row(lastRowPos).Cell(7).Value = age;
         worksheet.Row(lastRowPos).Cell(8).Value = 0;
         worksheet.Row(lastRowPos).Cell(9).Value = 0;
-
+        worksheet.Row(lastRowPos).Cell(10).Value = cardin;
         byte[] tmpSource;
         byte[] tmpHash;
         String byteholder;
