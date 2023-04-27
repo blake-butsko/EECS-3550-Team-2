@@ -237,7 +237,7 @@ namespace SWE_Project
             try
             {
                 // Book flight
-
+                Console.WriteLine("Booking flight");
                 var listOfData = new ArrayList(); // Making list to feed data into Append data function (IEnumerable)
                 listOfData.Add(UserId); // huh
                 listOfData.Add(FlightID);
@@ -255,7 +255,7 @@ namespace SWE_Project
                 }
                 else
                 {
-                    Console.WriteLine("Failed to add flight.\n Check Database");
+                    Console.WriteLine("Failed to book flight.\n Check Database");
                     return;
                 }
 

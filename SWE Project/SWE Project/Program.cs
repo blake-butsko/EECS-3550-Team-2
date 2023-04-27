@@ -264,7 +264,10 @@ class Program
         // WIll have to write console function for interior of schedule flight either in the function (which is most likely or out here)
 
         SWE_Project.Customer Phillip = new("000001");
-        Phillip.accountInformation();
+        //Phillip.accountInformation();
+        Phillip.storeFlight("Bank", new System.DateTime(2023, 4, 24), new System.DateTime(2023, 4, 24), "binkle", "Nashville", "Cleveland", "200", "payment");
+        //See how it functions with both
+
         //Benjamin.ScheduleFlight(new System.DateTime(2023, 4, 24,5,23,20), "Nashville", "Las Vegas");
         /*SWE_Project.MarketingManager Benjamin = new("12345", "password");
         Benjamin.ChoosePlane("7");*/
