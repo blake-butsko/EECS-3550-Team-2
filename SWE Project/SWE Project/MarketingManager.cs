@@ -181,6 +181,7 @@ namespace SWE_Project
                             Console.WriteLine();
                             if (String.Equals(userEntry, "quit"))
                                 return "";
+
                         } while (!(String.Equals(userEntry, "quit")));
                     }
                     else

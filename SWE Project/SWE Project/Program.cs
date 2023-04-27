@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System.Runtime.Intrinsics.Arm;
 using DocumentFormat.OpenXml.Office2010.Word;
+using System.Net;
 
 // Class for global variables following c# standards
 public class Globals
@@ -62,20 +63,27 @@ internal class CLICaller
             {
                 person.custHistory();
             }
-            else if (!string.Equals(userInput, "quit"))
+            else if(!string.Equals(userInput, "quit"))
+            {
+                Console.WriteLine("*********************************************************************************************");
+                System.Environment.Exit(1);
+            }
+            else
                 Console.WriteLine("Invalid Entry\n");
+            Console.WriteLine("*********************************************************************************************");
 
-        } while (!string.Equals(userInput, "quit"));
-
+        } while (string.Equals(userInput, "quit"));
 
         Console.WriteLine("*********************************************************************************************");
+        System.Environment.Exit(1);
         return;
     }
 
     public void LoadEngineerCli(SWE_Project.LoadEngineer engineer)
     {
         Console.WriteLine("*********************************************************************************************");
-        Console.WriteLine("Welcome Back " + engineer.FName + " " + engineer.LName + "!\n");
+        string user = engineer.UserId; // Temp
+        Console.WriteLine("\n Welcome Back " + engineer.FName + "!\n");
         var userInput = "";
         do
         {
@@ -143,14 +151,21 @@ internal class CLICaller
                     Console.WriteLine("Invalid Entry\n");
                 }
             }
-           
-            else if (!string.Equals(userInput, "quit"))
+            else if (string.Equals(userInput, "account"))
+            {
+
+            }
+            else if (string.Equals(userInput, "quit"))
+            {
+                Console.WriteLine("*********************************************************************************************");
+                System.Environment.Exit(1);
+            }
+            else
                 Console.WriteLine("Invalid Entry\n");
+            Console.WriteLine("*********************************************************************************************");
 
         } while (!string.Equals(userInput, "quit"));
 
-
-        Console.WriteLine("*********************************************************************************************");
         return;
 
     }
@@ -159,6 +174,7 @@ internal class CLICaller
     {
         Console.WriteLine("*********************************************************************************************");
         Console.WriteLine("Welcome Back " + marketing.FName + " " + marketing.LName + "!\n");
+        //string user = marketing.UserId; // Temp
         var userInput = "";
         do
         {
@@ -180,13 +196,20 @@ internal class CLICaller
 
 
             }
-            else if (!string.Equals(userInput, "quit"))
+            else if (string.Equals(userInput, "quit"))
+            {
+                Console.WriteLine("*********************************************************************************************");
+                System.Environment.Exit(1);
+            }
+            else
                 Console.WriteLine("Invalid Entry\n");
+            Console.WriteLine("*********************************************************************************************");
 
         } while (!string.Equals(userInput, "quit"));
 
 
         Console.WriteLine("*********************************************************************************************");
+        System.Environment.Exit(1);
         return;
 
 
@@ -196,6 +219,7 @@ internal class CLICaller
     {
         Console.WriteLine("*********************************************************************************************");
         Console.WriteLine("Welcome Back " + flighter.FName + " " + flighter.LName + "!\n");
+        string user = flighter.UserId; // Temp
         var userInput = "";
         do
         {
@@ -227,12 +251,19 @@ internal class CLICaller
             }
 
             else if (!string.Equals(userInput, "quit"))
+            {
+                Console.WriteLine("*********************************************************************************************");
+                System.Environment.Exit(1);
+            }
+            else
                 Console.WriteLine("Invalid Entry\n");
+            Console.WriteLine("*********************************************************************************************");
 
         } while (!string.Equals(userInput, "quit"));
 
 
         Console.WriteLine("*********************************************************************************************");
+        System.Environment.Exit(1);
         return;
 
     }
@@ -242,6 +273,7 @@ internal class CLICaller
 
         Console.WriteLine("*********************************************************************************************");
         Console.WriteLine("Welcome Back " + accountant.FName + " " + accountant.LName + "!\n");
+        string user = accountant.UserId; // Temp
         var userInput = "";
         do
         {
@@ -277,13 +309,21 @@ internal class CLICaller
             {
                 accountant.getTotalProfit();
             }
-            else if (!string.Equals(userInput, "quit"))
+            else if (string.Equals(userInput, "quit"))
+            {
+                Console.WriteLine("*********************************************************************************************");
+                System.Environment.Exit(1);
+            }
+            else
                 Console.WriteLine("Invalid Entry\n");
+            Console.WriteLine("*********************************************************************************************");
 
         } while (!string.Equals(userInput, "quit"));
 
 
         Console.WriteLine("*********************************************************************************************");
+        System.Environment.Exit(1);
+
         return;
     }
 }
@@ -295,19 +335,18 @@ class Program
     {
         Globals.databasePath = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + @"\AirportInfo.xlsx"); // store excel file in debug so it can be grabbed 
         CLICaller caller = new CLICaller();
-        
         int Vr = 0;
         string mainInput;
         string user = "";
         string pass = "";
+        var workbook = new XLWorkbook(Globals.databasePath); // Open database
         Console.WriteLine("*********************************************************************************************");
-        Console.WriteLine("Welcome to MidWest Airlines");
-        Console.WriteLine("");
+        Console.WriteLine("Welcome to MidWest Airlines\n");
         do
         {
             Console.WriteLine("If you already have an account and want to access the app, enter Login");
             Console.WriteLine("To make a new account, enter Create ");
-            Console.WriteLine("To exit the application, enter Quit");
+            Console.WriteLine("To exit the application, enter Quit\n");
             mainInput = Console.ReadLine();
             if (mainInput != null)
                 mainInput = mainInput.ToLower();
@@ -320,33 +359,139 @@ class Program
                 user = Console.ReadLine();
                 Console.Write("Enter password: ");
                 pass = Console.ReadLine();
-                Vr = Login(user, pass);
+                Vr = Login(user, pass, workbook);
 
 
-                if (Vr == 'Q')
+                if (Vr == 0)
                 {
-                    Console.WriteLine("Username or Password was incorrrect");
+                    Console.WriteLine("Username or Password was incorrrect\n");
+                    Console.WriteLine("*********************************************************************************************\n");
+
                 }
             }
             else if (mainInput == "create")//When login in inputted ask for Name, Address, Phone, Age, Card Information, Password and send to CreateAccount function
             {
-                Console.Write("Enter First Name: ");
-                string fname = Console.ReadLine();
-                Console.Write("Enter Last Name: ");
-                string lname = Console.ReadLine();
-                Console.Write("Enter Address: ");
-                string address = Console.ReadLine();
-                Console.Write("Enter Phone: ");
-                string phone = Console.ReadLine();
-                Console.Write("Enter Age: ");
-                string age = Console.ReadLine();
-                Console.Write("Enter Password: ");
-                string passs = Console.ReadLine();
-                Console.Write("Confirm Submission (Y/N)");
-                if (Console.ReadLine() == "Y" || Console.ReadLine() == "y")
+                int part = 0;
+                string fname = "";string lname = ""; string address = ""; string phone = ""; string age = "";string card = ""; string passs = ""; string confir = "";
+                do
                 {
-                    CreateAccount(fname, lname, address, phone, age, passs);
-                }
+                    if (part == 0)
+                    {
+                        Console.Write("Enter First Name: ");
+                        fname = Console.ReadLine();
+                        part++;
+                    }
+                    else if (part == 1) {
+                        Console.Write("Enter Last Name: ");
+                        lname = Console.ReadLine();
+                        part++;
+                    }
+                    else if (part == 2)
+                    {
+                        Console.Write("Enter Address: ");
+                        address = Console.ReadLine();
+                        part++;
+                    }
+                    else if (part == 3)
+                    {
+                        Console.Write("Enter Phone: ");
+                        phone = Console.ReadLine();
+                        try
+                        {
+                            Int32.Parse(phone);
+                            part++;
+                        }
+                        catch (ArgumentNullException)
+                        {
+                            Console.Write("Please Enter a Value");
+                        }
+                        catch
+                        {
+                            Console.Write("Invalid Phone Number");
+                        }
+                    }
+                    else if (part == 4)
+                    {
+                        Console.Write("Enter Age: ");
+                        age = Console.ReadLine();
+                        try
+                        {
+                            Int32.Parse(age);
+                            part++;
+                        }
+                        catch (ArgumentNullException)
+                        {
+                            Console.Write("Please Enter a Value");
+                        }
+                        catch 
+                        {
+                            Console.Write("Invalid age");
+                        }
+                    }
+                    else if (part == 5)
+                    {
+                        Console.Write("Enter Card Information: ");
+                        card = Console.ReadLine();
+                        if (card != null)
+                        {
+                            if (card.Length >= 16)
+                            {
+                                part++;
+                            }
+                            else
+                            {
+                                Console.Write("Invalid Card Number\n");
+                            }
+                        }
+                        else
+                        {
+                            Console.Write("Invalid Entry\n");
+                        }
+                    }
+                    else if (part == 6)
+                    {
+                        Console.Write("Enter Password: ");
+                        passs = Console.ReadLine();
+                        if (passs != null)
+                        {
+                            part++;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid Password");
+                        }
+                    }
+                    else if (part == 7)
+                    {
+                        Console.Write("Confirm Submission (Y/N)");
+                        confir = Console.ReadLine();
+                        if(confir != null)
+                        {
+                            if (confir.ToLower() == "y")
+                            {
+                                CreateAccount(fname, lname, address, phone, age, card, passs);
+                                part++;
+                            }
+                            else if (confir.ToLower() == "n")
+                            {
+                                part = 8;
+                            }
+                            else
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine("Enter Valid Confirmation (Y/N)\n");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("");
+                            Console.WriteLine("Enter Valid Confirmation (Y/N)\n");
+                        }
+                       
+                    }
+
+                } while (part != 8);
+               
             }
             else if (mainInput == "quit")
             {
@@ -355,11 +500,12 @@ class Program
             else
             {
                 Console.WriteLine("Invalid Entry\n");
+                Console.WriteLine("*********************************************************************************************\n");
+
             }
 
         } while (Vr == 0);
         System.DateTime dateTime = System.DateTime.Now;
-        var workbook = new XLWorkbook(Globals.databasePath); // Open database
         CLICaller cLi = new CLICaller();
         if (user.Length == 6)
         {
@@ -385,22 +531,26 @@ class Program
             dep = dep.ToLower();
             if (dep == "marketing")
             {
-                //MarketingManager currentUser = new MarketingManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
-                //cLi.marketingManagerCli(currentUser);
+                MarketingManager currentUser = new MarketingManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                workbook.Dispose();
+                cLi.marketingManagerCli(currentUser);
             }
             else if (dep == "engineer")
             {
                 LoadEngineer currentUser = new LoadEngineer(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                workbook.Dispose();
                 cLi.LoadEngineerCli(currentUser);
             }
             else if (dep == "flight")
             {
                 FlightManager currentUser = new FlightManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                workbook.Dispose();
                 cLi.FlightManagerCli(currentUser);
             }
             else if (dep == "accounting")
             {
                 AccountingManager currentUser = new AccountingManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                workbook.Dispose();
                 cLi.AccountingManagerCli(currentUser);
             }
         }
@@ -413,14 +563,15 @@ class Program
         //Mark.getFlightManifest("555");
         //x.getFlightProfit("555");
     }
-    static int Login(string user, string pass)
+    static int Login(string user, string pass, XLWorkbook workbook)
     {
         if (user == null || pass == null)
         {
+            Console.WriteLine("Invalid Entry\n");
             return 0;
         }
         int usersRow = 0;
-        var workbook = new XLWorkbook(Globals.databasePath); // Open database
+        //var workbook = new XLWorkbook(Globals.databasePath); // Open database
         var worksheet = workbook.Worksheet("custList");
         if (user.Length == 6)
         {
@@ -444,7 +595,6 @@ class Program
             if (string.Equals(usCell, user))
             {
                 byte[] tmpNewHash;
-                byte[] savedHash;
                 string SavedPass;
                 string checkPass;
                 SHA512 shaM = new SHA512Managed();
@@ -471,7 +621,7 @@ class Program
 
         return usersRow;
     }
-    static bool CreateAccount(string fname, string lname, string address, string phone, string age, string pass)
+    static bool CreateAccount(string fname, string lname, string address, string phone, string age, string cardin, string pass)
     {
         var workbook = new XLWorkbook(Globals.databasePath); // Open database
         var worksheet = workbook.Worksheet("custList");
@@ -501,7 +651,7 @@ class Program
         worksheet.Row(lastRowPos).Cell(7).Value = age;
         worksheet.Row(lastRowPos).Cell(8).Value = 0;
         worksheet.Row(lastRowPos).Cell(9).Value = 0;
-
+        worksheet.Row(lastRowPos).Cell(10).Value = cardin;
         byte[] tmpSource;
         byte[] tmpHash;
         String byteholder;
@@ -511,6 +661,7 @@ class Program
         byteholder = Encoding.UTF8.GetString(tmpHash);
         worksheet.Row(lastRowPos).Cell(2).Value = byteholder;
         workbook.SaveAs(Globals.databasePath);
+        workbook.Dispose();
         Console.WriteLine($"Your User ID is: '{ranCheck}'");
         return true;
     }
