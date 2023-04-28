@@ -37,7 +37,7 @@ internal class CLICaller
     public void CustomerCli(SWE_Project.Customer person) // add customer object here
     {
         Console.WriteLine("*********************************************************************************************");
-        Console.WriteLine("\n Welcome Back " + person.FName + "!\n");
+        Console.WriteLine("\n Welcome Back " + person.FName + " " + person.LName + "!\n");
         var userInput = "";
         do
         {
@@ -62,7 +62,10 @@ internal class CLICaller
             }
             else if (string.Equals(userInput, "print"))
             {
+                string flightId = Console.ReadLine();
 
+                if(flightId != null)
+                    person.printBoardingPass(flightId);
             }
             else if (string.Equals(userInput, "account"))
             {
@@ -80,7 +83,7 @@ internal class CLICaller
     public void LoadEngineerCli(SWE_Project.LoadEngineer engineer) 
     {
         Console.WriteLine("*********************************************************************************************");
-        string user = engineer.UserId; // Temp
+
         Console.WriteLine("Welcome Back " + engineer.FName + " " + engineer.LName + "!\n");
         var userInput = "";
         do
@@ -89,7 +92,6 @@ internal class CLICaller
             Console.WriteLine("To create a flight, enter create.");
             Console.WriteLine("To edit a flight, enter edit.");
             Console.WriteLine("To delete a flight, enter delete.");
-            Console.WriteLine("To create an account for a fellow worker, enter account.");
             Console.WriteLine("To exit the load engineer portal, enter quit.\n");
 
 
@@ -103,16 +105,17 @@ internal class CLICaller
 
             if (string.Equals(userInput, "create"))
             {
-                // Booking method here
                 Console.Write("Enter an ID for the flight: ");
                 string FlightId = Console.ReadLine();
+              
                 Console.Write("Enter the airport the flight is taking off from: ");
                 string DepartingFrom = Console.ReadLine();
                 Console.Write("Enter the airport the flight will be arriving at: ");
                 string ArrivingAt = Console.ReadLine();
+              
                 Console.Write("Enter the date and time of departure in the format MM/DD/YYYY HH:MM ");
                 string DepartTime = Console.ReadLine();
-              
+
                 string confIn;
                 do
                 {
@@ -157,10 +160,6 @@ internal class CLICaller
                     Console.WriteLine("Invalid Entry\n");
                 }
             }
-            else if (string.Equals(userInput, "account"))
-            {
-
-            }
             else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
             Console.WriteLine("*********************************************************************************************\n");
@@ -174,8 +173,8 @@ internal class CLICaller
     public void marketingManagerCli(SWE_Project.MarketingManager marketing)
     {
         Console.WriteLine("*********************************************************************************************");
-        //string user = marketing.UserId; // Temp
-        //Console.WriteLine("\n Welcome Back " + marketing.FName + "!\n");
+      
+        Console.WriteLine("\n Welcome Back " + marketing.FName + "!\n");
         var userInput = "";
         do
         {
@@ -202,7 +201,7 @@ internal class CLICaller
                     try
                     {
                         Int32.Parse(userInput);
-                        marketing.ChoosePlane(userInput);
+                        marketing.ChoosePlane(userInput, false);
                     }
                     catch 
                     {
@@ -226,7 +225,7 @@ internal class CLICaller
     public void FlightManagerCli(SWE_Project.FlightManager flighter)
     {
         Console.WriteLine("*********************************************************************************************");
-        string user = flighter.UserId; // Temp
+        string user = flighter.UserId;
         Console.WriteLine("\n Welcome Back " + flighter.FName + "!\n");
 
         var userInput = "";
@@ -234,7 +233,6 @@ internal class CLICaller
         {
             Console.WriteLine("What would you like to do today?");
             Console.WriteLine("To print a flight manifest for a flight, enter print.");
-            Console.WriteLine("To create an account for a fellow worker, enter account.");
             Console.WriteLine("To exit the marketing manager portal, enter quit.\n");
 
 
@@ -259,8 +257,6 @@ internal class CLICaller
                     Console.WriteLine("Invalid Entry\n");
                 }
             }
-
-            }
             else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
             Console.WriteLine("*********************************************************************************************\n");
@@ -283,7 +279,7 @@ internal class CLICaller
             Console.WriteLine("What would you like to do today?");
             Console.WriteLine("To select a plane to get the profit of, enter profit.");
             Console.WriteLine("To get the profit of the whole company, enter total.");
-            Console.WriteLine("To create an account for a fellow worker, enter account.");
+         
             Console.WriteLine("To exit the marketing manager portal, enter quit.\n");
 
 
