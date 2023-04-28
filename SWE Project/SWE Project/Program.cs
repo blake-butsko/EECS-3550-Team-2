@@ -64,18 +64,11 @@ internal class CLICaller
                 person.custHistory();
             }
             else if(!string.Equals(userInput, "quit"))
-            {
-                Console.WriteLine("*********************************************************************************************");
-                System.Environment.Exit(1);
-            }
-            else
                 Console.WriteLine("Invalid Entry\n");
-            Console.WriteLine("*********************************************************************************************");
+            Console.WriteLine("*********************************************************************************************\n");
 
-        } while (string.Equals(userInput, "quit"));
+        } while (!string.Equals(userInput, "quit"));
 
-        Console.WriteLine("*********************************************************************************************");
-        System.Environment.Exit(1);
         return;
     }
 
@@ -83,7 +76,7 @@ internal class CLICaller
     {
         Console.WriteLine("*********************************************************************************************");
         string user = engineer.UserId; // Temp
-        Console.WriteLine("\n Welcome Back " + engineer.FName + "!\n");
+        Console.WriteLine("Welcome Back " + engineer.FName + " " + engineer.LName + "!\n");
         var userInput = "";
         do
         {
@@ -155,14 +148,9 @@ internal class CLICaller
             {
 
             }
-            else if (string.Equals(userInput, "quit"))
-            {
-                Console.WriteLine("*********************************************************************************************");
-                System.Environment.Exit(1);
-            }
-            else
+            else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
-            Console.WriteLine("*********************************************************************************************");
+            Console.WriteLine("*********************************************************************************************\n");
 
         } while (!string.Equals(userInput, "quit"));
 
@@ -193,26 +181,33 @@ internal class CLICaller
 
             if (string.Equals(userInput, "plane"))
             {
-
-
+                do
+                {
+                    Console.WriteLine("Select the plane by entering the plane ID.");
+                    Console.WriteLine("To get back to main, enter back.");
+                    userInput = Console.ReadLine();
+                    try
+                    {
+                        Int32.Parse(userInput);
+                        marketing.ChoosePlane(userInput);
+                    }
+                    catch 
+                    {
+                        userInput = userInput.ToLower();
+                        if(userInput != "back")
+                        {
+                            Console.WriteLine("Invalid Entry");
+                        }
+                    }
+                } while (userInput == "back");
             }
-            else if (string.Equals(userInput, "quit"))
-            {
-                Console.WriteLine("*********************************************************************************************");
-                System.Environment.Exit(1);
-            }
-            else
+            else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
-            Console.WriteLine("*********************************************************************************************");
+            Console.WriteLine("*********************************************************************************************\n");
 
         } while (!string.Equals(userInput, "quit"));
 
-
-        Console.WriteLine("*********************************************************************************************");
-        System.Environment.Exit(1);
         return;
-
-
     }
 
     public void FlightManagerCli(SWE_Project.FlightManager flighter)
@@ -249,23 +244,13 @@ internal class CLICaller
                     Console.WriteLine("Invalid Entry\n");
                 }
             }
-
             else if (!string.Equals(userInput, "quit"))
-            {
-                Console.WriteLine("*********************************************************************************************");
-                System.Environment.Exit(1);
-            }
-            else
                 Console.WriteLine("Invalid Entry\n");
-            Console.WriteLine("*********************************************************************************************");
+            Console.WriteLine("*********************************************************************************************\n");
 
         } while (!string.Equals(userInput, "quit"));
 
-
-        Console.WriteLine("*********************************************************************************************");
-        System.Environment.Exit(1);
         return;
-
     }
 
     public void AccountingManagerCli(SWE_Project.AccountingManager accountant)
@@ -309,20 +294,11 @@ internal class CLICaller
             {
                 accountant.getTotalProfit();
             }
-            else if (string.Equals(userInput, "quit"))
-            {
-                Console.WriteLine("*********************************************************************************************");
-                System.Environment.Exit(1);
-            }
-            else
+            else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
-            Console.WriteLine("*********************************************************************************************");
+            Console.WriteLine("*********************************************************************************************\n");
 
         } while (!string.Equals(userInput, "quit"));
-
-
-        Console.WriteLine("*********************************************************************************************");
-        System.Environment.Exit(1);
 
         return;
     }
@@ -340,232 +316,234 @@ class Program
         string user = "";
         string pass = "";
         var workbook = new XLWorkbook(Globals.databasePath); // Open database
-        Console.WriteLine("*********************************************************************************************");
+        Console.WriteLine("*********************************************************************************************");//Console output seperator
         Console.WriteLine("Welcome to MidWest Airlines\n");
         do
         {
-            Console.WriteLine("If you already have an account and want to access the app, enter Login");
-            Console.WriteLine("To make a new account, enter Create ");
-            Console.WriteLine("To exit the application, enter Quit\n");
-            mainInput = Console.ReadLine();
-            if (mainInput != null)
-                mainInput = mainInput.ToLower();
-
-            if (string.Equals(mainInput, "login"))//When login is inputted wait for input of the ID and password send to login function
+            do
             {
-                user = "";
-                pass = "";
-                Console.Write("Enter user ID: ");
-                user = Console.ReadLine();
-                Console.Write("Enter password: ");
-                pass = Console.ReadLine();
-                Vr = Login(user, pass, workbook);
+                Console.WriteLine("If you already have an account and want to access the app, enter Login");
+                Console.WriteLine("To make a new account, enter Create ");
+                Console.WriteLine("To exit the application, enter Quit\n");
+                mainInput = Console.ReadLine();
+                if (mainInput != null)
+                    mainInput = mainInput.ToLower();
 
-
-                if (Vr == 0)
+                if (string.Equals(mainInput, "login"))//When login is inputted wait for input of the ID and password send to login function
                 {
-                    Console.WriteLine("Username or Password was incorrrect\n");
-                    Console.WriteLine("*********************************************************************************************\n");
+                    user = "";
+                    pass = "";
+                    Console.Write("Enter user ID: ");
+                    user = Console.ReadLine();
+                    Console.Write("Enter password: ");
+                    pass = Console.ReadLine();
+                    Vr = Login(user, pass, workbook);
 
+
+                    if (Vr == 0)//If no number is returned to Vr then no user was found with the ID and password
+                    {
+                        Console.WriteLine("Username or Password was incorrrect\n");
+                        Console.WriteLine("*********************************************************************************************\n");
+
+                    }
                 }
-            }
-            else if (mainInput == "create")//When login in inputted ask for Name, Address, Phone, Age, Card Information, Password and send to CreateAccount function
-            {
-                int part = 0;
-                string fname = "";string lname = ""; string address = ""; string phone = ""; string age = "";string card = ""; string passs = ""; string confir = "";
-                do
+                else if (mainInput == "create")//When login in inputted ask for Name, Address, Phone, Age, Card Information, Password and send to CreateAccount function
                 {
-                    if (part == 0)
+                    int part = 0;
+                    string fname = ""; string lname = ""; string address = ""; string phone = ""; string age = ""; string card = ""; string passs = ""; string confir = "";
+                    do       //Does multiple checks for correct format and length
                     {
-                        Console.Write("Enter First Name: ");
-                        fname = Console.ReadLine();
-                        part++;
-                    }
-                    else if (part == 1) {
-                        Console.Write("Enter Last Name: ");
-                        lname = Console.ReadLine();
-                        part++;
-                    }
-                    else if (part == 2)
-                    {
-                        Console.Write("Enter Address: ");
-                        address = Console.ReadLine();
-                        part++;
-                    }
-                    else if (part == 3)
-                    {
-                        Console.Write("Enter Phone: ");
-                        phone = Console.ReadLine();
-                        try
+                        if (part == 0)
                         {
-                            Int32.Parse(phone);
+                            Console.Write("Enter First Name: ");//Gets first name from user
+                            fname = Console.ReadLine();
                             part++;
                         }
-                        catch (ArgumentNullException)
+                        else if (part == 1)
                         {
-                            Console.Write("Please Enter a Value");
-                        }
-                        catch
-                        {
-                            Console.Write("Invalid Phone Number");
-                        }
-                    }
-                    else if (part == 4)
-                    {
-                        Console.Write("Enter Age: ");
-                        age = Console.ReadLine();
-                        try
-                        {
-                            Int32.Parse(age);
+                            Console.Write("Enter Last Name: ");//Gets Last Name from user
+                            lname = Console.ReadLine();
                             part++;
                         }
-                        catch (ArgumentNullException)
+                        else if (part == 2)
                         {
-                            Console.Write("Please Enter a Value");
+                            Console.Write("Enter Address: ");//Gets Address from user
+                            address = Console.ReadLine();
+                            part++;
                         }
-                        catch 
+                        else if (part == 3)
                         {
-                            Console.Write("Invalid age");
+                            Console.Write("Enter Phone: ");//Gets Phone from user
+                            phone = Console.ReadLine();
+                            try
+                            {
+                                Int32.Parse(phone);
+                                part++;
+                            }
+                            catch (ArgumentNullException)
+                            {
+                                Console.Write("Please Enter a Value\n");
+                            }
+                            catch   //Error for if user inputs letters instead of only numbers
+                            {
+                                Console.Write("Invalid Phone Number\n");
+                            }
                         }
-                    }
-                    else if (part == 5)
-                    {
-                        Console.Write("Enter Card Information: ");
-                        card = Console.ReadLine();
-                        if (card != null)
+                        else if (part == 4)
                         {
-                            if (card.Length >= 16)
+                            Console.Write("Enter Age: ");//Get Card Number From User
+                            age = Console.ReadLine();
+                            try
+                            {
+                                Int32.Parse(age);
+                                part++;
+                            }
+                            catch (ArgumentNullException)
+                            {
+                                Console.Write("Please Enter a Value\n");
+                            }
+                            catch   //Error for if user inputs letters instead of only numbers
+                            {
+                                Console.Write("Invalid age\n");
+                            }
+                        }
+                        else if (part == 5)
+                        {
+                            Console.Write("Enter Card Information: ");
+                            card = Console.ReadLine();
+                            if (card != null)
+                            {
+                                if (card.Length >= 16)  //Valid Card numbers have 16 or more digits
+                                {
+                                    part++;
+                                }
+                                else
+                                {
+                                    Console.Write("Invalid Card Number Length\n");//Error for entries with less than 16 digits
+                                }
+                            }
+                            else
+                            {
+                                Console.Write("Invalid Entry\n");//Error for null entries
+                            }
+                        }
+                        else if (part == 6)
+                        {
+                            Console.Write("Enter Password: ");//Get Password from User
+                            passs = Console.ReadLine();
+                            if (passs != null)
                             {
                                 part++;
                             }
                             else
                             {
-                                Console.Write("Invalid Card Number\n");
+                                Console.WriteLine("Invalid Password\n");//Error for null entries
                             }
                         }
-                        else
+                        else if (part == 7)
                         {
-                            Console.Write("Invalid Entry\n");
-                        }
-                    }
-                    else if (part == 6)
-                    {
-                        Console.Write("Enter Password: ");
-                        passs = Console.ReadLine();
-                        if (passs != null)
-                        {
-                            part++;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid Password");
-                        }
-                    }
-                    else if (part == 7)
-                    {
-                        Console.Write("Confirm Submission (Y/N)");
-                        confir = Console.ReadLine();
-                        if(confir != null)
-                        {
-                            if (confir.ToLower() == "y")
+                            Console.Write("Confirm Submission (Y/N) ");
+                            confir = Console.ReadLine();
+                            if (confir != null)
                             {
-                                CreateAccount(fname, lname, address, phone, age, card, passs);
-                                part++;
-                            }
-                            else if (confir.ToLower() == "n")
-                            {
-                                part = 8;
+                                confir = confir.ToLower();
+                                if (confir == "y")//If y is inputted creates account with information
+                                {
+                                    CreateAccount(fname, lname, address, phone, age, card, passs);
+                                    part++;
+                                }
+                                else if (confir == "n")//If no returns to main menu
+                                {
+                                    part = 8;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("");
+                                    Console.WriteLine("Invalid Entry\n");//Error for wrong entries
+                                }
                             }
                             else
                             {
                                 Console.WriteLine("");
-                                Console.WriteLine("Enter Valid Confirmation (Y/N)\n");
+                                Console.WriteLine("Invalid Entry\n");//Error for null entries
                             }
+
                         }
-                        else
-                        {
-                            Console.WriteLine("");
-                            Console.WriteLine("Enter Valid Confirmation (Y/N)\n");
-                        }
-                       
-                    }
 
-                } while (part != 8);
-               
-            }
-            else if (mainInput == "quit")
-            {
-                System.Environment.Exit(1);
-            }
-            else
-            {
-                Console.WriteLine("Invalid Entry\n");
-                Console.WriteLine("*********************************************************************************************\n");
+                    } while (part != 8);
 
-            }
+                }
+                else if (mainInput == "quit")
+                {
+                    System.Environment.Exit(1);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Entry\n");
+                    Console.WriteLine("*********************************************************************************************\n");
 
-        } while (Vr == 0);
-        System.DateTime dateTime = System.DateTime.Now;
-        CLICaller cLi = new CLICaller();
-        if (user.Length == 6)
-        {
-            var worksheet = workbook.Worksheet("custList");
-            var table = worksheet.Tables.Table(0);
-            var idCol = table.Column(1);
-            Customer currentUser = new Customer(idCol.Cell(Vr).Value.ToString(),
-                idCol.Cell(Vr).CellRight(1).Value.ToString(),
-                idCol.Cell(Vr).CellRight(8).GetValue<int>(),
-                idCol.Cell(Vr).CellRight(9).Value.ToString(),
-                idCol.Cell(Vr).CellRight(10).Value.ToString(),
-                idCol.Cell(Vr).CellRight(4).Value.ToString(),
-                idCol.Cell(Vr).CellRight(6).GetValue<int>(),
-                idCol.Cell(Vr).CellRight(5).Value.ToString());
-            cLi.CustomerCli(currentUser);
-        }
-        else if (user.Length == 5)
-        {
-            var worksheet = workbook.Worksheet("EmpList");
-            var table = worksheet.Tables.Table(0);
-            var idCol = table.Column(1);
-            string dep = idCol.Cell(Vr).CellRight(2).Value.ToString();
-            dep = dep.ToLower();
-            if (dep == "marketing")
-            {
-                MarketingManager currentUser = new MarketingManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
-                workbook.Dispose();
-                cLi.marketingManagerCli(currentUser);
-            }
-            else if (dep == "engineer")
-            {
-                LoadEngineer currentUser = new LoadEngineer(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
-                workbook.Dispose();
-                cLi.LoadEngineerCli(currentUser);
-            }
-            else if (dep == "flight")
-            {
-                FlightManager currentUser = new FlightManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
-                workbook.Dispose();
-                cLi.FlightManagerCli(currentUser);
-            }
-            else if (dep == "accounting")
-            {
-                AccountingManager currentUser = new AccountingManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
-                workbook.Dispose();
-                cLi.AccountingManagerCli(currentUser);
-            }
-        }
-        //SWE_Project.Location from = new("Nashville");
-        //SWE_Project.Location to = new("Cleveland");
-        //alex.CreateFlight(555, from, to, dateTime);
+                }
 
+            } while (Vr == 0);
+            System.DateTime dateTime = System.DateTime.Now;
+            CLICaller cLi = new CLICaller();
+            if (user.Length == 6)
+            {
+                var worksheet = workbook.Worksheet("custList");
+                var table = worksheet.Tables.Table(0);
+                var idCol = table.Column(1);
+                Customer currentUser = new Customer(idCol.Cell(Vr).Value.ToString(),
+                    idCol.Cell(Vr).CellRight(1).Value.ToString(),
+                    idCol.Cell(Vr).CellRight(8).GetValue<int>(),
+                    idCol.Cell(Vr).CellRight(9).Value.ToString(),
+                    idCol.Cell(Vr).CellRight(10).Value.ToString(),
+                    idCol.Cell(Vr).CellRight(4).Value.ToString(),
+                    idCol.Cell(Vr).CellRight(6).GetValue<int>(),
+                    idCol.Cell(Vr).CellRight(5).Value.ToString());
+                cLi.CustomerCli(currentUser);
+                currentUser = null;
+            }
+            else if (user.Length == 5)
+            {
+                var worksheet = workbook.Worksheet("EmpList");
+                var table = worksheet.Tables.Table(0);
+                var idCol = table.Column(1);
+                string dep = idCol.Cell(Vr).CellRight(2).Value.ToString();
+                dep = dep.ToLower();
+                if (dep == "marketing")
+                {
+                    MarketingManager currentUser = new MarketingManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                    cLi.marketingManagerCli(currentUser);
+                    currentUser = null;
+                }
+                else if (dep == "engineer")
+                {
+                    LoadEngineer currentUser = new LoadEngineer(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                    cLi.LoadEngineerCli(currentUser);
+                    currentUser = null;
+                }
+                else if (dep == "flight")
+                {
+                    FlightManager currentUser = new FlightManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                    cLi.FlightManagerCli(currentUser);
+                    currentUser = null;
+                }
+                else if (dep == "accounting")
+                {
+                    AccountingManager currentUser = new AccountingManager(idCol.Cell(Vr).Value.ToString(), idCol.Cell(Vr).CellRight(1).Value.ToString());
+                    cLi.AccountingManagerCli(currentUser);
+                    currentUser = null;
+                }
+            }
+        } while(true);
         //SWE_Project.AccountingManager x = new SWE_Project.AccountingManager("123","password");
-        SWE_Project.FlightManager Mark = new SWE_Project.FlightManager("123", "password");
+        //SWE_Project.FlightManager Mark = new SWE_Project.FlightManager("123", "password");
         //Mark.getFlightManifest("555");
         //x.getFlightProfit("555");
     }
     static int Login(string user, string pass, XLWorkbook workbook)
     {
-        if (user == null || pass == null)
+        if (user == "" || pass == "")
         {
             Console.WriteLine("Invalid Entry\n");
             return 0;
@@ -616,9 +594,6 @@ class Program
 
         if (usersRow == 0)
             Console.WriteLine("Failed to login - Invalid credentials\n");
-
-
-
         return usersRow;
     }
     static bool CreateAccount(string fname, string lname, string address, string phone, string age, string cardin, string pass)
@@ -660,6 +635,7 @@ class Program
         tmpHash = shaM.ComputeHash(tmpSource);
         byteholder = Encoding.UTF8.GetString(tmpHash);
         worksheet.Row(lastRowPos).Cell(2).Value = byteholder;
+        table.InsertRowsBelow(1);
         workbook.SaveAs(Globals.databasePath);
         workbook.Dispose();
         Console.WriteLine($"Your User ID is: '{ranCheck}'");
