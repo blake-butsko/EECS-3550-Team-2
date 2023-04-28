@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,7 +31,7 @@ namespace SWE_Project
 
 
         }
-
+        // Grab name from database given userId and password
         private void populateName()
         {
             var workbook = new XLWorkbook(Globals.databasePath);
@@ -53,6 +54,7 @@ namespace SWE_Project
         // Create a flight in the database
         public void CreateFlight(string FlightId, string DepartingFrom, string ArrivingAt, System.DateTime DepartTime)
         {
+            // Ensure valid location was entered
             string[] listOfAirports = { "Nashville", "Cleveland", "Los Angeles", "New York City", "Salt Lake City", "Miami", "Detroit", "Atlanta", "Chicago", "Las Vegas", "Washington DC" };
             if(!(listOfAirports.Contains(DepartingFrom) && listOfAirports.Contains(ArrivingAt)))
             {
@@ -69,7 +71,7 @@ namespace SWE_Project
                 var flightTable = activeFlightWorksheet.Tables.Table(0); // Get Flight Table
 
                 var flightIdColumn = flightTable.Column(1);
-
+                // Check if the flight already exists
                 for (int i = 1; i <= flightIdColumn.CellCount(); i++)
                 {
                     if (string.Equals(flightIdColumn.Cell(i).Value.ToString(), FlightId))
@@ -80,6 +82,7 @@ namespace SWE_Project
                 }
 
                 System.DateTime ArrivalTime = System.DateTime.Now;
+                // Get flight distance sheet
                 var distanceSheet = workbook.Worksheet("FlightDistance");
                 bool foundTime = false;
                 for (int i = 0; i < distanceSheet.Tables.Count(); i++)
@@ -99,6 +102,7 @@ namespace SWE_Project
                                 break;
                             }
                         }
+                        // Stop looking through database if time is found
                         if (foundTime)
                             break;
                     }
@@ -144,24 +148,38 @@ namespace SWE_Project
 
                 }
                 workbook.Save(); // Save changes
+
                 // Get approval from marketing manager
                 Console.WriteLine("\nPlease get the approval of a marketing manager to confirm this flight");
-                Console.WriteLine("UserId: ");
+                Console.Write("UserId: ");
                 string userId = Console.ReadLine();
-                Console.WriteLine("Password: ");
+                Console.Write("Password: ");
                 string password = Console.ReadLine();
-
+                // Find entered manager in employee database
                 var empWorksheet = workbook.Worksheet("empList");
                 var empTable = empWorksheet.Tables.Table(0);
                 var empIdColumn = empTable.Column(1);
                 MarketingManager marketingManager = new MarketingManager();
                 bool foundManager = false;
+
+                //Apply encryption
+                byte[] tmpNewHash;
+                string SavedPass;
+                string checkPass;
+                SHA512 shaM = new SHA512Managed();
+                var tmpSource = ASCIIEncoding.ASCII.GetBytes(password);//Turns inputted password into bytes
+                tmpNewHash = shaM.ComputeHash(tmpSource);//Hashes the bytes
+                checkPass = Encoding.UTF8.GetString(tmpNewHash);//turns it back into a string
+              
+
+
                 // Check for valid marketing manager credentials to select a plane type
                 for (int i = 1; i <= empIdColumn.CellCount(); i++)
                 {
                     if (string.Equals(empIdColumn.Cell(i).Value.ToString(), userId)) // Don't want to check both user id and password to save comparisions
                     {
-                        if (string.Equals(empIdColumn.Cell(i).CellRight(2).Value.ToString(), password))
+                       
+                        if (string.Equals(empIdColumn.Cell(i).CellRight(1).Value.ToString(), checkPass))
                         {
                             marketingManager = new MarketingManager(empIdColumn.Cell(i).Value.ToString(), empIdColumn.Cell(i).CellRight(2).Value.ToString());
                             foundManager = true;
@@ -177,7 +195,7 @@ namespace SWE_Project
                 }
                 else
                 {
-                    string planeType = marketingManager.ChoosePlane(FlightId);
+                    string planeType = marketingManager.ChoosePlane(FlightId, true);
                     if (string.Equals(planeType, ""))
                     {
                         flightTable.LastRow().Delete();

@@ -7,8 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
+
 namespace SWE_Project
 {
+    // The flight manager is responisble for printing the boarding pass for flights 24 hours before they take off
     internal class FlightManager
     {
         public string UserId { get; }
@@ -21,7 +25,7 @@ namespace SWE_Project
             this.Password = Password;
             populateName();
         }
-
+        // Grab name from database given userId and password
         private void populateName()
         {
             var workbook = new XLWorkbook(Globals.databasePath);
@@ -54,7 +58,7 @@ namespace SWE_Project
             bool foundFlight = false;
             for (int i = 1; i <= flightColumn.CellCount(); i++)
             {
-                if (string.Equals((string)flightColumn.Cell(i).Value, FlightId))
+                if (string.Equals(flightColumn.Cell(i).Value.ToString(), FlightId))
                 {
 
                     System.DateTime from = System.DateTime.Parse(flightColumn.Cell(i).CellRight(3).Value.ToString());
@@ -88,7 +92,7 @@ namespace SWE_Project
             string custID ="";
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("First Name, Last Name, Customer ID,");
-            
+            // Build string to write to csv
             for (int i = 0; i < flight.passengers.Count(); i++)
             {
                 for(int y = 1; y <= custColumn.CellCount(); y++)
@@ -105,6 +109,7 @@ namespace SWE_Project
                 }
 
             }
+            // Write string to file
             using (StreamWriter writer = new StreamWriter(fs))
             {
                 writer.Write(stringBuilder.ToString());
