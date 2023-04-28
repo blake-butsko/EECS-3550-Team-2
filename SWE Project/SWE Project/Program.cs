@@ -28,7 +28,7 @@ internal class CLICaller
     public void CustomerCli(SWE_Project.Customer person) // add customer object here
     {
         Console.WriteLine("*********************************************************************************************");
-        Console.WriteLine("Welcome Back " + person.FName + " " + person.LName + "!\n");
+        Console.WriteLine("\n Welcome Back " + person.FName + "!\n");
         var userInput = "";
         do
         {
@@ -53,11 +53,7 @@ internal class CLICaller
             }
             else if (string.Equals(userInput, "print"))
             {
-                Console.WriteLine("Please enter the flight id of the plane you are trying to board: ");
-                string userResponse = Console.ReadLine();
-                if (userResponse != null)
-                    person.printBoardingPass(userResponse);
-                
+
             }
             else if (string.Equals(userInput, "account"))
             {
@@ -72,7 +68,7 @@ internal class CLICaller
         return;
     }
 
-    public void LoadEngineerCli(SWE_Project.LoadEngineer engineer)
+    public void LoadEngineerCli(SWE_Project.LoadEngineer engineer) 
     {
         Console.WriteLine("*********************************************************************************************");
         string user = engineer.UserId; // Temp
@@ -84,6 +80,7 @@ internal class CLICaller
             Console.WriteLine("To create a flight, enter create.");
             Console.WriteLine("To edit a flight, enter edit.");
             Console.WriteLine("To delete a flight, enter delete.");
+            Console.WriteLine("To create an account for a fellow worker, enter account.");
             Console.WriteLine("To exit the load engineer portal, enter quit.\n");
 
 
@@ -106,7 +103,7 @@ internal class CLICaller
                 string ArrivingAt = Console.ReadLine();
                 Console.Write("Enter the time of departure: ");//Needs to be more complex
                 string DepartTime = Console.ReadLine();
-
+              
                 string confIn;
                 do
                 {
@@ -122,7 +119,7 @@ internal class CLICaller
             {
                 Console.Write("Enter the ID for the flight you want to edit: ");
                 string FlightId = Console.ReadLine();
-                if (FlightId != null)
+                if(FlightId != null)
                 {
                     engineer.EditFlight(FlightId);
                 }
@@ -161,8 +158,8 @@ internal class CLICaller
     public void marketingManagerCli(SWE_Project.MarketingManager marketing)
     {
         Console.WriteLine("*********************************************************************************************");
-        Console.WriteLine("Welcome Back " + marketing.FName + " " + marketing.LName + "!\n");
         //string user = marketing.UserId; // Temp
+        //Console.WriteLine("\n Welcome Back " + marketing.FName + "!\n");
         var userInput = "";
         do
         {
@@ -213,13 +210,15 @@ internal class CLICaller
     public void FlightManagerCli(SWE_Project.FlightManager flighter)
     {
         Console.WriteLine("*********************************************************************************************");
-        Console.WriteLine("Welcome Back " + flighter.FName + " " + flighter.LName + "!\n");
         string user = flighter.UserId; // Temp
+        Console.WriteLine("\n Welcome Back " + flighter.FName + "!\n");
+
         var userInput = "";
         do
         {
             Console.WriteLine("What would you like to do today?");
             Console.WriteLine("To print a flight manifest for a flight, enter print.");
+            Console.WriteLine("To create an account for a fellow worker, enter account.");
             Console.WriteLine("To exit the marketing manager portal, enter quit.\n");
 
 
@@ -244,6 +243,8 @@ internal class CLICaller
                     Console.WriteLine("Invalid Entry\n");
                 }
             }
+
+            }
             else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
             Console.WriteLine("*********************************************************************************************\n");
@@ -257,8 +258,9 @@ internal class CLICaller
     {
 
         Console.WriteLine("*********************************************************************************************");
-        Console.WriteLine("Welcome Back " + accountant.FName + " " + accountant.LName + "!\n");
         string user = accountant.UserId; // Temp
+        Console.WriteLine("\n Welcome Back " + accountant.FName + "!\n");
+
         var userInput = "";
         do
         {
@@ -292,7 +294,7 @@ internal class CLICaller
             }
             else if (string.Equals(userInput, "total"))
             {
-                accountant.getTotalProfit();
+
             }
             else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
@@ -305,12 +307,15 @@ internal class CLICaller
 }
 
 
+
+
 class Program
 {
     static void Main(String[] args)
     {
         Globals.databasePath = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + @"\AirportInfo.xlsx"); // store excel file in debug so it can be grabbed 
         CLICaller caller = new CLICaller();
+       
         int Vr = 0;
         string mainInput;
         string user = "";
@@ -561,7 +566,6 @@ class Program
         }
         else
         {
-            Console.WriteLine("Failed to login - Invalid credentials\n");
             return 0; //If length is not 8 for customers or 7 for employees than username is invalid so return Q
         }
 
@@ -570,14 +574,14 @@ class Program
         for (int i = 1; i <= totalRows; i++)
         {
             var usCell = table.Row(i).Cell(1).GetString();//Get row user id
-            if (string.Equals(usCell, user))
+            if (string.Equals(usCell , user))
             {
                 byte[] tmpNewHash;
                 string SavedPass;
                 string checkPass;
                 SHA512 shaM = new SHA512Managed();
                 var tmpSource = ASCIIEncoding.ASCII.GetBytes(pass);//Turns inputted password into bytes
-                tmpNewHash = shaM.ComputeHash(tmpSource);//Hashes the bytes
+                tmpNewHash =shaM.ComputeHash(tmpSource);//Hashes the bytes
                 checkPass = Encoding.UTF8.GetString(tmpNewHash);//turns it back into a string
                 SavedPass = table.Row(i).Cell(2).Value.ToString();
                 if (checkPass == SavedPass)//Compares inputed hashed string to hashed string stored in database
@@ -594,6 +598,9 @@ class Program
 
         if (usersRow == 0)
             Console.WriteLine("Failed to login - Invalid credentials\n");
+
+
+
         return usersRow;
     }
     static bool CreateAccount(string fname, string lname, string address, string phone, string age, string cardin, string pass)
@@ -609,7 +616,7 @@ class Program
         int cmp;
         for (int x = 2; x <= lastRowPos; x++)
         {
-            cmp = worksheet.Row(x).Cell(1).GetValue<int>();
+            cmp= worksheet.Row(x).Cell(1).GetValue<int>();
             if (ranCheck == cmp)
             {
                 ranCheck = rnd.Next(0, 900000);
@@ -622,7 +629,7 @@ class Program
         worksheet.Row(lastRowPos).Cell(3).Value = fname;
         worksheet.Row(lastRowPos).Cell(4).Value = lname;
         worksheet.Row(lastRowPos).Cell(5).Value = address;
-        worksheet.Row(lastRowPos).Cell(6).Value = phone;
+        worksheet.Row(lastRowPos).Cell(6).Value = phone;    
         worksheet.Row(lastRowPos).Cell(7).Value = age;
         worksheet.Row(lastRowPos).Cell(8).Value = 0;
         worksheet.Row(lastRowPos).Cell(9).Value = 0;
