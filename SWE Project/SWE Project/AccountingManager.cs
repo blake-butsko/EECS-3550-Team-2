@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace SWE_Project
 {
+    // The accounting manager is responsible for exporting a csvs of individual flight and total company profit
     internal class AccountingManager
     {
 
@@ -26,7 +27,7 @@ namespace SWE_Project
 
             populateName();
         }
-
+        // Grab name from database given valid login
         private void populateName()
         {
             var workbook = new XLWorkbook(Globals.databasePath);
@@ -46,7 +47,7 @@ namespace SWE_Project
             }
 
         }
-
+        // Get the profit of a single given flight
         public void getFlightProfit(string flightId)
         {
             var workbook = new XLWorkbook(Globals.databasePath);
@@ -77,6 +78,7 @@ namespace SWE_Project
                     break;
                 }
             }
+            // Return if flight is not found
             if (!foundFlight)
             {
                 Console.WriteLine("Flight not found \n");
@@ -84,28 +86,30 @@ namespace SWE_Project
             }
 
             Decimal profit = flight.passengers.Count * flight.Price;
-
+            // Make file and filename
             string fileName = "Flight " + flight.FlightId + "_Manifest.csv";
             FileStream fileCreate = File.Create(fileName);
 
             string report = "Flight," + (string)flight.FlightId + ",Profit," + profit.ToString();
-
+            // Write to file
             using (StreamWriter writer = new StreamWriter(fileCreate))
             {
                 writer.Write(report);
             }
         }
-
+        // Get profit for all flights
         public void getTotalProfit()
         {
-
+            // Open workbook and get to flight id column
             var workbook = new XLWorkbook(Globals.databasePath);
             var flightWorksheet = workbook.Worksheet("ActiveFlights");
 
             var flightTable = flightWorksheet.Tables.Table(0);
 
             var flightColumn = flightTable.Column(1); //flight id column from flight table
+            // Get a list of all flights
             List<Flight> flightList = new List<Flight>();
+            // Add all flights to list to go through
             for (int i = 2; i <= flightColumn.CellCount(); i++)
             {
                 Flight flight = new Flight();
@@ -120,15 +124,17 @@ namespace SWE_Project
 
                 flightList.Add(flight);
             }
+            // Create file
             string fileName = "Total_profit " + DateTime.Now.ToString() + ".csv";
-            fileName = fileName.Replace("/","_");
+            fileName = fileName.Replace("/", "_");
             fileName = fileName.Replace(":", "_");
 
             FileStream fileCreate = File.Create(fileName);
+
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("Flight, Profit,");
             Decimal totalProft = 0;
-
+            // Get profit for each flight and add it to string
             for (int i = 0; i < flightList.Count; i++)
             {
                 Decimal profit = flightList[i].passengers.Count * flightList[i].Price;
@@ -140,18 +146,12 @@ namespace SWE_Project
 
             stringBuilder.Append("Total profit,");
             stringBuilder.AppendLine(totalProft.ToString());
-
+            // Write string to file
             using (StreamWriter writer = new StreamWriter(fileCreate))
             {
                 writer.Write(stringBuilder.ToString());
             }
 
         }
-
-   
-    public void Login(string UserId, string Password)
-    {
-        throw new NotImplementedException();
     }
-}
 }

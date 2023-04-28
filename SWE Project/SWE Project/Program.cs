@@ -1,4 +1,13 @@
-﻿using System.Runtime.CompilerServices;
+﻿/* Authors: Daniel Viar, Issac Wamer, Blake Butsko
+ * 
+ * Professor: Dr. Thomas
+ * 
+ * Class: EECS 3550
+ * 
+ * Airline project - This project is focused on creating an airline experience similar to commercial airlines with accounts, flight scheduling, and rewards
+ */
+
+using System.Runtime.CompilerServices;
 using ClosedXML;
 using ClosedXML.Excel;
 using System.Collections;
@@ -107,21 +116,28 @@ internal class CLICaller
                 // Booking method here
                 Console.Write("Enter an ID for the flight: ");
                 string FlightId = Console.ReadLine();
-                Console.Write("Enter the airport the flight is taking off from: ");//Need to check if this is an actual airport
+                Console.Write("Enter the airport the flight is taking off from: ");
                 string DepartingFrom = Console.ReadLine();
                 Console.Write("Enter the airport the flight will be arriving at: ");
                 string ArrivingAt = Console.ReadLine();
-                Console.Write("Enter the time of departure: ");//Needs to be more complex
+                Console.Write("Enter the date and time of departure in the format MM/DD/YYYY HH:MM ");
                 string DepartTime = Console.ReadLine();
 
                 string confIn;
                 do
                 {
-                    Console.Write("Enter Yes or No (Y/N) to confirm submition: ");
+                    Console.Write("Enter Yes or No (Y/N) to confirm submission: ");
                     confIn = Console.ReadLine();
                     if (confIn == "Y")
                     {
-                        engineer.CreateFlight(FlightId, DepartingFrom, ArrivingAt, System.DateTime.Parse(DepartTime));
+                        try
+                        {
+                            engineer.CreateFlight(FlightId, DepartingFrom, ArrivingAt, System.DateTime.Parse(DepartTime));
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Invalid Time entered");
+                        }
                     }
                 } while (confIn == "y" || confIn == "n");
             }
@@ -194,6 +210,10 @@ internal class CLICaller
             if (string.Equals(userInput, "plane"))
             {
 
+                Console.WriteLine("Please Eneter what flight you would like to edit/ add");
+                string flightId = Console.ReadLine();
+                if(flightId != null)
+                    marketing.ChoosePlane(flightId,false);
 
             }
             else if (string.Equals(userInput, "quit"))
@@ -554,14 +574,7 @@ class Program
                 cLi.AccountingManagerCli(currentUser);
             }
         }
-        //SWE_Project.Location from = new("Nashville");
-        //SWE_Project.Location to = new("Cleveland");
-        //alex.CreateFlight(555, from, to, dateTime);
-
-        //SWE_Project.AccountingManager x = new SWE_Project.AccountingManager("123","password");
-        SWE_Project.FlightManager Mark = new SWE_Project.FlightManager("123", "password");
-        //Mark.getFlightManifest("555");
-        //x.getFlightProfit("555");
+       
     }
     static int Login(string user, string pass, XLWorkbook workbook)
     {

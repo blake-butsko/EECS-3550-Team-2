@@ -26,7 +26,7 @@ namespace SWE_Project
         }
 
         public MarketingManager() { }
-
+        // Grab name from database given userId and password
         private void populateName()
         {
             var workbook = new XLWorkbook(Globals.databasePath);
@@ -82,7 +82,7 @@ namespace SWE_Project
 
         // Function to go into the database and retrieves the flight distance
         // Then assigns a plane dependent on length of flight - To ActiveFlights
-        public string ChoosePlane(string FlightId)
+        public string ChoosePlane(string FlightId, bool loadEngAccess)
         {
             // Code to go into the database and retrieve the flight distance
             // For specified flightId find the distance between Departing and ArrivingAt (add try catch in case of invalid name)
@@ -113,18 +113,17 @@ namespace SWE_Project
                         String suggested;
                         // code to fetch distance from datasheet thing
                         // Need to find list of planes and distances based on that
-                        if (distance < 200)
+                        if (distance < 890)
                         {
                             suggested = PossiblePlanes[0];
                         }
-                        else if (distance > 199 && distance < 300)
+                        else if (distance > 890 && distance < 1700)
                             suggested = PossiblePlanes[1];
-                        else if (distance > 199 && distance < 300)
+                        else if (distance > 1700 && distance < 2000)
                             suggested = PossiblePlanes[2];
                         else
-                        {
                             suggested = PossiblePlanes[3];
-                        }
+
                         String userEntry;
 
                         do
@@ -143,7 +142,13 @@ namespace SWE_Project
                             if (String.Equals(userEntry, "y"))
                             {
                                 Console.WriteLine("You've selected y, the flight will be updated with the plane");
-                               
+                                if (!loadEngAccess)
+                                {
+                                    idColumn.Cell(i).CellRight(5).Value = suggested;
+
+                                    workbook.Save();
+                                }
+
                                 return suggested;
                             }
                             if (String.Equals(userEntry, "n"))
@@ -169,6 +174,12 @@ namespace SWE_Project
                                         {
                                            
                                             Console.WriteLine("You've selected y, the flight will be updated with the plane");
+                                            if (!loadEngAccess)
+                                            {
+                                                idColumn.Cell(i).CellRight(5).Value = planeChoice;
+
+                                                workbook.Save();
+                                            }
                                             return planeChoice;
                                         }
 

@@ -11,6 +11,9 @@ using static ClosedXML.Excel.XLPredefinedFormat;
 
 namespace SWE_Project
 {
+    /* The customer has three main options of booking a flight, printing a boarding pass, or viewing their account information.
+     * The customer also has a lot of inner variable to keep track of their data.
+     */
     internal class Customer
     {
         public string UserId { get; }
@@ -49,7 +52,7 @@ namespace SWE_Project
             this.Age = Age;
         }
 
-
+        // Grab name from data base
         private void populateName()
         {
             var workbook = new XLWorkbook(Globals.databasePath);
