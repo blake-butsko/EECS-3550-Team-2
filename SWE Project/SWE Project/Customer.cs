@@ -222,12 +222,22 @@ namespace SWE_Project
                         flightColumn.Cell(i).CellRight(2).Value.ToString(),
                         departTime, arrivalTime);
 
+
+                    if (!(System.DateTime.Now > departTime.AddHours(-24) && System.DateTime.Now < departTime))
+                    {
+                        Console.WriteLine("It is too early for you to print this\n");
+
+                        return;
+                    }
+
+
                     // Ensure customer is on flight
                     foreach (var customer in flight.passengers)
                     {
                         if (string.Equals(customer.UserId, this.UserId))
                             onFlight = true;
 
+                       
 
                         if (onFlight)
                         {
@@ -255,6 +265,8 @@ namespace SWE_Project
                             return;
                         }
                     }
+                    Console.WriteLine("You are not on this flight\n");
+                    return;
                 }
             }
         }
