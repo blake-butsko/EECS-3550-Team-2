@@ -9,6 +9,7 @@ using static ClosedXML.Excel.XLPredefinedFormat;
 using SWE_Project;
 using System.Text;
 using System.Security.Cryptography;
+using DocumentFormat.OpenXml.Drawing.Charts;
 
 // Class for global variables following c# standards
 public class Globals
@@ -253,6 +254,9 @@ class Program
     {
         Globals.databasePath = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + @"\AirportInfo.xlsx"); // store excel file in debug so it can be grabbed 
         CLICaller caller = new CLICaller();
+        ArrayList variableList = new ArrayList();
+
+
         /*Console.WriteLine("Hello World");
         SWE_Project.LoadEngineer alex = new("12345", "password");
        
@@ -264,8 +268,15 @@ class Program
         // WIll have to write console function for interior of schedule flight either in the function (which is most likely or out here)
 
         SWE_Project.Customer Phillip = new("000001");
+        Phillip.ScheduleFlight(new System.DateTime(2023, 4, 24, 5, 23, 20), "Nashville", "Las Vegas", true, true);
+        /*Phillip.updatePoints(200); */
+        //Phillip.storeFlight(List<string> flight, int price, int points, string status)
         //Phillip.accountInformation();
-        Phillip.storeFlight("Bank", new System.DateTime(2023, 4, 24), new System.DateTime(2023, 4, 24), "binkle", "Nashville", "Cleveland", "200", "payment");
+        //Phillip.updatePoints(25);
+
+        // Then write in updating class varibales too
+
+        //Phillip.storeFlight("Bank", new System.DateTime(2023, 4, 24), new System.DateTime(2023, 4, 24), "binkle", "Nashville", "Cleveland", "200", "payment");
         //See how it functions with both
 
         //Benjamin.ScheduleFlight(new System.DateTime(2023, 4, 24,5,23,20), "Nashville", "Las Vegas");

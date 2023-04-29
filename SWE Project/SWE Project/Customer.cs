@@ -2,6 +2,7 @@
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Office2013.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System;
@@ -19,11 +20,11 @@ namespace SWE_Project
         String[] west = { "Nashville", "Los Angeles", "Las Vegas", "Atlanta", "Miami", "Cleveland" };
         String[] east = { "Chicago", "Detroit", "New York", "Salt Lake", "Washington DC" };
 
-        public string UserId { get; }
+        public string UserId { get; set; }
         private string Password { get; set; }
         public string FName { get; set; }
         public string LName { get; set; }
-        public int Points { get; }
+        public int Points { get; set; }
 
 
         string CreditCardInfo = ""; // Could make into list to hold several cards
@@ -81,7 +82,7 @@ namespace SWE_Project
                 {
                     do
                     {
-                        var userRow = table.DataRange.Row(i);
+                        var userRow = table.DataRange.Row(i - 1);
                         for (int j = 1; j <= userRow.CellCount(); j++)
                         {
                             Console.WriteLine($"{j}. {header.Cell(j).Value} = {userRow.Cell(j).Value}");
@@ -101,6 +102,44 @@ namespace SWE_Project
                                 var cellToChange = userRow.Cell(colIndex);
                                 cellToChange.SetValue(newValue);
                                 workbook.Save();
+                                // switch statement to update local variables
+
+                                switch (colIndex)
+                                {
+                                    case 1:
+                                        UserId = newValue;
+                                        break;
+                                    case 2:
+                                        Password = newValue;
+                                        break;
+                                    case 3:
+                                        FName = newValue;
+                                        break;
+                                    case 4:
+                                        LName = newValue;
+                                        break;
+                                    case 5:
+                                        Address = newValue;
+                                        break;
+                                    case 6:
+                                        PhoneNumber = newValue;
+                                        break;
+                                    case 7:
+                                        Age = Int32.Parse(newValue);
+                                        break;
+                                    case 8:
+                                        break;
+                                    case 9:
+                                        Points = Int32.Parse(newValue);
+                                        break;
+                                    case 10:
+                                        CreditCardInfo = newValue;
+                                        break;
+                                    default:
+                                        Console.WriteLine("Invalid value");
+                                        break;
+                                }
+
                                 do
                                 {
                                     Console.WriteLine("Would you like to modify any other values y/n");
@@ -114,7 +153,7 @@ namespace SWE_Project
                             catch (Exception ex) { Console.WriteLine("Invalid input, please try again or type: quit"); }
                         }
                         catch (Exception ex) { Console.WriteLine("Invalid input, please try again or type: quit"); }
-                        
+
                     } while (colIndex != 0); // careful on this
                 }
             }
@@ -225,8 +264,59 @@ namespace SWE_Project
             throw new NotImplementedException();
         }
 
+        public void updatePoints(int points)
+        {
+            var workbook = new XLWorkbook(Globals.databasePath); // Open workbook and worksheet
+            var worksheet = workbook.Worksheet("CustList");
+
+            var table = worksheet.Tables.Table(0);
+
+            var userId = table.DataRange.Column(1);
+            var pointsCol = table.DataRange.Column(9);
+            //9 is points
+            try
+            {
+                for (int i = 1; i <= userId.CellCount(); i++)
+                {
+                    //&& string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn)
+                    if (string.Equals((userId.Cell(i).Value).ToString(), UserId))
+                    {
+                        pointsCol.Cell(i).SetValue((Int32.Parse((pointsCol.Cell(i).Value).ToString()) + points).ToString());
+                        workbook.Save();
+                    }
+                }
+            }
+            catch (Exception ex) { Console.WriteLine("Points were not updated"); }
+        }
+        public string getInfo(int choice)
+        {
+            var workbook = new XLWorkbook(Globals.databasePath); // Open workbook and worksheet
+            var worksheet = workbook.Worksheet("CustList");
+
+            var table = worksheet.Tables.Table(0);
+
+            var userId = table.DataRange.Column(1);
+            var choiceValue = table.DataRange.Column(choice);
+            //9 is points
+            //10 is payment
+            try
+            {
+                for (int i = 1; i <= userId.CellCount(); i++)
+                {
+                    //&& string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn)
+                    if (string.Equals((userId.Cell(i).Value).ToString(), UserId))
+                    {
+                        return (choiceValue.Cell(i).Value).ToString();
+                    }
+                }
+            }
+            catch (Exception ex) { Console.WriteLine("Value not found"); return ""; }
+            Console.WriteLine("Value not found");
+            return "";
+        }
+
         //This function will book a stored flight in customer history
-        public void storeFlight(string FlightID, System.DateTime departTime, System.DateTime arrivalTime, string status, string depart, string arrival, string points, string payment)
+        public void storeFlight(List<string> flight, int price, int points, string status)
         {
             var workbook = new XLWorkbook(Globals.databasePath); // Open workbook and worksheet
             var worksheet = workbook.Worksheet("CustHistory");
@@ -234,58 +324,58 @@ namespace SWE_Project
             var table = worksheet.Tables.Table(0);
 
             var flightId = table.DataRange.Column(1);
-            try
+            /*try
+            {*/
+            // Book flight
+            Console.WriteLine("Booking flight");
+            var listOfData = new ArrayList(); // Making list to feed data into Append data function (IEnumerable)
+            listOfData.Add(UserId); // huh
+            listOfData.Add(flight[0]);
+            listOfData.Add((System.DateTime.Parse(flight[2])).ToUniversalTime().ToString("g")); //WONK - just parse to system.date
+            listOfData.Add((System.DateTime.Parse(flight[4])).ToUniversalTime().ToString("g")); //WONK
+            listOfData.Add(status);
+            listOfData.Add(flight[1]);
+            listOfData.Add(flight[2]);
+            listOfData.Add(points); // points gotten from price/10 -> this updates the database but it would've put dated it down there
+            listOfData.Add(points > 0 ? "Card" : "Points"); // if there's points then you know it was bought with card
+
+            if (!(table.DataRange.FirstRow().Cell(1).Value.IsBlank))
             {
-                // Book flight
-                Console.WriteLine("Booking flight");
-                var listOfData = new ArrayList(); // Making list to feed data into Append data function (IEnumerable)
-                listOfData.Add(UserId); // huh
-                listOfData.Add(FlightID);
-                listOfData.Add(departTime.ToUniversalTime().ToString("g"));
-                listOfData.Add(arrivalTime.ToUniversalTime().ToString("g"));
-                listOfData.Add(status);
-                listOfData.Add(depart);
-                listOfData.Add(arrival);
-                listOfData.Add(points);
-                listOfData.Add(payment);
-
-                if (!(table.DataRange.FirstRow().Cell(1).Value.IsBlank))
-                {
-                    table.InsertRowsBelow(1); // Put new flight data into list
-                }
-                else
-                {
-                    Console.WriteLine("Failed to book flight.\n Check Database");
-                    return;
-                }
-
-                var tableLastRow = table.LastRow();
-                if (listOfData != null)
-                {
-                    for (int i = 0; i < table.LastRow().CellCount(); i++) // Iterrate through last row of table hitting each cell
-                    {
-
-                        tableLastRow.Cell(i + 1).Value = listOfData[i].ToString(); // Change value of cell to list data
-                    }
-
-                }
-                else
-                {
-                    Console.WriteLine("Internal Error");
-                    return;
-
-                }
-                workbook.Save(); // Save changes
+                table.InsertRowsBelow(1); // Put new flight data into list
             }
-            catch (FileNotFoundException ex)
+            else
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Failed to book flight.\n Check Database");
                 return;
             }
+
+            var tableLastRow = table.LastRow();
+            if (listOfData != null)
+            {
+                for (int i = 0; i < table.LastRow().CellCount(); i++) // Iterrate through last row of table hitting each cell
+                {
+
+                    tableLastRow.Cell(i + 1).Value = listOfData[i].ToString(); // Change value of cell to list data
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Internal Error");
+                return;
+
+            }
+            workbook.Save(); // Save changes
+            /*}
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine("There was an error");
+                return;
+            }*/
         }
 
 
-        public void ScheduleFlight(System.DateTime dateIn, string departureIn, string arrivalIn)
+        public void ScheduleFlight(System.DateTime dateIn, string departureIn, string arrivalIn, bool roundtrip)
         {
             // Write command line part
 
@@ -326,8 +416,7 @@ namespace SWE_Project
             }
             // Person selects flight from this list given index they put in and the same y/n thing as marketing manager
             // if statement where if this is empty it says no flights where found given parameters
-
-            List<String> possibleFlights = new List<String>(); //Actually need to store them as a dictionary or object to get name/times too
+            List<List<string>> possibleFlights = new List<List<string>>();
             for (int i = 1; i <= departure.CellCount(); i++)
             {
                 //&& string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn)
@@ -336,11 +425,9 @@ namespace SWE_Project
                     //if (System.DateTime.Parse(departureTime.Cell(1).Value.ToString()) > dateIn && System.DateTime.Parse(departureTime.Cell(1).Value.ToString()) < dateIn.AddDays(6))
                     if (System.DateTime.Parse(departureTime.Cell(i).Value.ToString()).Date == dateIn.Date)
                     {
-                        Console.WriteLine("Input {0} equal to {1}", dateIn, System.DateTime.Parse(departureTime.Cell(i).Value.ToString()));
-                        Console.WriteLine("This flight is viable {0}", flightId.Cell(i).Value.ToString());
-                        possibleFlights.Add(flightId.Cell(i).Value.ToString());
+                        possibleFlights.Add(new List<string> { flightId.Cell(i).Value.ToString(), departure.Cell(i).Value.ToString(), departureTime.Cell(i).Value.ToString(), arrival.Cell(i).Value.ToString(), arrivalTime.Cell(i).Value.ToString() });
                         //if(possibleFlights.Count>10) { break; }// if it's returning too many
-
+                        // Buy ticket code then if the purchase is successful it stores it in the database
 
                     }
                 }
@@ -352,9 +439,9 @@ namespace SWE_Project
                 // DateTime inputtedDate = DateTime.Parse(Console.ReadLine());
                 // Track number of passengers +1 when someone books a ticket -1 if someone cancels (careful about that)
             }
-            if (possibleFlights == null)
+            if (possibleFlights.Count == 0)
             {
-                Console.WriteLine("There are no flights within 5 days of this given date");
+                Console.WriteLine("There are no flights on this given date");
                 return;
             }
             else
@@ -362,48 +449,103 @@ namespace SWE_Project
                 // Define at top
                 String userEntry;
                 String userChoice;
-                String planeChoice;
+                List<string> planeChoice;
                 do
                 {
                     Console.WriteLine("Here are your possible flights please select one by using the corresponding digit:");
                     for (int i = 0; i < possibleFlights.Count; i++)
                     {
-                        Console.WriteLine("{0}. {1}", i + 1, possibleFlights.ElementAt(i));
+                        Console.WriteLine("{0}. Departing from {1} at {2}, Arriving at {3} at {4}", i + 1, possibleFlights[i][1], possibleFlights[i][2], possibleFlights[i][3], possibleFlights[i][4]);
                     }
                     userEntry = Console.ReadLine();
                     userEntry = userEntry.Trim(); //Might need to remove this
-                    planeChoice = possibleFlights.ElementAt(Int32.Parse(userEntry) - 1);
-                    try
+                    planeChoice = possibleFlights[Int32.Parse(userEntry) - 1];
+                    /*try
+                    {*/
+                    do
                     {
-                        do
+                        Console.WriteLine("You want to select this flight is that correct? y/n");
+                        Console.WriteLine("{1} to {2} Leaving {3} arrving {4}", planeChoice[0], planeChoice[1], planeChoice[3], planeChoice[2], planeChoice[4]);
+                        userChoice = Console.ReadLine();
+                        userChoice = userChoice.Trim();
+                        // Save to database
+                        if (String.Equals(userChoice, "y"))
                         {
-                            Console.WriteLine("You want to select this flight is that correct? y/n");
-                            /*Console.WriteLine("{1}{2}{3}{4}");*/
-                            Console.WriteLine(planeChoice);
-                            userChoice = Console.ReadLine();
-                            userChoice = userChoice.Trim();
-                            // Save to database
-                            if (String.Equals(userChoice, "y"))
+                            decimal payment = new Flight(planeChoice[0], planeChoice[1], planeChoice[3], System.DateTime.Parse(planeChoice[2]), System.DateTime.Parse(planeChoice[4])).Price;
+                            do
                             {
-                                Console.WriteLine("Flight booked");
-                                //Will call book flight functions
-                                return;
-                            }
-                            else if (String.Equals(userChoice, "n")) { break; } // Need to test if this
-                            else { Console.WriteLine("Invalid input please try again or type: quit"); }
-                        } while (!(String.Equals(userChoice, "quit")));
-                    }
-                    catch
+                                if (getInfo(10) == "")
+                                {
+                                    Console.WriteLine("It seems you don't have a valid payment method please input it below");
+                                    accountInformation();
+                                }
+                                else
+                                {
+                                    String temp = getInfo(10);
+                                    decimal fink = Points / 100;
+                                    if (fink - payment >= 0)
+                                    {
+                                        do
+                                        {
+                                            Console.WriteLine("Would you like to use your points on this purchase (y/n)");
+                                            userChoice = Console.ReadLine();
+                                            userChoice = userChoice.ToLower().Trim();
+                                            if (String.Equals(userChoice, "y"))
+                                            {
+                                                Console.WriteLine("Points used");
+                                                Points = 100 * (int)(fink - payment);
+                                                Console.WriteLine("You have {0} points left", Points);
+                                                break;
+                                            }
+                                            else if (String.Equals(userChoice, "n")) { break; }
+                                            else if (String.Equals(userChoice, "quit")) { return; }
+                                            else { Console.WriteLine("Invalid input please try again or type: quit"); }
+                                        } while (!(String.Equals(userChoice, "quit")));
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Ticket has been bought with payment method on account");
+                                    }
+                                    storeFlight(planeChoice, (int)payment, ((int)payment) / 10, "Booked");
+                                    Console.WriteLine("Made it here");
+                                    if (connecting != "")
+                                    {
+                                        // Call everything from here 
+                                        // Finshing connecting
+                                        // Then call return trip with round trip true - with flipped destinations
+                                        Console.WriteLine("You have a connecting flight let's book that");
+                                        ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date, planeChoice[3], connecting, false);
+                                        if (roundtrip)
+                                        {
+                                            // This is the return trip and the connecting flight will call itself
+                                            Console.WriteLine("***********************************************************************************************");
+                                            Console.WriteLine("Now lets book your return trip");
+                                            Console.WriteLine("How many days do you plan on staying in your destination?");
+                                            ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date.AddDays(double.Parse(Console.ReadLine())), connecting, planeChoice[3], false);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (roundtrip)
+                                        {
+                                            Console.WriteLine("Now lets book your return trip");
+                                            Console.WriteLine("How many days do you plan on staying in your destination?");
+                                            ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date.AddDays(double.Parse(Console.ReadLine())), planeChoice[3], planeChoice[1], false);
+                                        }
+                                    }
+                                    return;
+                                }
+                            } while (true);
+                        }
+                        else if (String.Equals(userChoice, "n")) { break; } // Need to test if this
+                        else { Console.WriteLine("Invalid input please try again or type: quit"); }
+                    } while (!(String.Equals(userChoice, "quit")));
+                    //}
+                    /*catch
                     {
                         Console.WriteLine("Invalid input please try again or type: quit");
-                    }
-                    //Here's where we're printing out the Selections
+                    }*/
                 } while (!(String.Equals(userEntry, "quit")));
-            }
-            if (connecting != "")
-            {
-                Console.WriteLine("Congrats you got a connecting flight");
-                // put finished flight scheduling in here or could call the function again adding a true to a default parameter set false
             }
 
             /*
