@@ -375,8 +375,12 @@ namespace SWE_Project
         }
 
 
-        public void ScheduleFlight(System.DateTime dateIn, string departureIn, string arrivalIn, bool roundtrip)
+        public void ScheduleFlight(System.DateTime dateIn, string departureIn, string arrivalIn, bool roundtrip, bool writeIn)
         {
+            if (writeIn)
+            {
+                Console.WriteLine("thank you for booking with McDonalds airlines");
+            }
             // Write command line part
 
             // Basic implementation of just checking dates and departure/destination
@@ -514,14 +518,14 @@ namespace SWE_Project
                                         // Finshing connecting
                                         // Then call return trip with round trip true - with flipped destinations
                                         Console.WriteLine("You have a connecting flight let's book that");
-                                        ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date, planeChoice[3], connecting, false);
+                                        ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date, planeChoice[3], connecting, false, true);
                                         if (roundtrip)
                                         {
                                             // This is the return trip and the connecting flight will call itself
                                             Console.WriteLine("***********************************************************************************************");
                                             Console.WriteLine("Now lets book your return trip");
                                             Console.WriteLine("How many days do you plan on staying in your destination?");
-                                            ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date.AddDays(double.Parse(Console.ReadLine())), connecting, planeChoice[3], false);
+                                            ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date.AddDays(double.Parse(Console.ReadLine())), connecting, planeChoice[3], false, true);
                                         }
                                     }
                                     else
@@ -530,7 +534,7 @@ namespace SWE_Project
                                         {
                                             Console.WriteLine("Now lets book your return trip");
                                             Console.WriteLine("How many days do you plan on staying in your destination?");
-                                            ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date.AddDays(double.Parse(Console.ReadLine())), planeChoice[3], planeChoice[1], false);
+                                            ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date.AddDays(double.Parse(Console.ReadLine())), planeChoice[3], planeChoice[1], false, true);
                                         }
                                     }
                                     return;
