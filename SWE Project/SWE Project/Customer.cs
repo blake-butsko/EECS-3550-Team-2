@@ -1,5 +1,4 @@
-﻿using actor_interface;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
 using DocumentFormat.OpenXml.Office2010.Excel;
@@ -16,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace SWE_Project
 {
-    internal class Customer : Actor
+    internal class Customer
     {
         String[] west = { "Nashville", "Los Angeles", "Las Vegas", "Atlanta", "Miami", "Cleveland" };
         String[] east = { "Chicago", "Detroit", "New York", "Salt Lake", "Washington DC" };
@@ -28,21 +27,16 @@ namespace SWE_Project
         public int Points { get; set; }
 
 
-        string CreditCardInfo = ""; // Could make into list to hold several cards
-        string Email = "";
-        string Address = "";
+        public string CreditCardInfo = ""; 
+        public string wallet = "";
+        public string Address = "";
         public int Age = -1;
-        string PhoneNumber = "";
-        public Customer(string userId, string password, int points, string creditCardInfo, string email, string address, int age, string phoneNumber)
+        public string PhoneNumber = "";
+        public Customer(string userId, string password)
         {
-            UserId = userId;
-            Password = password;
-            Points = points;
-            CreditCardInfo = creditCardInfo;
-            Email = email;
-            Address = address;
-            Age = age;
-            PhoneNumber = phoneNumber;
+            this.UserId = userId;
+            this.Password = password;
+            populateCustomer();
         }
 
         public Customer(string UserId, string FName, string LName, int Age)
@@ -57,12 +51,33 @@ namespace SWE_Project
             this.UserId = UserId;
         }
 
-        public void CreateAccount(string UserId, string Password)
+        public void populateCustomer()
         {
-            throw new NotImplementedException();
+            var workbook = new XLWorkbook(Globals.databasePath);
+            var custWorksheet = workbook.Worksheet("custList");
+            var custTable = custWorksheet.Tables.Table(0);
+
+            var custId = custTable.Column(1);
+
+            for (int i = 1; i <= custId.CellCount(); i++)
+            {
+                if (string.Equals(this.UserId, custId.Cell(i).Value.ToString()))
+                {
+                    this.FName = custId.Cell(i).CellRight(2).Value.ToString();
+                    this.LName = custId.Cell(i).CellRight(3).Value.ToString();
+                    this.Address = custId.Cell(i).CellRight(4).Value.ToString();
+                    this.PhoneNumber = custId.Cell(i).CellRight(5).Value.ToString();
+                    this.Age = Int32.Parse(custId.Cell(i).CellRight(6).Value.ToString());
+                    this.wallet = custId.Cell(i).CellRight(7).Value.ToString();
+                    this.Points = Int32.Parse(custId.Cell(i).CellRight(8).Value.ToString());
+                    this.CreditCardInfo = custId.Cell(i).CellRight(9).Value.ToString();
+                }
+
+
+            }
+
         }
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         public void accountInformation()
         {
             var workbook = new XLWorkbook(Globals.databasePath);
@@ -237,7 +252,7 @@ namespace SWE_Project
                         if (string.Equals(customer.UserId, this.UserId))
                             onFlight = true;
 
-                       
+
 
                         if (onFlight)
                         {
@@ -269,12 +284,6 @@ namespace SWE_Project
                     return;
                 }
             }
-        }
-
-
-        public void Login(string UserId, string Password)
-        {
-            throw new NotImplementedException();
         }
 
         public void updatePoints(int points)
@@ -392,7 +401,7 @@ namespace SWE_Project
         {
             if (writeIn)
             {
-                Console.WriteLine("thank you for booking with McDonalds airlines");
+                Console.WriteLine("thank you for booking with MidWest airlines");
             }
             // Write command line part
 
