@@ -268,7 +268,7 @@ class Program
         // WIll have to write console function for interior of schedule flight either in the function (which is most likely or out here)
 
         SWE_Project.Customer Phillip = new("000001");
-        Phillip.ScheduleFlight(new System.DateTime(2023, 4, 24, 5, 23, 20), "Nashville", "Las Vegas", true, true);
+        Phillip.ScheduleFlight();
         /*Phillip.updatePoints(200); */
         //Phillip.storeFlight(List<string> flight, int price, int points, string status)
         //Phillip.accountInformation();
