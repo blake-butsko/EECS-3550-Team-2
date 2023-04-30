@@ -19,7 +19,7 @@ namespace SWE_Project
     internal class Customer
     {
         String[] west = { "Los Angeles", "Las Vegas", "Atlanta", "Miami", "Cleveland" };
-        String[] east = { "Detroit", "New York", "Salt Lake", "Washington DC" };
+        String[] east = { "Detroit", "New York City", "Salt Lake City", "Washington DC" };
         string[] listOfAirports = { "Nashville", "Cleveland", "Los Angeles", "New York City", "Salt Lake City", "Miami", "Detroit", "Atlanta", "Chicago", "Las Vegas", "Washington DC" };
         string[] listOfAirportsLow = { "nashville", "cleveland", "los angeles", "new york city", "salt lake city", "miami", "detroit", "atlanta", "chicago", "las vegas", "washington dc" };
 
@@ -476,30 +476,44 @@ namespace SWE_Project
             }
             // Person selects flight from this list given index they put in and the same y/n thing as marketing manager
             // if statement where if this is empty it says no flights where found given parameters
-
             List<List<string>> possibleFlights = new List<List<string>>();
-            for (int i = 1; i <= departure.CellCount(); i++)
-            {
-                //&& string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn)
-                if (string.Equals((departure.Cell(i).Value).ToString(), departureIn) && string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn))
+            do
+            {   
+                for (int i = 1; i <= departure.CellCount(); i++)
                 {
-                    //if (System.DateTime.Parse(departureTime.Cell(1).Value.ToString()) > dateIn && System.DateTime.Parse(departureTime.Cell(1).Value.ToString()) < dateIn.AddDays(6))
-                    if (System.DateTime.Parse(departureTime.Cell(i).Value.ToString()).Date == dateIn.Date)
+                    //&& string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn)
+                    if (string.Equals((departure.Cell(i).Value).ToString(), departureIn) && string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn))
                     {
-                        possibleFlights.Add(new List<string> { flightId.Cell(i).Value.ToString(), departure.Cell(i).Value.ToString(), departureTime.Cell(i).Value.ToString(), arrival.Cell(i).Value.ToString(), arrivalTime.Cell(i).Value.ToString() });
-                        //if(possibleFlights.Count>10) { break; }// if it's returning too many
-                        // Buy ticket code then if the purchase is successful it stores it in the database
+                        //if (System.DateTime.Parse(departureTime.Cell(1).Value.ToString()) > dateIn && System.DateTime.Parse(departureTime.Cell(1).Value.ToString()) < dateIn.AddDays(6))
+                        if (System.DateTime.Parse(departureTime.Cell(i).Value.ToString()).Date == dateIn.Date)
+                        {
+                            possibleFlights.Add(new List<string> { flightId.Cell(i).Value.ToString(), departure.Cell(i).Value.ToString(), departureTime.Cell(i).Value.ToString(), arrival.Cell(i).Value.ToString(), arrivalTime.Cell(i).Value.ToString() });
+                            //if(possibleFlights.Count>10) { break; }// if it's returning too many
+                            // Buy ticket code then if the purchase is successful it stores it in the database
 
+                        }
                     }
                 }
-
-                // check both departure and arrival
-                // code date range/how to work with dates - right now I'm just doing the day of because that will be the easiest (but I'll still have code for multiple flights matching that)
-                // add the flight to the customer history - will probably have to access whatever customer ID (could pass this in as a parameter
-                // else statement if there's no flights in a range
-                // DateTime inputtedDate = DateTime.Parse(Console.ReadLine());
-                // Track number of passengers +1 when someone books a ticket -1 if someone cancels (careful about that)
-            }
+                if (possibleFlights.Count == 0 && connecting == "")
+                {
+                    if (east.Contains(departureIn) && east.Contains(arrivalIn))
+                    {
+                        connecting = arrivalIn;
+                        arrivalIn = "Chicago";
+                        Console.WriteLine("East connecting flight book");
+                    }
+                    else if (west.Contains(departureIn) && west.Contains(arrivalIn))
+                    {
+                        connecting = arrivalIn;
+                        arrivalIn = "Nashville";
+                        Console.WriteLine("West connecting flight book");
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            } while (true);
             if (possibleFlights.Count == 0)
             {
                 Console.WriteLine("There are no flights on this given date");
@@ -743,7 +757,6 @@ namespace SWE_Project
                                         Console.WriteLine("Ticket has been bought with payment method on account");
                                     }
                                     storeFlight(planeChoice, (int)payment, ((int)payment) / 10, "Booked");
-                                    Console.WriteLine("Made it here");
                                     if (connecting != "")
                                     {
                                         // Call everything from here 
