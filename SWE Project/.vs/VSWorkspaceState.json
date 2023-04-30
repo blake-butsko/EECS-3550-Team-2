@@ -2,9 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\SWE Project",
+    "\\SWE Project\\bin",
     "\\SWE Project\\bin\\Debug",
     "\\SWE Project\\bin\\Debug\\net6.0"
   ],
-  "SelectedNode": "\\SWE Project\\MarketingManager.cs",
+  "SelectedNode": "\\SWE Project.sln",
   "PreviewInSolutionExplorer": false
 }

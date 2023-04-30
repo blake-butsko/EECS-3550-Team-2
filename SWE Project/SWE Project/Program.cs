@@ -21,6 +21,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using System.Runtime.Intrinsics.Arm;
 using DocumentFormat.OpenXml.Office2010.Word;
 using System.Net;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 // Class for global variables following c# standards
 public class Globals
@@ -58,7 +59,7 @@ internal class CLICaller
 
             if (string.Equals(userInput, "book"))
             {
-                bool validEntry = true;
+                /*bool validEntry = true;
                 Console.WriteLine("What day would you like to depart? Enter in format: MM/DD/YYYY HH:MM PM");
                 string date = Console.ReadLine();
                 Console.WriteLine("Where are you departing from?");
@@ -91,16 +92,17 @@ internal class CLICaller
                         Console.WriteLine("Invalid Time");
                     }
 
-                    person.ScheduleFlight(departDate, depart, arrival, roundTripBool, true);
+                    person.ScheduleFlight(departDate, depart, arrival, roundTripBool);
 
 
-                }
-
+                }*/
+                person.ScheduleFlight();
 
 
             }
             else if (string.Equals(userInput, "print"))
             {
+                Console.WriteLine("Input the ID of your flight");
                 string flightId = Console.ReadLine();
 
                 if (flightId != null)
@@ -108,7 +110,7 @@ internal class CLICaller
             }
             else if (string.Equals(userInput, "account"))
             {
-
+                person.accountInformation();
             }
             else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
@@ -366,6 +368,9 @@ class Program
     {
         Globals.databasePath = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + @"\AirportInfo.xlsx"); // store excel file in debug so it can be grabbed 
         CLICaller caller = new CLICaller();
+
+
+        caller.CustomerCli(new Customer("391594", "Bank", "Big", 20));
 
         int Vr = 0;
         string mainInput;
