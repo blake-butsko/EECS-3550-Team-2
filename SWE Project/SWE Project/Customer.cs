@@ -18,8 +18,8 @@ namespace SWE_Project
 {
     internal class Customer
     {
-        String[] west = { "Nashville", "Los Angeles", "Las Vegas", "Atlanta", "Miami", "Cleveland" };
-        String[] east = { "Chicago", "Detroit", "New York", "Salt Lake", "Washington DC" };
+        String[] west = { "Los Angeles", "Las Vegas", "Atlanta", "Miami", "Cleveland" };
+        String[] east = { "Detroit", "New York", "Salt Lake", "Washington DC" };
         string[] listOfAirports = { "Nashville", "Cleveland", "Los Angeles", "New York City", "Salt Lake City", "Miami", "Detroit", "Atlanta", "Chicago", "Las Vegas", "Washington DC" };
         string[] listOfAirportsLow = { "nashville", "cleveland", "los angeles", "new york city", "salt lake city", "miami", "detroit", "atlanta", "chicago", "las vegas", "washington dc" };
 
@@ -415,8 +415,8 @@ namespace SWE_Project
             bool roundtrip;
             do
             {
-                /*try
-                {*/
+                try
+                {
                 Console.WriteLine("thank you for booking with McDonalds airlines");
                 Console.WriteLine("What day would you like to leave (MM/DD/YYYY)");
                 dateIn = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy", CultureInfo.InvariantCulture); // Just gotta check if this compares all we need is the date
@@ -431,9 +431,9 @@ namespace SWE_Project
                 tempWritein = Console.ReadLine().ToLower().Trim();
                 arrivalIn = listOfAirportsLow.Contains(tempWritein) ? listOfAirports[Array.IndexOf(listOfAirportsLow, tempWritein)] : throw new Exception(); ;
                 break;
-                //could you make exception specific to what faulted? by passing it in?
-                /*}
-                catch (Exception) { Console.WriteLine("Invalid input, lets try again"); }*/
+                    //could you make exception specific to what faulted? by passing it in?
+                }
+                catch (Exception) { Console.WriteLine("Invalid input, lets try again"); }
             } while (true);
 
             // Write command line part
@@ -656,7 +656,7 @@ namespace SWE_Project
             for (int i = 1; i <= departure.CellCount(); i++)
             {
                 //&& string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn)
-                if (string.Equals((departure.Cell(i).Value).ToString(), departureIn))
+                if (string.Equals((departure.Cell(i).Value).ToString(), departureIn) && string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn))
                 {
                     //if (System.DateTime.Parse(departureTime.Cell(1).Value.ToString()) > dateIn && System.DateTime.Parse(departureTime.Cell(1).Value.ToString()) < dateIn.AddDays(6))
                     if (System.DateTime.Parse(departureTime.Cell(i).Value.ToString()).Date == dateIn.Date)
