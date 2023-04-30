@@ -30,7 +30,7 @@ namespace SWE_Project
         public int Points { get; set; }
 
 
-        public string CreditCardInfo = ""; 
+        public string CreditCardInfo = "";
         public string wallet = "";
         public string Address = "";
         public int Age = -1;
@@ -417,20 +417,20 @@ namespace SWE_Project
             {
                 try
                 {
-                Console.WriteLine("thank you for booking with McDonalds airlines");
-                Console.WriteLine("What day would you like to leave (MM/DD/YYYY)");
-                dateIn = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy", CultureInfo.InvariantCulture); // Just gotta check if this compares all we need is the date
-                Console.WriteLine("Is it a round trip (y/n)");
-                roundtrip = String.Equals(Console.ReadLine().ToLower().Trim(), "y") ? true : false;
-                // Add check here
-                Array.ForEach(listOfAirports, (s) => { Console.WriteLine("|{0} |", s); });
-                Console.WriteLine("Where are you leaving from");
-                tempWritein = Console.ReadLine().ToLower().Trim();
-                departureIn = listOfAirportsLow.Contains(tempWritein) ? listOfAirports[Array.IndexOf(listOfAirportsLow, tempWritein)] : throw new Exception();
-                Console.WriteLine("Where do you wanna go");
-                tempWritein = Console.ReadLine().ToLower().Trim();
-                arrivalIn = listOfAirportsLow.Contains(tempWritein) ? listOfAirports[Array.IndexOf(listOfAirportsLow, tempWritein)] : throw new Exception(); ;
-                break;
+                    Console.WriteLine("thank you for booking with McDonalds airlines");
+                    Console.WriteLine("What day would you like to leave (MM/DD/YYYY)");
+                    dateIn = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy", CultureInfo.InvariantCulture); // Just gotta check if this compares all we need is the date
+                    Console.WriteLine("Is it a round trip (y/n)");
+                    roundtrip = String.Equals(Console.ReadLine().ToLower().Trim(), "y") ? true : false;
+                    // Add check here
+                    Array.ForEach(listOfAirports, (s) => { Console.WriteLine("|{0} |", s); });
+                    Console.WriteLine("Where are you leaving from");
+                    tempWritein = Console.ReadLine().ToLower().Trim();
+                    departureIn = listOfAirportsLow.Contains(tempWritein) ? listOfAirports[Array.IndexOf(listOfAirportsLow, tempWritein)] : throw new Exception();
+                    Console.WriteLine("Where do you wanna go");
+                    tempWritein = Console.ReadLine().ToLower().Trim();
+                    arrivalIn = listOfAirportsLow.Contains(tempWritein) ? listOfAirports[Array.IndexOf(listOfAirportsLow, tempWritein)] : throw new Exception(); ;
+                    break;
                     //could you make exception specific to what faulted? by passing it in?
                 }
                 catch (Exception) { Console.WriteLine("Invalid input, lets try again"); }
@@ -478,7 +478,7 @@ namespace SWE_Project
             // if statement where if this is empty it says no flights where found given parameters
             List<List<string>> possibleFlights = new List<List<string>>();
             do
-            {   
+            {
                 for (int i = 1; i <= departure.CellCount(); i++)
                 {
                     //&& string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn)
@@ -527,6 +527,11 @@ namespace SWE_Project
                 List<string> planeChoice;
                 do
                 {
+                    if(connecting != "")
+                    {
+                        Console.WriteLine("Sorry, but our airline does not currently offer any direct flights between these locations");
+                        Console.WriteLine("Let's book the first leg of your connecting flight");
+                    }
                     Console.WriteLine("Here are your possible flights please select one by using the corresponding digit:");
                     for (int i = 0; i < possibleFlights.Count; i++)
                     {
@@ -534,91 +539,93 @@ namespace SWE_Project
                     }
                     userEntry = Console.ReadLine();
                     userEntry = userEntry.Trim(); //Might need to remove this
-                    planeChoice = possibleFlights[Int32.Parse(userEntry) - 1];
-                    /*try
-                    {*/
-                    do
+                    try
                     {
-                        Console.WriteLine("You want to select this flight is that correct? y/n");
-                        Console.WriteLine("{1} to {2} Leaving {3} arrving {4}", planeChoice[0], planeChoice[1], planeChoice[3], planeChoice[2], planeChoice[4]);
-                        userChoice = Console.ReadLine();
-                        userChoice = userChoice.Trim();
-                        // Save to database
-                        if (String.Equals(userChoice, "y"))
+                        planeChoice = possibleFlights[Int32.Parse(userEntry) - 1];
+
+                        do
                         {
-                            decimal payment = new Flight(planeChoice[0], planeChoice[1], planeChoice[3], System.DateTime.Parse(planeChoice[2]), System.DateTime.Parse(planeChoice[4])).Price;
-                            do
+                            Console.WriteLine("You want to select this flight is that correct? y/n");
+                            Console.WriteLine("{1} to {2} Leaving {3} arrving {4}", planeChoice[0], planeChoice[1], planeChoice[3], planeChoice[2], planeChoice[4]);
+                            userChoice = Console.ReadLine();
+                            userChoice = userChoice.Trim();
+                            // Save to database
+                            if (String.Equals(userChoice, "y"))
                             {
-                                if (getInfo(10) == "")
+                                decimal payment = new Flight(planeChoice[0], planeChoice[1], planeChoice[3], System.DateTime.Parse(planeChoice[2]), System.DateTime.Parse(planeChoice[4])).Price;
+                                do
                                 {
-                                    Console.WriteLine("It seems you don't have a valid payment method please input it below");
-                                    accountInformation();
-                                }
-                                else
-                                {
-                                    String temp = getInfo(10);
-                                    decimal fink = Points / 100;
-                                    if (fink - payment >= 0)
+                                    if (getInfo(10) == "")
                                     {
-                                        do
+                                        Console.WriteLine("It seems you don't have a valid payment method please input it below");
+                                        accountInformation();
+                                    }
+                                    else
+                                    {
+                                        String temp = getInfo(10);
+                                        decimal fink = Points / 100;
+                                        if (fink - payment >= 0)
                                         {
-                                            Console.WriteLine("Would you like to use your points on this purchase (y/n)");
-                                            userChoice = Console.ReadLine();
-                                            userChoice = userChoice.ToLower().Trim();
-                                            if (String.Equals(userChoice, "y"))
+                                            do
                                             {
-                                                Console.WriteLine("Points used");
-                                                Points = 100 * (int)(fink - payment);
-                                                Console.WriteLine("You have {0} points left", Points);
-                                                break;
+                                                Console.WriteLine("Would you like to use your points on this purchase (y/n)");
+                                                userChoice = Console.ReadLine();
+                                                userChoice = userChoice.ToLower().Trim();
+                                                if (String.Equals(userChoice, "y"))
+                                                {
+                                                    Console.WriteLine("Points used");
+                                                    Points = 100 * (int)(fink - payment);
+                                                    Console.WriteLine("You have {0} points left", Points);
+                                                    break;
+                                                }
+                                                else if (String.Equals(userChoice, "n")) { break; }
+                                                else if (String.Equals(userChoice, "quit")) { return; }
+                                                else { Console.WriteLine("Invalid input please try again or type: quit"); }
+                                            } while (!(String.Equals(userChoice, "quit")));
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Ticket has been bought with payment method on account");
+                                        }
+                                        storeFlight(planeChoice, (int)payment, ((int)payment) / 10, "Booked");
+                                        if (connecting != "")
+                                        {
+                                            // Call everything from here 
+                                            // Finshing connecting
+                                            // Then call return trip with round trip true - with flipped destinations
+                                            Console.WriteLine("Let's book the next part of your connecting flight");
+                                            ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date, planeChoice[3], connecting, false);
+                                            if (roundtrip)
+                                            {
+                                                // This is the return trip and the connecting flight will call itself
+                                                Console.WriteLine("***********************************************************************************************");
+                                                Console.WriteLine("Now lets book your return trip");
+                                                Console.WriteLine("{0} to {1}", connecting, planeChoice[1]);
+                                                Console.WriteLine("How many days do you plan on staying in your destination?"); // Should add try catch to this
+                                                ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date.AddDays(double.Parse(Console.ReadLine())), connecting, planeChoice[1], false);
                                             }
-                                            else if (String.Equals(userChoice, "n")) { break; }
-                                            else if (String.Equals(userChoice, "quit")) { return; }
-                                            else { Console.WriteLine("Invalid input please try again or type: quit"); }
-                                        } while (!(String.Equals(userChoice, "quit")));
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("Ticket has been bought with payment method on account");
-                                    }
-                                    storeFlight(planeChoice, (int)payment, ((int)payment) / 10, "Booked");
-                                    if (connecting != "")
-                                    {
-                                        // Call everything from here 
-                                        // Finshing connecting
-                                        // Then call return trip with round trip true - with flipped destinations
-                                        Console.WriteLine("You have a connecting flight let's book that");
-                                        ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date, planeChoice[3], connecting, false);
-                                        if (roundtrip)
-                                        {
-                                            // This is the return trip and the connecting flight will call itself
-                                            Console.WriteLine("***********************************************************************************************");
-                                            Console.WriteLine("Now lets book your return trip");
-                                            Console.WriteLine("How many days do you plan on staying in your destination?");
-                                            ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date.AddDays(double.Parse(Console.ReadLine())), connecting, planeChoice[3], false);
                                         }
-                                    }
-                                    else
-                                    {
-                                        if (roundtrip)
+                                        else
                                         {
-                                            Console.WriteLine("Now lets book your return trip");
-                                            Console.WriteLine("How many days do you plan on staying in your destination?");
-                                            ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date.AddDays(double.Parse(Console.ReadLine())), planeChoice[3], planeChoice[1], false);
+                                            if (roundtrip)
+                                            {
+                                                Console.WriteLine("Now lets book your return trip");
+                                                Console.WriteLine("How many days do you plan on staying in your destination?");
+                                                ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date.AddDays(double.Parse(Console.ReadLine())), planeChoice[3], planeChoice[1], false);
+                                            }
                                         }
+                                        return;
                                     }
-                                    return;
-                                }
-                            } while (true);
-                        }
-                        else if (String.Equals(userChoice, "n")) { break; } // Need to test if this
-                        else { Console.WriteLine("Invalid input please try again or type: quit"); }
-                    } while (!(String.Equals(userChoice, "quit")));
-                    //}
-                    /*catch
+                                } while (true);
+                            }
+                            else if (String.Equals(userChoice, "n")) { break; } // Need to test if this
+                            else { Console.WriteLine("Invalid input please try again or type: quit"); }
+                        } while (!(String.Equals(userChoice, "quit")));
+                    }
+                    catch
                     {
                         Console.WriteLine("Invalid input please try again or type: quit");
-                    }*/
+                    }
                 } while (!(String.Equals(userEntry, "quit")));
             }
 
@@ -664,31 +671,45 @@ namespace SWE_Project
                 connecting = arrivalIn;
                 arrivalIn = "Chicago";
             }
-            // Person selects flight from this list given index they put in and the same y/n thing as marketing manager
-            // if statement where if this is empty it says no flights where found given parameters
-            List<List<string>> possibleFlights = new List<List<string>>();
-            for (int i = 1; i <= departure.CellCount(); i++)
-            {
-                //&& string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn)
-                if (string.Equals((departure.Cell(i).Value).ToString(), departureIn) && string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn))
-                {
-                    //if (System.DateTime.Parse(departureTime.Cell(1).Value.ToString()) > dateIn && System.DateTime.Parse(departureTime.Cell(1).Value.ToString()) < dateIn.AddDays(6))
-                    if (System.DateTime.Parse(departureTime.Cell(i).Value.ToString()).Date == dateIn.Date)
-                    {
-                        possibleFlights.Add(new List<string> { flightId.Cell(i).Value.ToString(), departure.Cell(i).Value.ToString(), departureTime.Cell(i).Value.ToString(), arrival.Cell(i).Value.ToString(), arrivalTime.Cell(i).Value.ToString() });
-                        //if(possibleFlights.Count>10) { break; }// if it's returning too many
-                        // Buy ticket code then if the purchase is successful it stores it in the database
 
+            List<List<string>> possibleFlights = new List<List<string>>();
+            do
+            {
+                for (int i = 1; i <= departure.CellCount(); i++)
+                {
+                    //&& string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn)
+                    if (string.Equals((departure.Cell(i).Value).ToString(), departureIn) && string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn))
+                    {
+                        //if (System.DateTime.Parse(departureTime.Cell(1).Value.ToString()) > dateIn && System.DateTime.Parse(departureTime.Cell(1).Value.ToString()) < dateIn.AddDays(6))
+                        if (System.DateTime.Parse(departureTime.Cell(i).Value.ToString()).Date == dateIn.Date)
+                        {
+                            possibleFlights.Add(new List<string> { flightId.Cell(i).Value.ToString(), departure.Cell(i).Value.ToString(), departureTime.Cell(i).Value.ToString(), arrival.Cell(i).Value.ToString(), arrivalTime.Cell(i).Value.ToString() });
+                            //if(possibleFlights.Count>10) { break; }// if it's returning too many
+                            // Buy ticket code then if the purchase is successful it stores it in the database
+
+                        }
                     }
                 }
-
-                // check both departure and arrival
-                // code date range/how to work with dates - right now I'm just doing the day of because that will be the easiest (but I'll still have code for multiple flights matching that)
-                // add the flight to the customer history - will probably have to access whatever customer ID (could pass this in as a parameter
-                // else statement if there's no flights in a range
-                // DateTime inputtedDate = DateTime.Parse(Console.ReadLine());
-                // Track number of passengers +1 when someone books a ticket -1 if someone cancels (careful about that)
-            }
+                if (possibleFlights.Count == 0 && connecting == "")
+                {
+                    if (east.Contains(departureIn) && east.Contains(arrivalIn))
+                    {
+                        connecting = arrivalIn;
+                        arrivalIn = "Chicago";
+                        Console.WriteLine("East connecting flight book");
+                    }
+                    else if (west.Contains(departureIn) && west.Contains(arrivalIn))
+                    {
+                        connecting = arrivalIn;
+                        arrivalIn = "Nashville";
+                        Console.WriteLine("West connecting flight book");
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            } while (true);
             if (possibleFlights.Count == 0)
             {
                 Console.WriteLine("There are no flights on this given date");
@@ -702,6 +723,11 @@ namespace SWE_Project
                 List<string> planeChoice;
                 do
                 {
+                    if (connecting != "")
+                    {
+                        Console.WriteLine("Sorry, but our airline does not currently offer any direct flights between these locations");
+                        Console.WriteLine("Let's book the first leg of your connecting flight");
+                    }
                     Console.WriteLine("Here are your possible flights please select one by using the corresponding digit:");
                     for (int i = 0; i < possibleFlights.Count; i++)
                     {
@@ -762,7 +788,7 @@ namespace SWE_Project
                                         // Call everything from here 
                                         // Finshing connecting
                                         // Then call return trip with round trip true - with flipped destinations
-                                        Console.WriteLine("You have a connecting flight let's book that");
+                                        Console.WriteLine("Let's book the next part of your connecting flight");
                                         ScheduleFlight((System.DateTime.Parse(planeChoice[4])).Date, planeChoice[3], connecting, false);
                                         if (roundtrip)
                                         {
