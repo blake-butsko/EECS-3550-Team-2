@@ -187,7 +187,8 @@ namespace SWE_Project
             }
         }
 
-        public void cancelFlight() {
+        public void cancelFlight()
+        {
             try
             {
                 var workbook = new XLWorkbook(Globals.databasePath); // Open database
@@ -232,7 +233,7 @@ namespace SWE_Project
                     {
                         Status.Cell(i).Value = "Cancelled";
 
-                        if((string.Equals(custpoints.Cell(i).Value.ToString(), "Points")))
+                        if ((string.Equals(custpoints.Cell(i).Value.ToString(), "Points")))
                             updatePoints(Int32.Parse(custpoints.Cell(i).Value.ToString()));
                         else
                             updateWallet(Int32.Parse(custpoints.Cell(i).Value.ToString()));
@@ -240,10 +241,31 @@ namespace SWE_Project
                     }
                 }
 
+
+                var activeFlightWorksheet = workbook.Worksheet("ActiveFlights"); // Get Flight Manifest sheet
+
+                var activeFlightTable = activeFlightWorksheet.Tables.Table(0);
+
+                var activeFlightColumnId = activeFlightTable.Column(1);
+
+                for (int i = 1; i <= activeFlightColumnId.CellCount(); i++)
+                {
+                    if (string.Equals(cancelChoice, activeFlightColumnId.Cell(i).Value.ToString()))
+                    {
+                        int passengers = Int32.Parse(activeFlightColumnId.Cell(i).CellRight(6).Value.ToString());
+                        passengers--;
+                        activeFlightColumnId.Cell(i).CellRight(6).Value = passengers;
+                        workbook.Save();
+
+
+                    }
+
+                }
+
             }
             catch (Exception) { Console.WriteLine("Internal Failure\n"); }
         }
-        
+
 
         public void custHistory()
         {
@@ -441,8 +463,8 @@ namespace SWE_Project
             var listOfData = new ArrayList(); // Making list to feed data into Append data function (IEnumerable)
             listOfData.Add(UserId);
             listOfData.Add(flight[0]);
-            listOfData.Add((System.DateTime.Parse(flight[2])).ToString("g")); 
-            listOfData.Add((System.DateTime.Parse(flight[4])).ToString("g")); 
+            listOfData.Add((System.DateTime.Parse(flight[2])).ToString("g"));
+            listOfData.Add((System.DateTime.Parse(flight[4])).ToString("g"));
             listOfData.Add(status);
             listOfData.Add(flight[1]);
             listOfData.Add(flight[3]);
