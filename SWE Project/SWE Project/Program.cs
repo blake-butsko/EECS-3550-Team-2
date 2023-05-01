@@ -416,37 +416,66 @@ class Program
                         {
                             Console.Write("Enter First Name: ");//Gets first name from user
                             fname = Console.ReadLine();
-                            part++;
+                            if(fname != "")
+                            {
+                                part++;
+                            }
+                            else
+                            {
+                                Console.Write("Please Enter a Value\n");
+                            }
                         }
                         else if (part == 1)
                         {
                             Console.Write("Enter Last Name: ");//Gets Last Name from user
                             lname = Console.ReadLine();
-                            part++;
+                            if (lname != "")
+                            {
+                                part++;
+                            }
+                            else
+                            {
+                                Console.Write("Please Enter a Value\n");
+                            }
                         }
                         else if (part == 2)
                         {
                             Console.Write("Enter Address: ");//Gets Address from user
                             address = Console.ReadLine();
-                            part++;
+                            if (address != "")
+                            {
+                                part++;
+                            }
+                            else
+                            {
+                                Console.Write("Please Enter a Value\n");
+                            }
                         }
                         else if (part == 3)
                         {
                             Console.Write("Enter Phone: ");//Gets Phone from user
                             phone = Console.ReadLine();
-                            try
+                            if(phone.Length > 9)
                             {
-                                Int64.Parse(phone);
-                                part++;
+                                try
+                                {
+                                    Int64.Parse(phone);
+                                    part++;
+                                }
+                                catch (ArgumentNullException)
+                                {
+                                    Console.Write("Please Enter a Value\n");
+                                }
+                                catch   //Error for if user inputs letters instead of only numbers
+                                {
+                                    Console.Write("Invalid Phone Number\n");
+                                }
                             }
-                            catch (ArgumentNullException)
+                            else
                             {
-                                Console.Write("Please Enter a Value\n");
+                                Console.Write("Invalid Phone Number Length\n");
                             }
-                            catch   //Error for if user inputs letters instead of only numbers
-                            {
-                                Console.Write("Invalid Phone Number\n");
-                            }
+                            
                         }
                         else if (part == 4)
                         {
@@ -514,6 +543,7 @@ class Program
                                 else if (confir == "n")//If no returns to main menu
                                 {
                                     part = 8;
+                                    Console.WriteLine("\n*********************************************************************************************\n");
                                 }
                                 else
                                 {
@@ -596,7 +626,6 @@ class Program
         var workbook = new XLWorkbook(Globals.databasePath);
         if (user == "" || pass == "")
         {
-            Console.WriteLine("Invalid Entry\n");
             return 0;
         }
         int usersRow = 0;

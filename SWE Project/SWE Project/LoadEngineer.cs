@@ -230,7 +230,7 @@ namespace SWE_Project
                 for (int i = 1; i <= flightIdColumn.CellCount(); i++)
                 {
                     // Check current flight is in list
-                    if (String.Equals(flightIdColumn.Cell(i).Value.GetText(), FlightId.ToString()))
+                    if (String.Equals(flightIdColumn.Cell(i).Value.ToString(), FlightId.ToString()))
                     {   
                         // Get row of flight
                         var flightRow = flightTable.DataRange.Row(i);
