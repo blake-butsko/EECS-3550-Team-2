@@ -187,6 +187,60 @@ namespace SWE_Project
             }
         }
 
+        public void cancelFlight() {
+            try
+            {
+                var workbook = new XLWorkbook(Globals.databasePath); // Open database
+                var flightWorksheet = workbook.Worksheet("CustHistory"); // Get Flight Manifest sheet
+
+                var flightTable = flightWorksheet.Tables.Table(0);
+
+                var CustId = flightTable.DataRange.Column(1);
+                var FlightID = flightTable.DataRange.Column(2);
+                var Departure = flightTable.DataRange.Column(6);
+                var Arrival = flightTable.DataRange.Column(7);
+                var DepartingTime = flightTable.DataRange.Column(3);
+                var ArrivalTime = flightTable.DataRange.Column(4);
+                var Status = flightTable.DataRange.Column(4);
+                var custpoints = flightTable.DataRange.Column(8);
+
+                Console.WriteLine("Let's help you cancel that flight");
+                // Prints out selections
+                for (int i = 1; i <= CustId.CellCount(); i++)
+                {
+                    if (String.Equals(CustId.Cell(i).Value.ToString(), UserId))
+                    {
+                        Console.WriteLine("{0}. Leaving {1} at {2} to {3} at {4}", FlightID.Cell(i).Value.ToString(), FlightID.Cell(i).Value.ToString(), FlightID.Cell(i).Value.ToString(), DepartingTime.Cell(i).Value.ToString(), ArrivalTime.Cell(i).Value.ToString());
+                    }
+                }
+                string cancelChoice;
+                do
+                {
+                    try
+                    {
+
+                        Console.WriteLine("Please input the number next to the flight you'd like to cancel");
+                        cancelChoice = Console.ReadLine().ToLower().Trim();
+                        break;
+                    }
+                    catch (Exception) { Console.WriteLine("Invalid input, lets try again"); }
+                } while (true);
+
+                for (int i = 1; i <= CustId.CellCount(); i++)
+                {
+                    if (String.Equals(CustId.Cell(i).Value.ToString(), UserId) && String.Equals(FlightID.Cell(i).Value.ToString(), cancelChoice))
+                    {
+                        Status.Cell(i).SetValue("Cancelled");
+
+                        updatePoints(-Int32.Parse(custpoints.Cell(i).Value));
+                        workbook.Save();
+                    }
+                }
+
+            }
+        }
+        
+
         public void custHistory()
         {
             var workbook = new XLWorkbook(Globals.databasePath);

@@ -46,6 +46,7 @@ internal class CLICaller
             Console.WriteLine("To book a flight, enter book.");
             Console.WriteLine("To print a boarding pass, enter print.");
             Console.WriteLine("To look at account, enter account.");
+            Console.WriteLine("To cancel a flight, enter cancel.");
             Console.WriteLine("To exit the customer portal, enter quit.\n");
 
 
@@ -111,6 +112,10 @@ internal class CLICaller
             else if (string.Equals(userInput, "account"))
             {
                 person.accountInformation();
+            }
+            else if (string.Equals(userInput, "account"))
+            {
+                person.cancelFlight();
             }
             else if (!string.Equals(userInput, "quit"))
                 Console.WriteLine("Invalid Entry\n");
