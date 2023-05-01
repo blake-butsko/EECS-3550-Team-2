@@ -381,6 +381,9 @@ namespace SWE_Project
             }
 
             var tableLastRow = table.LastRow();
+            var flightSheet = workbook.Worksheet("ActiveFlights");
+            var flightTable = flightSheet.Tables.Table(0);
+            var flightIdColumn = flightTable.Column(1);
 
             if (listOfData != null)
             {
@@ -388,6 +391,19 @@ namespace SWE_Project
                 {
 
                     tableLastRow.Cell(i + 1).Value = listOfData[i].ToString(); // Change value of cell to list data
+                }
+
+                for (int i = 1; i <= flightIdColumn.CellCount(); i++)
+                {
+                    if (string.Equals(flight[0], flightIdColumn.Cell(i).Value.ToString()))
+                    {
+                        int passengers = Int32.Parse(flightIdColumn.Cell(i).CellRight(6).Value.ToString());
+                        passengers++;
+                        flightIdColumn.Cell(i).CellRight(6).Value = passengers;
+
+                        break;
+                    }
+
                 }
 
             }
