@@ -381,6 +381,7 @@ namespace SWE_Project
             }
 
             var tableLastRow = table.LastRow();
+
             if (listOfData != null)
             {
                 for (int i = 0; i < table.LastRow().CellCount(); i++) // Iterrate through last row of table hitting each cell
@@ -417,7 +418,7 @@ namespace SWE_Project
             {
                 try
                 {
-                    Console.WriteLine("thank you for booking with McDonalds airlines");
+                    Console.WriteLine("Thank you for booking with MidWest airlines");
                     Console.WriteLine("What day would you like to leave (MM/DD/YYYY)");
                     dateIn = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy", CultureInfo.InvariantCulture); // Just gotta check if this compares all we need is the date
                     Console.WriteLine("Is it a round trip (y/n)");
@@ -500,13 +501,13 @@ namespace SWE_Project
                     {
                         connecting = arrivalIn;
                         arrivalIn = "Chicago";
-                        Console.WriteLine("East connecting flight book");
+                        //Console.WriteLine("East connecting flight book");
                     }
                     else if (west.Contains(departureIn) && west.Contains(arrivalIn))
                     {
                         connecting = arrivalIn;
                         arrivalIn = "Nashville";
-                        Console.WriteLine("West connecting flight book");
+                        // Console.WriteLine("West connecting flight book");
                     }
                 }
                 else
@@ -527,9 +528,9 @@ namespace SWE_Project
                 List<string> planeChoice;
                 do
                 {
-                    if(connecting != "")
+                    if (connecting != "")
                     {
-                        Console.WriteLine("Sorry, but our airline does not currently offer any direct flights between these locations");
+                        Console.WriteLine("Sorry, but our airline does not currently offer any direct flights between these locations\n");
                         Console.WriteLine("Let's book the first leg of your connecting flight");
                     }
                     Console.WriteLine("Here are your possible flights please select one by using the corresponding digit:");
@@ -725,7 +726,7 @@ namespace SWE_Project
                 {
                     if (connecting != "")
                     {
-                        Console.WriteLine("Sorry, but our airline does not currently offer any direct flights between these locations");
+                        Console.WriteLine("Sorry, but our airline does not currently offer any direct flights between these locations\n");
                         Console.WriteLine("Let's book the first leg of your connecting flight");
                     }
                     Console.WriteLine("Here are your possible flights please select one by using the corresponding digit:");

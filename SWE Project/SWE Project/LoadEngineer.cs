@@ -116,11 +116,11 @@ namespace SWE_Project
 
                 listOfData.Add(DepartingFrom);
                 listOfData.Add(ArrivingAt);
-                listOfData.Add(DepartTime.ToUniversalTime().ToString("g"));
-                listOfData.Add(ArrivalTime.ToUniversalTime().ToString("g"));
-                listOfData.Add(0); // Passengers
+                listOfData.Add(DepartTime.ToString());
+                listOfData.Add(ArrivalTime.ToString());
+                listOfData.Add(0); // flight type
+                listOfData.Add(0); // passengers
 
-                
                 if (!(flightTable.DataRange.FirstRow().Cell(1).Value.IsBlank))
                 {
                     flightTable.InsertRowsBelow(1); // Put new flight data into list
@@ -170,21 +170,16 @@ namespace SWE_Project
                 var tmpSource = ASCIIEncoding.ASCII.GetBytes(password);//Turns inputted password into bytes
                 tmpNewHash = shaM.ComputeHash(tmpSource);//Hashes the bytes
                 checkPass = Encoding.UTF8.GetString(tmpNewHash);//turns it back into a string
-              
-
 
                 // Check for valid marketing manager credentials to select a plane type
                 for (int i = 1; i <= empIdColumn.CellCount(); i++)
                 {
+                   
                     if (string.Equals(empIdColumn.Cell(i).Value.ToString(), userId)) // Don't want to check both user id and password to save comparisions
-                    {
-                       
-                        if (string.Equals(empIdColumn.Cell(i).CellRight(1).Value.ToString(), checkPass))
-                        {
-                            marketingManager = new MarketingManager(empIdColumn.Cell(i).Value.ToString(), empIdColumn.Cell(i).CellRight(2).Value.ToString());
+                    {                    
+                            marketingManager = new MarketingManager(empIdColumn.Cell(i).Value.ToString(), password);
                             foundManager = true;
                             break;
-                        }
                     }
                 }
                 // Delete flight from database 

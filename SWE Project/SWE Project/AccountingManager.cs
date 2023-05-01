@@ -116,13 +116,15 @@ namespace SWE_Project
 
                 System.DateTime departTime = System.DateTime.Parse(flightColumn.Cell(i).CellRight(3).Value.ToString());
                 System.DateTime arrivalTime = System.DateTime.Parse(flightColumn.Cell(i).CellRight(4).Value.ToString());
+                if (!(string.Equals(flightColumn.Cell(i).CellRight(6).Value.ToString(), "0")))
+                {
+                    flight = new Flight(flightColumn.Cell(i).Value.ToString(),
+                        flightColumn.Cell(i).CellRight(1).Value.ToString(),
+                         flightColumn.Cell(i).CellRight(2).Value.ToString(),
+                         departTime, arrivalTime);
 
-                flight = new Flight(flightColumn.Cell(i).Value.ToString(),
-                    flightColumn.Cell(i).CellRight(1).Value.ToString(),
-                     flightColumn.Cell(i).CellRight(2).Value.ToString(),
-                     departTime, arrivalTime);
-
-                flightList.Add(flight);
+                    flightList.Add(flight);
+                }
             }
             // Create file
             string fileName = "Total_profit " + DateTime.Now.ToString() + ".csv";
@@ -140,11 +142,11 @@ namespace SWE_Project
                 Decimal profit = flightList[i].passengers.Count * flightList[i].Price;
                 totalProft += profit;
                 stringBuilder.Append(flightList[i].FlightId);
-                stringBuilder.Append(",");
+                stringBuilder.Append(",$");
                 stringBuilder.AppendLine(profit.ToString());
             }
 
-            stringBuilder.Append("Total profit,");
+            stringBuilder.Append("Total profit,$");
             stringBuilder.AppendLine(totalProft.ToString());
             // Write string to file
             using (StreamWriter writer = new StreamWriter(fileCreate))
