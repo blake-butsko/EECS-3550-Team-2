@@ -201,14 +201,14 @@ namespace SWE_Project
                 var Arrival = flightTable.DataRange.Column(7);
                 var DepartingTime = flightTable.DataRange.Column(3);
                 var ArrivalTime = flightTable.DataRange.Column(4);
-                var Status = flightTable.DataRange.Column(4);
+                var Status = flightTable.DataRange.Column(5);
                 var custpoints = flightTable.DataRange.Column(8);
 
                 Console.WriteLine("Let's help you cancel that flight");
                 // Prints out selections
                 for (int i = 1; i <= CustId.CellCount(); i++)
                 {
-                    if (String.Equals(CustId.Cell(i).Value.ToString(), UserId))
+                    if (String.Equals(CustId.Cell(i).Value.ToString(), UserId) && !(string.Equals(Status.Cell(i).Value.ToString(), "Cancelled")))
                     {
                         Console.WriteLine("{0}. Leaving {1} at {2} to {3} at {4}", FlightID.Cell(i).Value.ToString(), FlightID.Cell(i).Value.ToString(), FlightID.Cell(i).Value.ToString(), DepartingTime.Cell(i).Value.ToString(), ArrivalTime.Cell(i).Value.ToString());
                     }
@@ -230,14 +230,18 @@ namespace SWE_Project
                 {
                     if (String.Equals(CustId.Cell(i).Value.ToString(), UserId) && String.Equals(FlightID.Cell(i).Value.ToString(), cancelChoice))
                     {
-                        Status.Cell(i).SetValue("Cancelled");
+                        Status.Cell(i).Value = "Cancelled";
 
-                        updatePoints(-Int32.Parse(custpoints.Cell(i).Value));
+                        if((string.Equals(custpoints.Cell(i).Value.ToString(), "Points")))
+                            updatePoints(Int32.Parse(custpoints.Cell(i).Value.ToString()));
+                        else
+                            updateWallet(Int32.Parse(custpoints.Cell(i).Value.ToString()));
                         workbook.Save();
                     }
                 }
 
             }
+            catch (Exception) { Console.WriteLine("Internal Failure\n"); }
         }
         
 
@@ -368,6 +372,32 @@ namespace SWE_Project
             }
             catch (Exception ex) { Console.WriteLine("Points were not updated"); }
         }
+
+        public void updateWallet(int amount)
+        {
+            var workbook = new XLWorkbook(Globals.databasePath); // Open workbook and worksheet
+            var worksheet = workbook.Worksheet("CustList");
+
+            var table = worksheet.Tables.Table(0);
+
+            var userId = table.DataRange.Column(1);
+            var walletCol = table.DataRange.Column(8);
+            //9 is points
+            try
+            {
+                for (int i = 1; i <= userId.CellCount(); i++)
+                {
+                    //&& string.Equals((arrival.Cell(i).Value).ToString(), arrivalIn)
+                    if (string.Equals((userId.Cell(i).Value).ToString(), UserId))
+                    {
+                        wallet += amount;
+                        walletCol.Cell(i).Value = (Int32.Parse((walletCol.Cell(i).Value).ToString()) + amount);
+                        workbook.Save();
+                    }
+                }
+            }
+            catch (Exception ex) { Console.WriteLine("Points were not updated"); }
+        }
         public string getInfo(int choice)
         {
             var workbook = new XLWorkbook(Globals.databasePath); // Open workbook and worksheet
@@ -411,8 +441,8 @@ namespace SWE_Project
             var listOfData = new ArrayList(); // Making list to feed data into Append data function (IEnumerable)
             listOfData.Add(UserId);
             listOfData.Add(flight[0]);
-            listOfData.Add((System.DateTime.Parse(flight[2])).ToUniversalTime().ToString("g")); //WONK - just parse to system.date
-            listOfData.Add((System.DateTime.Parse(flight[4])).ToUniversalTime().ToString("g")); //WONK
+            listOfData.Add((System.DateTime.Parse(flight[2])).ToString("g")); 
+            listOfData.Add((System.DateTime.Parse(flight[4])).ToString("g")); 
             listOfData.Add(status);
             listOfData.Add(flight[1]);
             listOfData.Add(flight[3]);

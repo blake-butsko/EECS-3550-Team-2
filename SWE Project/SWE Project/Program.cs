@@ -113,7 +113,7 @@ internal class CLICaller
             {
                 person.accountInformation();
             }
-            else if (string.Equals(userInput, "account"))
+            else if (string.Equals(userInput, "cancel"))
             {
                 person.cancelFlight();
             }
@@ -373,8 +373,8 @@ class Program
     {
         Globals.databasePath = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + @"\AirportInfo.xlsx"); // store excel file in debug so it can be grabbed 
         CLICaller caller = new CLICaller();
-       
-        //This was just for Daniel to test Customer without having to login
+        caller.CustomerCli(new Customer("391594", "Bank", "Big", 20));
+      
         int Vr = 0;
         string mainInput;
         string user = "";
